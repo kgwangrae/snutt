@@ -345,8 +345,7 @@ $(function(){
 		else if (e.keyCode == 38 && current_tab == "my_courses"){
 			//up
 			if (!my_courses_selected_row && my_lectures.length > 0){
-				$('#search_result_table tbody tr').first().trigger('click');
-				my_courses_selected_row.addClass('selected');
+				$('#my_courses_table tbody tr').first().trigger('click');
 				$('#search_query_text').blur();
 			}
 			else if (my_courses_selected_row && my_courses_selected_row.prev().length > 0){
@@ -358,13 +357,13 @@ $(function(){
 		}
 		else if (e.keyCode == 13 && current_tab == "search"){
 			//enter
-			if (selected_row && $(':focus').size() == 0){
+			if (selected_row && $('#search_query_text:focus').size() == 0){
 				selected_row.trigger('dblclick');
 			}
 		}
 		else if (e.keyCode == 13 && current_tab == "my_courses"){
 			//enter
-			if (my_courses_selected_row && $(':focus').size() == 0){
+			if (my_courses_selected_row && $('#search_query_text:focus').size() == 0){
 				my_courses_selected_row.trigger('dblclick');
 			}
 		}
@@ -648,7 +647,7 @@ function my_courses_row_click_handler()
 	my_courses_selected_row = ele;
 	my_courses_selected_row.find('.remove-course-button').show();
 	//timetable refreshing
-	var selected_lecture = get_lecture_by_course_number(ele.attr('course-number'), ele.attr('lecture-number'));
+	var selected_lecture = get_my_lecture_by_course_number(ele.attr('course-number'), ele.attr('lecture-number'));
 	if (!selected_lecture.color)
 		selected_lecture.color = gray_color;
 	generate_timecell(my_lectures.concat([selected_lecture]));

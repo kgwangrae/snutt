@@ -18,6 +18,9 @@
 		<script src="/javascripts/utils.js" type="text/javascript"></script> 
 		<script src="/socket.io/socket.io.js" type="text/javascript"></script> 
 		<script src="/javascripts/timetable.js" type="text/javascript"></script> 
+		<script src="/javascripts/exportpng.js" type="text/javascript"></script> 
+		<script src="/javascripts/canvas2image.js" type="text/javascript"></script> 
+		<script src="/javascripts/base64.js" type="text/javascript"></script> 
 	</head> 
 	<body ondragstart="return false" onselectstart="return false"> 
 		<div class="navbar navbar-fixed-top">
@@ -27,78 +30,107 @@
 					<ul class="nav" id="main_navigation">
 						<li class="active"><a href="#search" id="nav_search_result" data-toggle="tab">검색결과</a></li>
 						<li><a href="#my_courses" data-toggle="tab" rel="tooltip" id="nav_my_courses">내 강의 <span class="badge badge-info" id="my_courses_credit">0학점</span></a></li>
+						<li><a href="#export" id="nav_export" data-toggle="tab">내보내기</a></li>
 					</ul>
 				</div>
 			</div>
 		</div>
 		<div class="container">
-			<div id="search_form_container">
-				<form class="well form-search" id="search_form">
-					<div class="btn-group" id="search_type">
-						<a class="btn dropdown-toggle" data-toggle="dropdown" href="#"><span id="stype_dropdown_label">교과목명</span> <span class="caret"></span></a>
-						<ul class="dropdown-menu">
-							<li><a href="#" id="stype_course_title">교과목명으로 검색</a></li>
-							<li><a href="#" id="stype_department">개설학과로 검색</a></li>
-							<li><a href="#" id="stype_class_time">수업교시로 검색</a></li>
-							<li><a href="#" id="stype_instructor">교수명으로 검색</a></li>
-							<li><a href="#" id="stype_course_number">교과목번호로 검색</a></li>
-						</ul>
+			<div id="content_wrapper">
+				<div id="search_form_container">
+					<form class="well form-search" id="search_form">
+						<div class="btn-group" id="search_type">
+							<a class="btn dropdown-toggle" data-toggle="dropdown" href="#"><span id="stype_dropdown_label">교과목명</span> <span class="caret"></span></a>
+							<ul class="dropdown-menu">
+								<li><a href="#" id="stype_course_title">교과목명으로 검색</a></li>
+								<li><a href="#" id="stype_department">개설학과로 검색</a></li>
+								<li><a href="#" id="stype_class_time">수업교시로 검색</a></li>
+								<li><a href="#" id="stype_instructor">교수명으로 검색</a></li>
+								<li><a href="#" id="stype_course_number">교과목번호로 검색</a></li>
+							</ul>
+						</div>
+						<input type="text" class="input-medium" id="search_query_text" placeholder="예) 수및연" />
+						<button type="submit" class="btn">검색</button>
+
+						<!-- 검색필터 버튼 -->
+						<a class="btn" id="search_filter_toggle_button" state="off">검색필터 <span class="caret"></span></a>
+
+						<div id="search_filter">
+							<div class="search-filter-container" id="filter_basics">
+								<span class="header">학문의 기초</span>
+								<span class="label" value="basics_korean">국어와 작문</span>
+								<span class="label" value="basics_foreign">외국어와 외국문화</span>
+								<span class="label" value="basics_science">기초과학</span>
+								<span class="label" value="basics">학문의 기초</span>
+							</div>
+							<div class="search-filter-container" id="filter_core">
+								<span class="header">핵심교양</span>
+								<span class="label" value="core_art">문학과 예술</span>
+								<span class="label" value="core_history">역사와 철학</span>
+								<span class="label" value="core_society">사회와 이념</span>
+								<span class="label" value="core_nature">자연의 이해</span>
+								<span class="label" value="core_technology">자연과 기술</span>
+								<span class="label" value="core_biology">생명과 환경</span>
+							</div>
+							<div class="search-filter-container" id="filter_etc">
+								<span class="header">기타</span>
+								<span class="label" value="teaching">교직</span>
+								<span class="label" value="exercise">예체능</span>
+								<span class="label" value="etc">기타교양</span>
+							</div>
+							<div class="search-filter-container" id="filter_academic_year">
+								<span class="header">학년</span>
+								<span class="label" value="1">1학년</span>
+								<span class="label" value="2">2학년</span>
+								<span class="label" value="3">3학년</span>
+								<span class="label" value="4">4학년 이상</span>
+								<span class="label" value="5">대학원</span>
+							</div>
+							<div class="search-filter-container" id="filter_credit">
+								<span class="header">학점</span>
+								<span class="label" value="1">1학점</span>
+								<span class="label" value="2">2학점</span>
+								<span class="label" value="3">3학점</span>
+								<span class="label" value="4">4학점</span>
+								<span class="label" value="5">5학점 이상</span>
+							</div>
+							<div id="search_filter_footer">
+							</div>
+						</div>
+
+					</form>
+				</div>
+				<div class="tab-content" id="lectures_content">
+					<div class="tab-pane active" id="search">
+						<div id="search_result">
+							<table class="table table-condensed table-bordered search-result-table" id="search_result_table">
+								<thead>
+									<tr>
+										<th class="course-number">교과목</th>
+										<th class="lecture-number">강좌</th>
+										<th class="course-title">교과목명</th>
+										<th class="classification">구분</th>
+										<th class="academic-year">학년</th>
+										<th class="credit">학점</th>
+										<th class="class-time">수업교시</th>
+										<th class="location">강의실</th>
+										<th class="instructor">교수</th>
+										<th class="quota">정원</th>
+										<th class="enrollment">현원</th>
+										<th class="remark">비고</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td colspan="12" style="text-align:center;">검색어를 입력하세요.</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+
 					</div>
-					<input type="text" class="input-medium" id="search_query_text" placeholder="예) 수및연" />
-					<button type="submit" class="btn">검색</button>
-
-					<!-- 검색필터 버튼 -->
-					<a class="btn" id="search_filter_toggle_button" state="off">검색필터 <span class="caret"></span></a>
-
-					<div id="search_filter">
-						<div class="search-filter-container" id="filter_basics">
-							<span class="header">학문의 기초</span>
-							<span class="label" value="basics_korean">국어와 작문</span>
-							<span class="label" value="basics_foreign">외국어와 외국문화</span>
-							<span class="label" value="basics_science">기초과학</span>
-							<span class="label" value="basics">학문의 기초</span>
-						</div>
-						<div class="search-filter-container" id="filter_core">
-							<span class="header">핵심교양</span>
-							<span class="label" value="core_art">문학과 예술</span>
-							<span class="label" value="core_history">역사와 철학</span>
-							<span class="label" value="core_society">사회와 이념</span>
-							<span class="label" value="core_nature">자연의 이해</span>
-							<span class="label" value="core_technology">자연과 기술</span>
-							<span class="label" value="core_biology">생명과 환경</span>
-						</div>
-						<div class="search-filter-container" id="filter_academic_year">
-							<span class="header">학년</span>
-							<span class="label" value="1">1학년</span>
-							<span class="label" value="2">2학년</span>
-							<span class="label" value="3">3학년</span>
-							<span class="label" value="4">4학년 이상</span>
-							<span class="label" value="5">대학원</span>
-						</div>
-						<div class="search-filter-container" id="filter_credit">
-							<span class="header">학점</span>
-							<span class="label" value="1">1학점</span>
-							<span class="label" value="2">2학점</span>
-							<span class="label" value="3">3학점</span>
-							<span class="label" value="4">4학점</span>
-							<span class="label" value="5">5학점 이상</span>
-						</div>
-						<div class="search-filter-container" id="filter_etc">
-							<span class="header">기타</span>
-							<span class="label" value="teaching">교직</span>
-							<span class="label" value="exercise">예체능</span>
-							<span class="label" value="etc">기타교양</span>
-						</div>
-						<div id="search_filter_footer">
-						</div>
-					</div>
-
-				</form>
-			</div>
-			<div class="tab-content" id="lectures_content">
-				<div class="tab-pane active" id="search">
-					<div id="search_result">
-						<table class="table table-condensed table-bordered search-result-table" id="search_result_table">
+					<div class="tab-pane" id="my_courses">
+						<table class="table table-condensed table-bordered search-result-table" id="my_courses_table">
 							<thead>
 								<tr>
 									<th class="course-number">교과목</th>
@@ -117,202 +149,189 @@
 							</thead>
 							<tbody>
 								<tr>
-									<td colspan="12" style="text-align:center;">검색어를 입력하세요.</td>
+									<td colspan="12" style="text-align:center;">선택된 강의가 없습니다.</td>
 								</tr>
 							</tbody>
 						</table>
 					</div>
-
 				</div>
-				<div class="tab-pane" id="my_courses">
-					<table class="table table-condensed table-bordered search-result-table" id="my_courses_table">
+				<div id="timetable_container">
+					<div id="timecells_container">
+					</div>
+					<table id="timetable">
 						<thead>
 							<tr>
-								<th class="course-number">교과목</th>
-								<th class="lecture-number">강좌</th>
-								<th class="course-title">교과목명</th>
-								<th class="classification">구분</th>
-								<th class="academic-year">학년</th>
-								<th class="credit">학점</th>
-								<th class="class-time">수업교시</th>
-								<th class="location">강의실</th>
-								<th class="instructor">교수</th>
-								<th class="quota">정원</th>
-								<th class="enrollment">현원</th>
-								<th class="remark">비고</th>
+								<th>&nbsp;</th>
+								<th>월요일</th>
+								<th>화요일</th>
+								<th>수요일</th>
+								<th>목요일</th>
+								<th>금요일</th>
+								<th>토요일</th>
 							</tr>
 						</thead>
 						<tbody>
 							<tr>
-								<td colspan="12" style="text-align:center;">선택된 강의가 없습니다.</td>
+								<th rowspan="2">
+									<span class="period">0교시</span><br />
+									<span class="time">08:00~09:00</span>
+								</th>
+								<td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
+							</tr>
+							<tr>
+								<td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
+							</tr>
+							<tr>
+								<th rowspan="2">
+									<span class="period">1교시</span><br />
+									<span class="time">09:00~10:00</span>
+								</th>
+								<td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
+							</tr>
+							<tr>
+								<td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
+							</tr>
+							<tr>
+								<th rowspan="2">
+									<span class="period">2교시</span><br />
+									<span class="time">10:00~11:00</span>
+								</th>
+								<td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
+							</tr>
+							<tr>
+								<td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
+							</tr>
+							<tr>
+								<th rowspan="2">
+									<span class="period">3교시</span><br />
+									<span class="time">11:00~12:00</span>
+								</th>
+								<td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
+							</tr>
+							<tr>
+								<td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
+							</tr>
+							<tr>
+								<th rowspan="2">
+									<span class="period">4교시</span><br />
+									<span class="time">12:00~13:00</span>
+								</th>
+								<td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
+							</tr>
+							<tr>
+								<td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
+							</tr>
+							<tr>
+								<th rowspan="2">
+									<span class="period">5교시</span><br />
+									<span class="time">13:00~14:00</span>
+								</th>
+								<td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
+							</tr>
+							<tr>
+								<td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
+							</tr>
+							<tr>
+								<th rowspan="2">
+									<span class="period">6교시</span><br />
+									<span class="time">14:00~15:00</span>
+								</th>
+								<td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
+							</tr>
+							<tr>
+								<td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
+							</tr>
+							<tr>
+								<th rowspan="2">
+									<span class="period">7교시</span><br />
+									<span class="time">15:00~16:00</span>
+								</th>
+								<td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
+							</tr>
+							<tr>
+								<td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
+							</tr>
+							<tr>
+								<th rowspan="2">
+									<span class="period">8교시</span><br />
+									<span class="time">16:00~17:00</span>
+								</th>
+								<td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
+							</tr>
+							<tr>
+								<td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
+							</tr>
+							<tr>
+								<th rowspan="2">
+									<span class="period">9교시</span><br />
+									<span class="time">17:00~18:00</span>
+								</th>
+								<td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
+							</tr>
+							<tr>
+								<td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
+							</tr>
+							<tr>
+								<th rowspan="2">
+									<span class="period">10교시</span><br />
+									<span class="time">18:00~19:00</span>
+								</th>
+								<td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
+							</tr>
+							<tr>
+								<td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
+							</tr>
+							<tr>
+								<th rowspan="2">
+									<span class="period">11교시</span><br />
+									<span class="time">19:00~20:00</span>
+								</th>
+								<td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
+							</tr>
+							<tr>
+								<td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
+							</tr>
+							<tr>
+								<th rowspan="2">
+									<span class="period">12교시</span><br />
+									<span class="time">20:00~21:00</span>
+								</th>
+								<td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
+							</tr>
+							<tr>
+								<td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
+							</tr>
+							<tr>
+								<th rowspan="2">
+									<span class="period">13교시</span><br />
+									<span class="time">21:00~22:00</span>
+								</th>
+								<td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
+							</tr>
+							<tr>
+								<td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
 							</tr>
 						</tbody>
 					</table>
 				</div>
-			</div>
-			<div id="timetable_container">
-				<div id="timecells_container">
+
+				<div id="footer">
 				</div>
-				<table id="timetable">
-					<thead>
-						<tr>
-							<th>&nbsp;</th>
-							<th>월요일</th>
-							<th>화요일</th>
-							<th>수요일</th>
-							<th>목요일</th>
-							<th>금요일</th>
-							<th>토요일</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<th rowspan="2">
-								<span class="period">0교시</span><br />
-								<span class="time">08:00~09:00</span>
-							</th>
-							<td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
-						</tr>
-						<tr>
-							<td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
-						</tr>
-						<tr>
-							<th rowspan="2">
-								<span class="period">1교시</span><br />
-								<span class="time">09:00~10:00</span>
-							</th>
-							<td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
-						</tr>
-						<tr>
-							<td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
-						</tr>
-						<tr>
-							<th rowspan="2">
-								<span class="period">2교시</span><br />
-								<span class="time">10:00~11:00</span>
-							</th>
-							<td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
-						</tr>
-						<tr>
-							<td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
-						</tr>
-						<tr>
-							<th rowspan="2">
-								<span class="period">3교시</span><br />
-								<span class="time">11:00~12:00</span>
-							</th>
-							<td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
-						</tr>
-						<tr>
-							<td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
-						</tr>
-						<tr>
-							<th rowspan="2">
-								<span class="period">4교시</span><br />
-								<span class="time">12:00~13:00</span>
-							</th>
-							<td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
-						</tr>
-						<tr>
-							<td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
-						</tr>
-						<tr>
-							<th rowspan="2">
-								<span class="period">5교시</span><br />
-								<span class="time">13:00~14:00</span>
-							</th>
-							<td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
-						</tr>
-						<tr>
-							<td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
-						</tr>
-						<tr>
-							<th rowspan="2">
-								<span class="period">6교시</span><br />
-								<span class="time">14:00~15:00</span>
-							</th>
-							<td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
-						</tr>
-						<tr>
-							<td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
-						</tr>
-						<tr>
-							<th rowspan="2">
-								<span class="period">7교시</span><br />
-								<span class="time">15:00~16:00</span>
-							</th>
-							<td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
-						</tr>
-						<tr>
-							<td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
-						</tr>
-						<tr>
-							<th rowspan="2">
-								<span class="period">8교시</span><br />
-								<span class="time">16:00~17:00</span>
-							</th>
-							<td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
-						</tr>
-						<tr>
-							<td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
-						</tr>
-						<tr>
-							<th rowspan="2">
-								<span class="period">9교시</span><br />
-								<span class="time">17:00~18:00</span>
-							</th>
-							<td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
-						</tr>
-						<tr>
-							<td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
-						</tr>
-						<tr>
-							<th rowspan="2">
-								<span class="period">10교시</span><br />
-								<span class="time">18:00~19:00</span>
-							</th>
-							<td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
-						</tr>
-						<tr>
-							<td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
-						</tr>
-						<tr>
-							<th rowspan="2">
-								<span class="period">11교시</span><br />
-								<span class="time">19:00~20:00</span>
-							</th>
-							<td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
-						</tr>
-						<tr>
-							<td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
-						</tr>
-						<tr>
-							<th rowspan="2">
-								<span class="period">12교시</span><br />
-								<span class="time">20:00~21:00</span>
-							</th>
-							<td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
-						</tr>
-						<tr>
-							<td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
-						</tr>
-						<tr>
-							<th rowspan="2">
-								<span class="period">13교시</span><br />
-								<span class="time">21:00~22:00</span>
-							</th>
-							<td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
-						</tr>
-						<tr>
-							<td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
 
-			<div id="footer">
 			</div>
-
+			<div id="export_wrapper">
+				<h3>이미지 내보내기</h3>
+				<canvas id="tt_canvas" style="display:none;">
+				</canvas>
+				<div id="export_image_wrapper">
+				</div>
+				<div id="export_button">
+					<a href="#export_image" id="export_save_button" class="btn btn-danger" download="timetable.png">저장하기</a>
+					<p>
+					* 저장하기 버튼이 작동하지 않으면 위에 있는 그림을 [우클릭 -&gt; 다른이름으로 사진 저장]으로 직접 저장하세요.
+					</p>
+				</div>
+			</div>
 		</div> <!-- /container -->
 
 		<!-- Le javascript

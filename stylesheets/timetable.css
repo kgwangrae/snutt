@@ -1,6 +1,7 @@
+* {font-family:"Arial";}
 body {padding-top:45px;}
 #search_form {margin-bottom:0;}
-#search_type {display:inline;}
+#search_type {float:left;margin-right:3px;}
 .search-result-table th {text-align:center;}
 .search-result-table td {vertical-align:middle;}
 .search-result-table .classification {width:30px;text-align:center;}
@@ -42,3 +43,9 @@ body {padding-top:45px;}
 .search-filter-container {float:left;margin-right:20px;height:30px;}
 .search-filter-container span.header {font-weight:bold;font-size:9pt;color:#000;cursor:pointer;}
 .search-filter-container span.label {cursor:pointer;}
+
+#export_wrapper {}
+#export_wrapper h3 {font-size:12pt;padding:3px;}
+#export_image_wrapper {padding:3px;}
+#export_button {padding:3px;}
+#export_button p {color:red;margin-top:5px;}

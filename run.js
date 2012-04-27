@@ -88,7 +88,7 @@ function init_data()
 }
 init_data();
 
-var port = process.env.PORT || 3783;
+var port = process.env.PORT || 3784;
 app.listen(port);
 console.log("Listening on " + port);
 
@@ -174,36 +174,33 @@ function filter_check(lecture, filter)
 		}
 		if (!result) return false;
 	}
+	//학문의기초, 핵심교양, 기타는 OR 연산
+	if (!filter.basics && !filter.core && !filter.etc) return true;
+	var result = false;
 	//학문의 기초
 	if (filter.basics){
-		var result = false;
 		for (var i=0;i<filter.basics.length;i++){
 			var basics = filter.basics[i];
 			if (basics == lecture.category) result = true;
 		}
-		if (!result) return false;
 	}
 	//핵심교양
 	if (filter.core){
-		var result = false;
 		for (var i=0;i<filter.core.length;i++){
 			var core = filter.core[i];
 			if (core == lecture.category) result = true;
 		}
-		if (!result) return false;
 	}
 	//기타
 	if (filter.etc){
-		var result = false;
 		for (var i=0;i<filter.etc.length;i++){
 			var etc = filter.etc[i];
 			if (etc == "teaching" && lecture.classification == "교직") result = true;
 			if (etc == "exercise" && lecture.category == "normal_exercise") result = true;
 			if (etc == "etc" && lecture.category != "normal_exercise" && lecture.category.indexOf('normal') != -1) result = true;
 		}
-		if (!result) return false;
 	}
-	return true;
+	return result;
 }
 
 function get_lectures(query)

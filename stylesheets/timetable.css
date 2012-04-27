@@ -1,0 +1,44 @@
+body {padding-top:45px;}
+#search_form {margin-bottom:0;}
+#search_type {display:inline;}
+.search-result-table th {text-align:center;}
+.search-result-table td {vertical-align:middle;}
+.search-result-table .classification {width:30px;text-align:center;}
+.search-result-table .academic-year {width:40px;text-align:center;}
+.search-result-table .course-number {width:65px;text-align:center;}
+.search-result-table .lecture-number {width:30px;text-align:center;}
+.search-result-table .credit {width:30px;text-align:center;}
+.search-result-table .course-title {width:270px;}
+.search-result-table .quota {width:30px;text-align:center;}
+.search-result-table .enrollment {width:30px;text-align:center;}
+.search-result-table .class-time {width:70px;text-align:center;}
+.search-result-table .instructor {width:70px;text-align:center;}
+.search-result-table .location {width:70px;text-align:center;}
+.search-result-table th.remark {text-align:center;}
+.search-result-table tbody tr {cursor:pointer;}
+#lectures_content {height:250px;overflow:scroll;overflow-x:hidden;border:1px solid #ccc;}
+#timetable_container {margin-top:10px;}
+
+#search_result_table tr.selected {background-color:#ccf}
+#my_courses_table tr.selected {background-color:#ccf}
+#timetable {width:100%;}
+#timetable th, #timetable td{text-align:center;vertical-align:middle;border:1px solid #ddd;line-height:100%;padding:0;}
+#timetable thead th {height:30px;}
+#timetable tbody th {width:100px;}
+#timetable tbody td {height:18px;}
+#timetable .period {font-size:1.2em;}
+#timetable .time {font-size:0.8em;}
+.timecell-container {position:absolute;z-index:100;}
+.timecell {position:relative;border:3px solid #ccc;text-align:center;cursor:pointer;}
+
+#footer {margin-top:20px;padding:10px;text-align:center;}
+#footer p {font-size:12pt;font-family:"Arial";}
+#footer a:visited {color:#c53535;text-decoration:none;}
+#footer a:link {color:#c53535;text-decoration:none;}
+#footer a:hover {color:#c53535;text-decoration:none;}
+
+#search_filter {margin-top:10px;}
+#search_filter_footer {clear:both;}
+.search-filter-container {float:left;margin-right:20px;height:30px;}
+.search-filter-container span.header {font-weight:bold;font-size:9pt;color:#000;cursor:pointer;}
+.search-filter-container span.label {cursor:pointer;}

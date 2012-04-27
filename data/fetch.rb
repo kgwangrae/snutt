@@ -24,7 +24,7 @@ end
 category_map = {} #"xxx.xxx;yyy => "학문의 기초""
 
 #htm file download (wget)
-#`sh gethtm.sh #{"#{year} #{semester}"}`
+`sh gethtm.sh #{"#{year} #{semester}"}`
 Dir["htm/#{year}_#{semester}*.htm"].each do |htmfile|
 	result = `ruby parsing_htm.rb #{"#{htmfile}"}`.split("\n")
 	#학문의 기초 - ALL

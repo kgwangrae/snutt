@@ -32,8 +32,8 @@ body {padding-top:45px;}
 .timecell-container {position:absolute;z-index:100;}
 .timecell {position:relative;border:3px solid #ccc;text-align:center;cursor:pointer;}
 
-#footer {margin-top:20px;padding:10px;text-align:center;}
-#footer p {font-size:12pt;font-family:"Arial";}
+#footer {margin:20px 0 10px 0;padding:10px;text-align:center;border-top:1px solid #ddd;}
+#footer p {font-size:9pt;font-family:"Arial";margin:0;padding:0;margin:3px;}
 #footer a:visited {color:#c53535;text-decoration:none;}
 #footer a:link {color:#c53535;text-decoration:none;}
 #footer a:hover {color:#c53535;text-decoration:none;}

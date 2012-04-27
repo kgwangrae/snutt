@@ -198,6 +198,7 @@ $(function(){
 			page:page,
 			per_page:per_page,
 		});
+		cancel_lecture_selection();
 		return false;
 	});
 

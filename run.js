@@ -57,6 +57,7 @@ var app = require('http').createServer(handler),
 		io = require('socket.io').listen(app),
 		fs = require('fs'),
 		mime = require('mime'),
+		restler = require('restler');
 		utils = require('./utils.js');
 
 io.set('log level', 1); //reduce log level
@@ -84,6 +85,13 @@ function init_data()
 			lectures.push(new Lecture(options));
 		}
 		console.log('init finished');
+	});
+
+	//timetable_images 폴더가 없으면 생성
+	var stats = fs.stat('timetable_images', function(err, stats){
+		if (err){
+			fs.mkdir('timetable_images');
+		}
 	});
 }
 init_data();
@@ -337,6 +345,9 @@ io.sockets.on('connection', function (socket) {
 	socket.on('search_query', function(data){
 		socket.emit('search_result', get_lectures(data));
 	});
+	socket.on('publish_timetable_to_facebook', function(data){
+		upload_timetable_to_facebook(data, socket);
+	});
 });
 
 //b's elements are members of a's elements with increasing order
@@ -368,4 +379,40 @@ function permutation_inclusion(a, b)
 		if(flag) return false;
 	}
 	return true;
+}
+
+//access_token, base64_data, message
+function upload_timetable_to_facebook(options, socket)
+{
+	var options = options || {};
+	var access_token = options.access_token;
+	var base64_data = options.base64_data;
+	var message = options.message.toString('utf8');
+	message = message + "\nhttp://choco.wafflestudio.net:3784"
+
+	var image_path = save_timetable_image(base64_data);
+	var target_url = 'https://graph.facebook.com/me/photos?message='+encodeURI(message)+'&access_token=' + access_token;
+	restler.post(target_url, {
+		multipart: true,
+		encoding:"utf8",
+		data: {
+			source: restler.file(image_path, null, null, null, 'image/png')
+		}
+	}).on('complete', function(data) {
+		console.log("photo upload complete! : " + image_path);
+		console.log(data);
+		socket.emit('facebook_publish_complete', {data:JSON.parse(data)});
+	});
+}
+
+
+function save_timetable_image(base64_data)
+{
+
+	var filename = 'timetable_images/' + String((new Date()).getTime()) + "_" + Math.floor(Math.random() * 10000) + ".png";
+	var base64Image = base64_data.toString('base64');
+	var decodedImage = new Buffer(base64Image, 'base64');
+	fs.writeFile(filename, decodedImage, function(err) {});
+
+	return filename;
 }

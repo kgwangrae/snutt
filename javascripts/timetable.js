@@ -113,6 +113,24 @@ $(function(){
 			$('#nav_search_result').tab('show');
 		}
 	});
+	socket.on('facebook_publish_complete', function(data){
+		$('#publish_facebook_ok_button').removeAttr('disabled');
+		$('#facebook_loading_modal').dialog('close');
+		if (data.data.error){
+			alert('업로드에 실패했습니다.');
+		}
+		else {
+			alert('성공적으로 게시되었습니다!');
+			$('#facebook_message').val("");
+			$('#facebook_message_wrapper').slideUp();
+			$('#publish_facebook_toggle_button').attr('state', 'off').removeClass('dropup');
+		}
+	});
+
+	$('#brand_button').click(function(){
+		$('#nav_search_result').trigger('click');
+		return false;
+	});
 
 	//resize
 	$(window).resize(function(){
@@ -178,7 +196,7 @@ $(function(){
 					type:search_type,
 					query_text:query_text,
 					page:page,
-					per_page:per_page,
+					per_page:per_page
 				});
 				page_loading_requesting = true;
 			}
@@ -196,7 +214,7 @@ $(function(){
 			type:search_type,
 			query_text:query_text,
 			page:page,
-			per_page:per_page,
+			per_page:per_page
 		});
 		cancel_lecture_selection();
 		return false;
@@ -213,12 +231,12 @@ $(function(){
 		if (ele.attr('state') == 'off'){
 			ele.attr('state', 'on').addClass('btn-info').addClass('dropup');
 			search_filter_tooltip_message('검색필터가 켜졌습니다.');
-			$('#search_filter').stop(true,true).slideDown();
+			$('#search_filter').slideDown();
 		}
 		else {
 			ele.attr('state', 'off').removeClass('btn-info').removeClass('dropup');
 			search_filter_tooltip_message('검색필터가 꺼졌습니다.');
-			$('#search_filter').stop(true,true).slideUp();
+			$('#search_filter').slideUp();
 		}
 	});
 	$('#search_filter').hide();
@@ -410,6 +428,59 @@ $(function(){
 		$('#search_query_text').focus().val("");
 	});
 
+	//facebook modal
+	$('#facebook_loading_modal').dialog({
+		modal:true,
+		resizable:false,
+		closeOnEscape:false,
+		autoOpen:false
+	});
+
+	//페이스북에 공유하기
+	$('#publish_facebook_toggle_button').click(function(){
+		var ele = $(this);
+		if (ele.attr('state') == 'off'){
+			ele.attr('state', 'on').addClass('dropup');
+			$('#facebook_message_wrapper').slideDown();
+			$('#facebook_message').focus();
+		}
+		else {
+			ele.attr('state', 'off').removeClass('dropup');
+			$('#facebook_message').blur();
+			$('#facebook_message_wrapper').slideUp();
+		}
+		return false;
+	});
+	$('#facebook_message_wrapper').hide();
+
+	//페이스북에 올리기
+	$('#facebook_message_wrapper').submit(function(){
+		var ele = $('#publish_facebook_ok_button');
+		if (!ele.attr('disabled')){
+			ele.attr('disabled', true);
+
+			FB.login(function(response){
+				if (response.authResponse){
+					var access_token = response.authResponse.accessToken;
+					var base64_data = $('.timetable-image').attr('src').replace(/data:image\/png;base64,/, "");
+					var message = $("#facebook_message").val();
+					socket.emit('publish_timetable_to_facebook', {
+						access_token:access_token,
+						base64_data:base64_data,
+						message:message
+					});
+					$('#facebook_message').blur();
+					$('#facebook_loading_modal').dialog('open');
+				}
+				else {
+					alert("페이스북 로그인에 실패했습니다.");
+					ele.removeAttr('disabled');
+				}
+			}, {scope:'publish_stream'});
+		}
+		return false;
+	});
+
 });
 
 function get_filter()
@@ -508,9 +579,14 @@ function wday_to_num(wday){
 	return -1;
 }
 
-function generate_random_color()
+function generate_random_color(color)
 {
-	return colors[Math.floor(colors.length * Math.random())];
+	if (!color)	return colors[Math.floor(colors.length * Math.random())];
+	var result = colors[Math.floor(colors.length * Math.random())];
+	while (result.plane == color.plane){
+		result = colors[Math.floor(colors.length * Math.random())];
+	}
+	return result;
 }
 
 function generate_timecell(lectures)
@@ -527,7 +603,7 @@ function generate_timecell(lectures)
 		//시간이 유효하지 않으면 스킵
 		if (wday_to_num(lecture.class_time[0]) == -1) continue;
 		//cell 색깔 설정
-		if (!lecture.color) generate_random_color();
+		if (!lecture.color) generate_random_color(lecture.color);
 
 		var class_times = lecture.class_time.split("/");
 		var locations = lecture.location.split("/");
@@ -576,7 +652,7 @@ function generate_timecell(lectures)
 		var ele = $(this);
 		var lecture = get_my_lecture_by_course_number(ele.attr('course-number'), ele.attr('lecture-number'));
 		if (lecture && !ele.hasClass('gray-cell')){ //회색이 아닐때만 바꿈
-			lecture.color = generate_random_color();
+			lecture.color = generate_random_color(lecture.color);
 			$('.timecell').each(function(x){
 				var cell = $(this);
 				if (cell.attr('course-number') == ele.attr('course-number') && cell.attr('lecture-number') == ele.attr('lecture-number'))
@@ -632,9 +708,12 @@ function remove_lecture_from_my_lectures(lecture)
 
 function timecell_dblclick_handler(ele)
 {
-	//더블클릭하면 삭제
 	var lecture = get_my_lecture_by_course_number(ele.attr('course-number'), ele.attr('lecture-number'));
-	remove_lecture_from_my_lectures(lecture);
+	//더블클릭하면 삭제
+	var con = confirm("["+lecture.course_title+"]를 시간표에서 제거하시겠습니까?");
+	if (con){
+		remove_lecture_from_my_lectures(lecture);
+	}
 }
 
 function my_courses_row_click_handler()
@@ -690,7 +769,7 @@ function row_dblclick_handler(ele)
 			alert("강의시간이 겹칩니다.");
 		}
 		else {
-			selected_lecture.color = generate_random_color();
+			selected_lecture.color = generate_random_color(selected_lecture.color);
 			my_lectures.push(selected_lecture);
 			generate_timecell(my_lectures);
 			refresh_my_courses_table();
@@ -753,7 +832,6 @@ function refresh_my_courses_table()
 	//총 학점 갱신
 	$('#my_courses_credit').text(credit+"학점");
 	my_courses_selected_row = null;
-	
 }
 
 function set_result_table(data)

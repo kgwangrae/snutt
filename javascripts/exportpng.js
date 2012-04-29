@@ -9,9 +9,16 @@ var bg_image;
 
 $(function(){
 	$('#nav_export').click(function(){
+		//브라우저가 canvas.toDataURL을 지원할 때에만..
+		if (!supportsToDataURL()){
+			alert("현재 사용중인 브라우저에선 내보내기 기능을 지원하지 않습니다.");
+			return false;
+		}
 		$('#content_wrapper').hide();
 		$('#export_wrapper').show();
 		export_timetable();
+		current_tab = "export";
+		return false;
 	});
 	$('#main_navigation a').not('#nav_export').click(function(){
 		$('#content_wrapper').show();
@@ -24,29 +31,36 @@ $(function(){
 	});
 	bg_image = new Image();
 	bg_image.src = '/images/tt_background.png';
+
+	bg_image.onload = function(){
+		canvas = document.getElementById("tt_canvas");  
+		canvas.width = bg_image.width;
+		canvas.height = bg_image.height;
+		ctx = canvas.getContext('2d');
+		ctx.drawImage(bg_image, 0, 0, bg_image.width, bg_image.height);
+		imgd = ctx.getImageData(0, 0, bg_image.width, bg_image.height); 
+		pix = imgd.data;
+		//init line variables;
+		line_vertical = [];
+		line_horizontal = [];
+		for (var i=0;i<bg_image.width*4;i+=4){
+			if (pix[bg_image.width*4 + i] != 255)
+				line_horizontal.push(i/4);
+		}
+		for (var i=0;i<bg_image.height;i++){
+			if (pix[(bg_image.width-2 + bg_image.width*i)*4] != 255)
+				line_vertical.push(i);
+		}
+	}
 });
 
 function export_timetable()
 {
-	canvas = document.getElementById("tt_canvas");  
-	ctx = canvas.getContext('2d');
-
-	canvas.width = bg_image.width;
-	canvas.height = bg_image.height;
+	if (!ctx){
+		alert("오류가 발생했습니다. 잠시 뒤 다시 시도해주세요.");
+		return;
+	}
 	ctx.drawImage(bg_image, 0, 0, bg_image.width, bg_image.height);
-	imgd = ctx.getImageData(0, 0, bg_image.width, bg_image.height); 
-	pix = imgd.data;
-	//init line variables;
-	line_vertical = [];
-	line_horizontal = [];
-	for (var i=0;i<bg_image.width*4;i+=4){
-		if (pix[bg_image.width*4 + i] != 255)
-			line_horizontal.push(i/4);
-	}
-	for (var i=0;i<bg_image.height;i++){
-		if (pix[(bg_image.width-2 + bg_image.width*i)*4] != 255)
-			line_vertical.push(i);
-	}
 
 	draw_timetable();
 	$('.timetable-image').remove();
@@ -133,4 +147,21 @@ function wrapText(context, text, x, y, maxWidth, lineHeight)
 	}
 	context.fillText(line, x, y);
 	return y;
+}
+
+function supports_canvas()
+{
+	return !!document.createElement('canvas').getContext;
+}
+
+function supportsToDataURL()
+{
+	if(!supports_canvas())
+	{
+		return false;
+	}
+
+	var c = document.createElement("canvas");
+	var data = c.toDataURL("image/png");
+	return (data.indexOf("data:image/png") == 0);
 }

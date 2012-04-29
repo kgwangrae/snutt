@@ -49,3 +49,11 @@ body {padding-top:45px;}
 #export_image_wrapper {padding:3px;}
 #export_button {padding:3px;}
 #export_button p {color:red;margin-top:5px;}
+
+#facebook_message_wrapper {margin-top:5px;}
+#facebook_message_wrapper #facebook_message {width:250px;}
+
+#facebook_loading_modal {background-color:black;}
+#facebook_loading_modal #facebook_loading_image{margin-top:20px;text-align:center;}
+#facebook_loading_modal p{margin-top:15px;text-align:center;}
+.ui-widget-header {display:none;}

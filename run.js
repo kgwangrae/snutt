@@ -388,7 +388,7 @@ function upload_timetable_to_facebook(options, socket)
 	var access_token = options.access_token;
 	var base64_data = options.base64_data;
 	var message = options.message.toString('utf8');
-	message = message + "\nhttp://choco.wafflestudio.net:3784"
+	//message = message + "\nhttp://choco.wafflestudio.net:3784"
 
 	var image_path = save_timetable_image(base64_data);
 	var target_url = 'https://graph.facebook.com/me/photos?message='+encodeURI(message)+'&access_token=' + access_token;

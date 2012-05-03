@@ -610,7 +610,7 @@ function generate_timecell(lectures)
 	for (var a=0;a<lectures.length;a++){
 		var lecture = lectures[a];
 		//시간이 유효하지 않으면 스킵
-		if (wday_to_num(lecture.class_time[0]) == -1) continue;
+		if (wday_to_num(lecture.class_time.charAt(0)) == -1) continue;
 		//cell 색깔 설정
 		if (!lecture.color) generate_random_color(lecture.color);
 
@@ -618,7 +618,7 @@ function generate_timecell(lectures)
 		var locations = lecture.location.split("/");
 		for (var i=0;i<class_times.length;i++){
 			//setup variables
-			var wday = wday_to_num(class_times[i][0]);
+			var wday = wday_to_num(class_times[i].charAt(0));
 			var start_time = parseFloat(class_times[i].replace(/[()]/g,"").split('-')[0].slice(1))*2;
 			var duration = parseFloat(class_times[i].replace(/[()]/g,"").split('-')[1])*2;
 			//기준 셀

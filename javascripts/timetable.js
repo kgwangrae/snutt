@@ -732,7 +732,6 @@ function my_courses_row_click_handler()
 	//remove 버튼 추가
 	$('.remove-course-button').remove();
 	var course_title = my_courses_selected_row.find('.course-title');
-	console.log(course_title);
 	var remove_button = $('<span class="badge badge-important">제거</span>').addClass('remove-course-button').appendTo(course_title);
 	//remove 버튼 핸들러 추가
 	remove_button.click(function(){

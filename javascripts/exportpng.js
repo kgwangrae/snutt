@@ -18,7 +18,6 @@ $(function(){
 		$('#export_wrapper').show();
 		export_timetable();
 		current_tab = "export";
-		return false;
 	});
 	$('#main_navigation a').not('#nav_export').click(function(){
 		$('#content_wrapper').show();
@@ -29,27 +28,33 @@ $(function(){
 		//Canvas2Image.saveAsPNG(canvas); 
 		//return false;
 	});
-	bg_image = new Image();
-	bg_image.src = '/images/tt_background.png';
 
-	bg_image.onload = function(){
-		canvas = document.getElementById("tt_canvas");  
-		canvas.width = bg_image.width;
-		canvas.height = bg_image.height;
-		ctx = canvas.getContext('2d');
-		ctx.drawImage(bg_image, 0, 0, bg_image.width, bg_image.height);
-		imgd = ctx.getImageData(0, 0, bg_image.width, bg_image.height); 
-		pix = imgd.data;
-		//init line variables;
-		line_vertical = [];
-		line_horizontal = [];
-		for (var i=0;i<bg_image.width*4;i+=4){
-			if (pix[bg_image.width*4 + i] != 255)
-				line_horizontal.push(i/4);
-		}
-		for (var i=0;i<bg_image.height;i++){
-			if (pix[(bg_image.width-2 + bg_image.width*i)*4] != 255)
-				line_vertical.push(i);
+	//png export를 지원하는 웹브라우저만
+	if (supportsToDataURL()){
+		bg_image = new Image();
+		bg_image.src = '/images/tt_background.png';
+
+		bg_image.onload = function(){
+			$('#export_image_wrapper').width(bg_image.width);
+			$('#export_image_wrapper').height(bg_image.height);
+			canvas = document.getElementById("tt_canvas");  
+			canvas.width = bg_image.width;
+			canvas.height = bg_image.height;
+			ctx = canvas.getContext('2d');
+			ctx.drawImage(bg_image, 0, 0, bg_image.width, bg_image.height);
+			imgd = ctx.getImageData(0, 0, bg_image.width, bg_image.height); 
+			pix = imgd.data;
+			//init line variables;
+			line_vertical = [];
+			line_horizontal = [];
+			for (var i=0;i<bg_image.width*4;i+=4){
+				if (pix[bg_image.width*4 + i] != 255)
+					line_horizontal.push(i/4);
+			}
+			for (var i=0;i<bg_image.height;i++){
+				if (pix[(bg_image.width-2 + bg_image.width*i)*4] != 255)
+					line_vertical.push(i);
+			}
 		}
 	}
 });

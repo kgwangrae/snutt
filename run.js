@@ -64,6 +64,9 @@ io.set('log level', 1); //reduce log level
 
 //GLOBAL VARIABLES
 var lectures = [];
+var updated_time = "";
+var year = "";
+var semester = "";
 
 function init_data()
 {
@@ -74,8 +77,11 @@ function init_data()
 			process.kill();
 		}
 		var lines = data.toString().split("\n");
-		var header = lines[0].split(";");
-		for (var i=1;i<lines.length;i++){
+		year = lines[0].split("/")[0];
+		semester = lines[0].split("/")[1];
+		updated_time = lines[1];
+		var header = lines[2].split(";");
+		for (var i=3;i<lines.length;i++){
 			var line = lines[i];
 			var options = {};
 			var components = line.split(";");
@@ -341,7 +347,12 @@ function class_time_check(lecture_class_time, search_class_time)
 }
 
 io.sockets.on('connection', function (socket) {
-	socket.emit('init_client', {message:"Hello world!"});
+	socket.emit('init_client', {
+		message:"Hello world!",
+		updated_time:updated_time,
+		year:year,
+		semester:semester
+	});
 	socket.on('search_query', function(data){
 		socket.emit('search_result', get_lectures(data));
 	});

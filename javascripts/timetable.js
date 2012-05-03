@@ -99,10 +99,15 @@ var colors = [
 	{border:"#9dd",plane:"#cff"}
 ];
 var search_type = "course_title";
+var current_year;
+var current_semester;
 
 $(function(){
 	socket = io.connect();
 	socket.on('init_client', function(data){
+		$('#data_updated_at').text(data.updated_time);
+		current_year = data.year;
+		current_semester = data.semester;
 	});
 	socket.on('search_result', function(data){
 		page_loading_requesting = false;
@@ -127,6 +132,7 @@ $(function(){
 		}
 	});
 
+	//SNUTT 로고 클릭
 	$('#brand_button').click(function(){
 		$('#nav_search_result').trigger('click');
 		return false;
@@ -222,7 +228,7 @@ $(function(){
 
 	//표의 빈공간 클릭 시 gray-cell 삭제
 	$('#timetable tbody td').click(function(){
-		$('.gray-cell').remove();
+		cancel_lecture_selection();
 	});
 
 	//검색필터 on/off 토글
@@ -255,8 +261,8 @@ $(function(){
 		var ele = $(this);
 		ele.parent().children().removeClass('label-info');
 		ele.addClass('label-info');
-	})
-;
+	});
+
 	$('#search_filter .header').click(function(){
 		var header = $(this);
 		var selected = header.siblings('.label-info');
@@ -480,7 +486,10 @@ $(function(){
 		}
 		return false;
 	});
+	
+	touchScroll('lectures_content');
 
+	//document load end//
 });
 
 function get_filter()
@@ -615,12 +624,8 @@ function generate_timecell(lectures)
 			//기준 셀
 			var criteria_cell = $($('#timetable td')[6*start_time+wday]);
 			var criteria_cell2;
-			if (wday == 5) criteria_cell2 = criteria_cell.prev();
+			if (wday == 5 || wday == 4) criteria_cell2 = criteria_cell.prev();
 			else criteria_cell2 = criteria_cell.next();
-
-			//var width = unitcell_width - border_weight*2;
-			//var left = leftcell_width + (width+2*border_weight)*wday;
-			//var top = topcell_height + (unitcell_height)*start_time;
 			
 			var width = Math.abs(criteria_cell2.position().left - criteria_cell.position().left) - 2*border_weight;
 			var height = (unitcell_height)*duration - border_weight*2;
@@ -720,12 +725,20 @@ function my_courses_row_click_handler()
 {
 	if (my_courses_selected_row){
 		my_courses_selected_row.removeClass('selected');
-		my_courses_selected_row.find('.remove-course-button').hide();
 	}
 	var ele = $(this);
 	ele.addClass('selected');
 	my_courses_selected_row = ele;
-	my_courses_selected_row.find('.remove-course-button').show();
+	//remove 버튼 추가
+	$('.remove-course-button').remove();
+	var course_title = my_courses_selected_row.find('.course-title');
+	console.log(course_title);
+	var remove_button = $('<span class="badge badge-important">제거</span>').addClass('remove-course-button').appendTo(course_title);
+	//remove 버튼 핸들러 추가
+	remove_button.click(function(){
+		if (my_courses_selected_row) my_courses_selected_row.trigger('dblclick');
+	});
+
 	//timetable refreshing
 	var selected_lecture = get_my_lecture_by_course_number(ele.attr('course-number'), ele.attr('lecture-number'));
 	if (!selected_lecture.color)
@@ -735,14 +748,20 @@ function my_courses_row_click_handler()
 
 function row_click_handler()
 {
-	if (selected_row){
+	if (selected_row)
 		selected_row.removeClass('selected');
-		selected_row.find('.add-course-button').hide();
-	}
 	var ele = $(this);
 	ele.addClass('selected');
 	selected_row = ele;
-	selected_row.find('.add-course-button').show();
+	//add 버튼 추가
+	$('.add-course-button').remove();
+	var course_title = selected_row.find('.course-title');
+	var add_button = $('<span class="badge badge-success">추가</span>').addClass('add-course-button').appendTo(course_title);
+	//add버튼 핸들러 추가
+	add_button.click(function(){
+		if (selected_row) selected_row.trigger('dblclick');
+	});
+
 	//timetable refreshing
 	var selected_lecture = get_lecture_by_course_number(ele.attr('course-number'), ele.attr('lecture-number'));
 	if (!selected_lecture.color)
@@ -781,7 +800,10 @@ function row_dblclick_handler(ele)
 function cancel_lecture_selection()
 {
 	$('.selected').removeClass('selected');
+	$('.add-course-button').remove();
+	$('.remove-course-button').remove();
 	selected_row = null;
+	my_courses_selected_row = null;
 	generate_timecell(my_lectures);
 }
 
@@ -806,7 +828,6 @@ function refresh_my_courses_table()
 		$('<td></td>').addClass('quota').appendTo(row).text(lecture.quota);
 		$('<td></td>').addClass('enrollment').appendTo(row).text(lecture.enrollment);
 		$('<td></td>').addClass('remark').appendTo(row).text(lecture.remark);
-		var remove_button = $('<span class="badge badge-important">제거</span>').addClass('remove-course-button').appendTo(course_title).hide();
 
 		row.appendTo($('#my_courses_table tbody'));
 		//bind row click event
@@ -819,10 +840,6 @@ function refresh_my_courses_table()
 			my_courses_row_dblclick_handler($(this));
 		})
 
-		//remove_button click
-		remove_button.click(function(){
-			if (my_courses_selected_row) my_courses_selected_row.trigger('dblclick');
-		});
 	}
 
 	if (my_lectures.length == 0){
@@ -848,6 +865,8 @@ function set_result_table(data)
 		var lecture = data.lectures[i];
 		var row = $('<tr></tr>').attr('course-number', lecture.course_number).attr('lecture-number', lecture.lecture_number);
 		$('<td></td>').addClass('course-number').appendTo(row).text(lecture.course_number);
+		//var rating = $('<td></td>').addClass('course-number').appendTo(row).text("");
+		//$('<div></div>').appendTo(rating).jRating({score:Math.random()*10});
 		$('<td></td>').addClass('lecture-number').appendTo(row).text(lecture.lecture_number);
 		var course_title = $('<td></td>').addClass('course-title').appendTo(row).text(lecture.course_title+" ");
 		$('<td></td>').addClass('classification').appendTo(row).text(lecture.classification);
@@ -860,7 +879,6 @@ function set_result_table(data)
 		$('<td></td>').addClass('quota').appendTo(row).text(lecture.quota);
 		$('<td></td>').addClass('enrollment').appendTo(row).text(lecture.enrollment);
 		$('<td></td>').addClass('remark').appendTo(row).text(lecture.remark);
-		var add_button = $('<span class="badge badge-success">추가</span>').addClass('add-course-button').appendTo(course_title).hide();
 
 		row.appendTo($('#search_result_table tbody'));
 		//bind row click event
@@ -872,13 +890,46 @@ function set_result_table(data)
 		row.addSwipeEvents().bind('doubletap', function(evt, touch) {
 			row_dblclick_handler($(this));
 		})
-		//add_button click
-		add_button.click(function(){
-			if (selected_row) selected_row.trigger('dblclick');
-		});
 	}
 	if (data.lectures.length == 0){
 		var row = $('<tr></tr>').appendTo($('#search_result_table tbody'));
 		$('<td colspan="12">'+data.query.query_text+' : 검색 결과가 없습니다.</td>').appendTo(row).css('text-align', 'center');
 	}
 }
+
+function show_course_detail(options)
+{
+	var year = options.year;
+	var semester = options.semester;
+	var course_number = options.course_number;
+	var lecture_number = options.lecture_number;
+	var url = "http://sugang.snu.ac.kr/sugang/JACC107.do?gaesulYear="+year+"&gaesulHakgi="+semester+"&gyoCode="+course_number+"&gangjwaCode="+lecture_number;
+	window.open(url);
+}
+
+function isTouchDevice(){
+	try{
+		document.createEvent("TouchEvent");
+		return true;
+	}catch(e){
+		return false;
+	}
+}
+
+function touchScroll(id){
+	if(isTouchDevice()){ //if touch events exist...
+		var el=document.getElementById(id);
+		var scrollStartPos=0;
+
+		document.getElementById(id).addEventListener("touchstart", function(event) {
+			scrollStartPos=this.scrollTop+event.touches[0].pageY;
+			//event.preventDefault();
+		},false);
+
+		document.getElementById(id).addEventListener("touchmove", function(event) {
+			this.scrollTop=scrollStartPos-event.touches[0].pageY;
+			event.preventDefault();
+		},false);
+	}
+}
+

@@ -129,6 +129,8 @@ def convert_classtime(time)
 end
 
 open(txt_filename, "w") do |file|
+	file.puts "#{year}/#{semester}"
+	file.puts Time.now.localtime("+09:00").strftime("%Y-%m-%d %H:%M:%S")
 	file.puts "classification;department;academic_year;course_number;lecture_number;course_title;credit;class_time;location;instructor;quota;enrollment;remark;category"
 	3.upto(m.row_size-1) do |i|
 		classification = m[i,0]

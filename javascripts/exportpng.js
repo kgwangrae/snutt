@@ -69,11 +69,12 @@ function export_timetable()
 
 	draw_timetable();
 	$('.timetable-image').remove();
-	var imgPNG = Canvas2Image.saveAsPNG(canvas, true); 
+	//var imgPNG = Canvas2Image.saveAsPNG(canvas, true); 
+	var imgPNG = new Image();
+	imgPNG.src = canvas.toDataURL("image/png");
 	$(imgPNG).appendTo($('#export_image_wrapper')).addClass('timetable-image');
 
-	export_image_url = canvas.toDataURL();
-	$('#export_save_button').attr('href', export_image_url);
+	$('#export_save_button').attr('href', imgPNG.src);
 }
 
 function set_rect_style(color)

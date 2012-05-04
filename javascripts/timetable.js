@@ -552,12 +552,13 @@ $(function(){
 		return "";
 	}
 	$('#timetable tbody td').mousedown(function(e){
-		custom_start_cell = $(e.toElement);
+		custom_start_cell = $(this);
+
 		custom_wday = wday_string(custom_start_cell.attr('class'));
 		custom_start_time = parseFloat(custom_start_cell.attr('time'));
 	}).mousemove(function(e){
 		if (custom_start_cell){
-			custom_end_cell = $(e.toElement);
+			custom_end_cell = $(this);
 			custom_end_time = Math.max(parseFloat(custom_end_cell.attr('time')), custom_start_time) + 0.5;
 			if (custom_class_time == (custom_wday + "(" + custom_start_time + "-" + (custom_end_time - custom_start_time) + ")"))
 				return false;
@@ -1057,3 +1058,20 @@ function touchScroll(id){
 	}
 }
 
+
+//파이어폭스 드래그 금지
+var omitformtags=["input", "textarea", "select"];
+omitformtags=omitformtags.join("|");
+function disableselect(e){
+	if (omitformtags.indexOf(e.target.tagName.toLowerCase())==-1)
+		return false;
+}
+function reEnable(){
+	return true;
+}
+if (typeof document.onselectstart!="undefined")
+	document.onselectstart=new Function ("return false")
+else {
+	document.onmousedown=disableselect;
+	document.onmouseup=reEnable;
+}

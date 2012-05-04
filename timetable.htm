@@ -198,6 +198,9 @@
 				</div>
 				<div id="timetable_container">
 					<div id="timecells_container">
+						<div id="customcell_container">
+							<div id="customcell" style="display:none;"></div>
+						</div>
 					</div>
 					<table id="timetable">
 						<thead>
@@ -217,140 +220,140 @@
 									<span class="period">0교시</span><br />
 									<span class="time">08:00~09:00</span>
 								</th>
-								<td class="mon">&nbsp;</td><td class="tue">&nbsp;</td><td class="wed">&nbsp;</td><td class="thu">&nbsp;</td><td class="fri">&nbsp;</td><td class="sat">&nbsp;</td>
+								<td class="mon" time="0">&nbsp;</td><td class="tue" time="0">&nbsp;</td><td class="wed" time="0">&nbsp;</td><td class="thu" time="0">&nbsp;</td><td class="fri" time="0">&nbsp;</td><td class="sat" time="0">&nbsp;</td>
 							</tr>
 							<tr>
-								<td class="mon">&nbsp;</td><td class="tue">&nbsp;</td><td class="wed">&nbsp;</td><td class="thu">&nbsp;</td><td class="fri">&nbsp;</td><td class="sat">&nbsp;</td>
+								<td class="mon" time="0.5">&nbsp;</td><td class="tue" time="0.5">&nbsp;</td><td class="wed" time="0.5">&nbsp;</td><td class="thu" time="0.5">&nbsp;</td><td class="fri" time="0.5">&nbsp;</td><td class="sat" time="0.5">&nbsp;</td>
 							</tr>
 							<tr>
 								<th rowspan="2">
 									<span class="period">1교시</span><br />
 									<span class="time">09:00~10:00</span>
 								</th>
-								<td class="mon">&nbsp;</td><td class="tue">&nbsp;</td><td class="wed">&nbsp;</td><td class="thu">&nbsp;</td><td class="fri">&nbsp;</td><td class="sat">&nbsp;</td>
+								<td class="mon" time="1">&nbsp;</td><td class="tue" time="1">&nbsp;</td><td class="wed" time="1">&nbsp;</td><td class="thu" time="1">&nbsp;</td><td class="fri" time="1">&nbsp;</td><td class="sat" time="1">&nbsp;</td>
 							</tr>
 							<tr>
-								<td class="mon">&nbsp;</td><td class="tue">&nbsp;</td><td class="wed">&nbsp;</td><td class="thu">&nbsp;</td><td class="fri">&nbsp;</td><td class="sat">&nbsp;</td>
+								<td class="mon" time="1.5">&nbsp;</td><td class="tue" time="1.5">&nbsp;</td><td class="wed" time="1.5">&nbsp;</td><td class="thu" time="1.5">&nbsp;</td><td class="fri" time="1.5">&nbsp;</td><td class="sat" time="1.5">&nbsp;</td>
 							</tr>
 							<tr>
 								<th rowspan="2">
 									<span class="period">2교시</span><br />
 									<span class="time">10:00~11:00</span>
 								</th>
-								<td class="mon">&nbsp;</td><td class="tue">&nbsp;</td><td class="wed">&nbsp;</td><td class="thu">&nbsp;</td><td class="fri">&nbsp;</td><td class="sat">&nbsp;</td>
+								<td class="mon" time="2">&nbsp;</td><td class="tue" time="2">&nbsp;</td><td class="wed" time="2">&nbsp;</td><td class="thu" time="2">&nbsp;</td><td class="fri" time="2">&nbsp;</td><td class="sat" time="2">&nbsp;</td>
 							</tr>
 							<tr>
-								<td class="mon">&nbsp;</td><td class="tue">&nbsp;</td><td class="wed">&nbsp;</td><td class="thu">&nbsp;</td><td class="fri">&nbsp;</td><td class="sat">&nbsp;</td>
+								<td class="mon" time="2.5">&nbsp;</td><td class="tue" time="2.5">&nbsp;</td><td class="wed" time="2.5">&nbsp;</td><td class="thu" time="2.5">&nbsp;</td><td class="fri" time="2.5">&nbsp;</td><td class="sat" time="2.5">&nbsp;</td>
 							</tr>
 							<tr>
 								<th rowspan="2">
 									<span class="period">3교시</span><br />
 									<span class="time">11:00~12:00</span>
 								</th>
-								<td class="mon">&nbsp;</td><td class="tue">&nbsp;</td><td class="wed">&nbsp;</td><td class="thu">&nbsp;</td><td class="fri">&nbsp;</td><td class="sat">&nbsp;</td>
+								<td class="mon" time="3">&nbsp;</td><td class="tue" time="3">&nbsp;</td><td class="wed" time="3">&nbsp;</td><td class="thu" time="3">&nbsp;</td><td class="fri" time="3">&nbsp;</td><td class="sat" time="3">&nbsp;</td>
 							</tr>
 							<tr>
-								<td class="mon">&nbsp;</td><td class="tue">&nbsp;</td><td class="wed">&nbsp;</td><td class="thu">&nbsp;</td><td class="fri">&nbsp;</td><td class="sat">&nbsp;</td>
+								<td class="mon" time="3.5">&nbsp;</td><td class="tue" time="3.5">&nbsp;</td><td class="wed" time="3.5">&nbsp;</td><td class="thu" time="3.5">&nbsp;</td><td class="fri" time="3.5">&nbsp;</td><td class="sat" time="3.5">&nbsp;</td>
 							</tr>
 							<tr>
 								<th rowspan="2">
 									<span class="period">4교시</span><br />
 									<span class="time">12:00~13:00</span>
 								</th>
-								<td class="mon">&nbsp;</td><td class="tue">&nbsp;</td><td class="wed">&nbsp;</td><td class="thu">&nbsp;</td><td class="fri">&nbsp;</td><td class="sat">&nbsp;</td>
+								<td class="mon" time="4">&nbsp;</td><td class="tue" time="4">&nbsp;</td><td class="wed" time="4">&nbsp;</td><td class="thu" time="4">&nbsp;</td><td class="fri" time="4">&nbsp;</td><td class="sat" time="4">&nbsp;</td>
 							</tr>
 							<tr>
-								<td class="mon">&nbsp;</td><td class="tue">&nbsp;</td><td class="wed">&nbsp;</td><td class="thu">&nbsp;</td><td class="fri">&nbsp;</td><td class="sat">&nbsp;</td>
+								<td class="mon" time="4.5">&nbsp;</td><td class="tue" time="4.5">&nbsp;</td><td class="wed" time="4.5">&nbsp;</td><td class="thu" time="4.5">&nbsp;</td><td class="fri" time="4.5">&nbsp;</td><td class="sat" time="4.5">&nbsp;</td>
 							</tr>
 							<tr>
 								<th rowspan="2">
 									<span class="period">5교시</span><br />
 									<span class="time">13:00~14:00</span>
 								</th>
-								<td class="mon">&nbsp;</td><td class="tue">&nbsp;</td><td class="wed">&nbsp;</td><td class="thu">&nbsp;</td><td class="fri">&nbsp;</td><td class="sat">&nbsp;</td>
+								<td class="mon" time="5">&nbsp;</td><td class="tue" time="5">&nbsp;</td><td class="wed" time="5">&nbsp;</td><td class="thu" time="5">&nbsp;</td><td class="fri" time="5">&nbsp;</td><td class="sat" time="5">&nbsp;</td>
 							</tr>
 							<tr>
-								<td class="mon">&nbsp;</td><td class="tue">&nbsp;</td><td class="wed">&nbsp;</td><td class="thu">&nbsp;</td><td class="fri">&nbsp;</td><td class="sat">&nbsp;</td>
+								<td class="mon" time="5.5">&nbsp;</td><td class="tue" time="5.5">&nbsp;</td><td class="wed" time="5.5">&nbsp;</td><td class="thu" time="5.5">&nbsp;</td><td class="fri" time="5.5">&nbsp;</td><td class="sat" time="5.5">&nbsp;</td>
 							</tr>
 							<tr>
 								<th rowspan="2">
 									<span class="period">6교시</span><br />
 									<span class="time">14:00~15:00</span>
 								</th>
-								<td class="mon">&nbsp;</td><td class="tue">&nbsp;</td><td class="wed">&nbsp;</td><td class="thu">&nbsp;</td><td class="fri">&nbsp;</td><td class="sat">&nbsp;</td>
+								<td class="mon" time="6">&nbsp;</td><td class="tue" time="6">&nbsp;</td><td class="wed" time="6">&nbsp;</td><td class="thu" time="6">&nbsp;</td><td class="fri" time="6">&nbsp;</td><td class="sat" time="6">&nbsp;</td>
 							</tr>
 							<tr>
-								<td class="mon">&nbsp;</td><td class="tue">&nbsp;</td><td class="wed">&nbsp;</td><td class="thu">&nbsp;</td><td class="fri">&nbsp;</td><td class="sat">&nbsp;</td>
+								<td class="mon" time="6.5">&nbsp;</td><td class="tue" time="6.5">&nbsp;</td><td class="wed" time="6.5">&nbsp;</td><td class="thu" time="6.5">&nbsp;</td><td class="fri" time="6.5">&nbsp;</td><td class="sat" time="6.5">&nbsp;</td>
 							</tr>
 							<tr>
 								<th rowspan="2">
 									<span class="period">7교시</span><br />
 									<span class="time">15:00~16:00</span>
 								</th>
-								<td class="mon">&nbsp;</td><td class="tue">&nbsp;</td><td class="wed">&nbsp;</td><td class="thu">&nbsp;</td><td class="fri">&nbsp;</td><td class="sat">&nbsp;</td>
+								<td class="mon" time="7">&nbsp;</td><td class="tue" time="7">&nbsp;</td><td class="wed" time="7">&nbsp;</td><td class="thu" time="7">&nbsp;</td><td class="fri" time="7">&nbsp;</td><td class="sat" time="7">&nbsp;</td>
 							</tr>
 							<tr>
-								<td class="mon">&nbsp;</td><td class="tue">&nbsp;</td><td class="wed">&nbsp;</td><td class="thu">&nbsp;</td><td class="fri">&nbsp;</td><td class="sat">&nbsp;</td>
+								<td class="mon" time="7.5">&nbsp;</td><td class="tue" time="7.5">&nbsp;</td><td class="wed" time="7.5">&nbsp;</td><td class="thu" time="7.5">&nbsp;</td><td class="fri" time="7.5">&nbsp;</td><td class="sat" time="7.5">&nbsp;</td>
 							</tr>
 							<tr>
 								<th rowspan="2">
 									<span class="period">8교시</span><br />
 									<span class="time">16:00~17:00</span>
 								</th>
-								<td class="mon">&nbsp;</td><td class="tue">&nbsp;</td><td class="wed">&nbsp;</td><td class="thu">&nbsp;</td><td class="fri">&nbsp;</td><td class="sat">&nbsp;</td>
+								<td class="mon" time="8">&nbsp;</td><td class="tue" time="8">&nbsp;</td><td class="wed" time="8">&nbsp;</td><td class="thu" time="8">&nbsp;</td><td class="fri" time="8">&nbsp;</td><td class="sat" time="8">&nbsp;</td>
 							</tr>
 							<tr>
-								<td class="mon">&nbsp;</td><td class="tue">&nbsp;</td><td class="wed">&nbsp;</td><td class="thu">&nbsp;</td><td class="fri">&nbsp;</td><td class="sat">&nbsp;</td>
+								<td class="mon" time="8.5">&nbsp;</td><td class="tue" time="8.5">&nbsp;</td><td class="wed" time="8.5">&nbsp;</td><td class="thu" time="8.5">&nbsp;</td><td class="fri" time="8.5">&nbsp;</td><td class="sat" time="8.5">&nbsp;</td>
 							</tr>
 							<tr>
 								<th rowspan="2">
 									<span class="period">9교시</span><br />
 									<span class="time">17:00~18:00</span>
 								</th>
-								<td class="mon">&nbsp;</td><td class="tue">&nbsp;</td><td class="wed">&nbsp;</td><td class="thu">&nbsp;</td><td class="fri">&nbsp;</td><td class="sat">&nbsp;</td>
+								<td class="mon" time="9">&nbsp;</td><td class="tue" time="9">&nbsp;</td><td class="wed" time="9">&nbsp;</td><td class="thu" time="9">&nbsp;</td><td class="fri" time="9">&nbsp;</td><td class="sat" time="9">&nbsp;</td>
 							</tr>
 							<tr>
-								<td class="mon">&nbsp;</td><td class="tue">&nbsp;</td><td class="wed">&nbsp;</td><td class="thu">&nbsp;</td><td class="fri">&nbsp;</td><td class="sat">&nbsp;</td>
+								<td class="mon" time="9.5">&nbsp;</td><td class="tue" time="9.5">&nbsp;</td><td class="wed" time="9.5">&nbsp;</td><td class="thu" time="9.5">&nbsp;</td><td class="fri" time="9.5">&nbsp;</td><td class="sat" time="9.5">&nbsp;</td>
 							</tr>
 							<tr>
 								<th rowspan="2">
 									<span class="period">10교시</span><br />
 									<span class="time">18:00~19:00</span>
 								</th>
-								<td class="mon">&nbsp;</td><td class="tue">&nbsp;</td><td class="wed">&nbsp;</td><td class="thu">&nbsp;</td><td class="fri">&nbsp;</td><td class="sat">&nbsp;</td>
+								<td class="mon" time="10">&nbsp;</td><td class="tue" time="10">&nbsp;</td><td class="wed" time="10">&nbsp;</td><td class="thu" time="10">&nbsp;</td><td class="fri" time="10">&nbsp;</td><td class="sat" time="10">&nbsp;</td>
 							</tr>
 							<tr>
-								<td class="mon">&nbsp;</td><td class="tue">&nbsp;</td><td class="wed">&nbsp;</td><td class="thu">&nbsp;</td><td class="fri">&nbsp;</td><td class="sat">&nbsp;</td>
+								<td class="mon" time="10.5">&nbsp;</td><td class="tue" time="10.5">&nbsp;</td><td class="wed" time="10.5">&nbsp;</td><td class="thu" time="10.5">&nbsp;</td><td class="fri" time="10.5">&nbsp;</td><td class="sat" time="10.5">&nbsp;</td>
 							</tr>
 							<tr>
 								<th rowspan="2">
 									<span class="period">11교시</span><br />
 									<span class="time">19:00~20:00</span>
 								</th>
-								<td class="mon">&nbsp;</td><td class="tue">&nbsp;</td><td class="wed">&nbsp;</td><td class="thu">&nbsp;</td><td class="fri">&nbsp;</td><td class="sat">&nbsp;</td>
+								<td class="mon" time="11">&nbsp;</td><td class="tue" time="11">&nbsp;</td><td class="wed" time="11">&nbsp;</td><td class="thu" time="11">&nbsp;</td><td class="fri" time="11">&nbsp;</td><td class="sat" time="11">&nbsp;</td>
 							</tr>
 							<tr>
-								<td class="mon">&nbsp;</td><td class="tue">&nbsp;</td><td class="wed">&nbsp;</td><td class="thu">&nbsp;</td><td class="fri">&nbsp;</td><td class="sat">&nbsp;</td>
+								<td class="mon" time="11.5">&nbsp;</td><td class="tue" time="11.5">&nbsp;</td><td class="wed" time="11.5">&nbsp;</td><td class="thu" time="11.5">&nbsp;</td><td class="fri" time="11.5">&nbsp;</td><td class="sat" time="11.5">&nbsp;</td>
 							</tr>
 							<tr>
 								<th rowspan="2">
 									<span class="period">12교시</span><br />
 									<span class="time">20:00~21:00</span>
 								</th>
-								<td class="mon">&nbsp;</td><td class="tue">&nbsp;</td><td class="wed">&nbsp;</td><td class="thu">&nbsp;</td><td class="fri">&nbsp;</td><td class="sat">&nbsp;</td>
+								<td class="mon" time="12">&nbsp;</td><td class="tue" time="12">&nbsp;</td><td class="wed" time="12">&nbsp;</td><td class="thu" time="12">&nbsp;</td><td class="fri" time="12">&nbsp;</td><td class="sat" time="12">&nbsp;</td>
 							</tr>
 							<tr>
-								<td class="mon">&nbsp;</td><td class="tue">&nbsp;</td><td class="wed">&nbsp;</td><td class="thu">&nbsp;</td><td class="fri">&nbsp;</td><td class="sat">&nbsp;</td>
+								<td class="mon" time="12.5">&nbsp;</td><td class="tue" time="12.5">&nbsp;</td><td class="wed" time="12.5">&nbsp;</td><td class="thu" time="12.5">&nbsp;</td><td class="fri" time="12.5">&nbsp;</td><td class="sat" time="12.5">&nbsp;</td>
 							</tr>
 							<tr>
 								<th rowspan="2">
 									<span class="period">13교시</span><br />
 									<span class="time">21:00~22:00</span>
 								</th>
-								<td class="mon">&nbsp;</td><td class="tue">&nbsp;</td><td class="wed">&nbsp;</td><td class="thu">&nbsp;</td><td class="fri">&nbsp;</td><td class="sat">&nbsp;</td>
+								<td class="mon" time="13">&nbsp;</td><td class="tue" time="13">&nbsp;</td><td class="wed" time="13">&nbsp;</td><td class="thu" time="13">&nbsp;</td><td class="fri" time="13">&nbsp;</td><td class="sat" time="13">&nbsp;</td>
 							</tr>
 							<tr>
-								<td class="mon">&nbsp;</td><td class="tue">&nbsp;</td><td class="wed">&nbsp;</td><td class="thu">&nbsp;</td><td class="fri">&nbsp;</td><td class="sat">&nbsp;</td>
+								<td class="mon" time="13.5">&nbsp;</td><td class="tue" time="13.5">&nbsp;</td><td class="wed" time="13.5">&nbsp;</td><td class="thu" time="13.5">&nbsp;</td><td class="fri" time="13.5">&nbsp;</td><td class="sat" time="13.5">&nbsp;</td>
 							</tr>
 						</tbody>
 					</table>
@@ -397,6 +400,14 @@
 			<p>
 			이미지를 등록중입니다. 잠시만 기다려주세요.
 			</p>
+		</div>
+		<div id="custom_lecture_modal">
+			<form id="custom_lecture_form">
+				<input type="text" id="custom_course_title" class="input-large" placeholder="교과목명을 입력하세요." /><br />
+				<input type="text" id="custom_location" class="input-large" placeholder="강의동을 입력하세요." /><br />
+				<button type="submit" id="custom_lecture_add_button" class="btn btn-inverse">추가</button>
+				<a id="custom_lecture_close_button" class="btn btn-inverse">취소</a>
+			</form>
 		</div>
 
 		<!-- Le javascript

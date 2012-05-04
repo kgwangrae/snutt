@@ -102,6 +102,15 @@ var search_type = "course_title";
 var current_year;
 var current_semester;
 
+var custom_start_cell;
+var custom_end_cell;
+var custom_wday;
+var custom_start_time;
+var custom_class_time;
+var custom_end_cell;
+var custom_end_time;
+var custom_lecture_number = 1;
+
 $(function(){
 	socket = io.connect();
 	socket.on('init_client', function(data){
@@ -289,12 +298,7 @@ $(function(){
 	}
 
 	$('body').keydown(function(e){
-		if (e.keyCode == 9){
-			//tab
-			$('#search_query_text').focus();
-			return false;
-		}
-		else if (e.keyCode == 34 && current_tab == "search"){
+		if (e.keyCode == 34 && current_tab == "search"){
 			//pagedown
 			//선택된 것이 없으면 1번째 row 선택
 			if (!selected_row && lectures.length > 0){
@@ -439,7 +443,32 @@ $(function(){
 		modal:true,
 		resizable:false,
 		closeOnEscape:false,
+		dialogClass:"no-title",
 		autoOpen:false
+	});
+
+	//custom lecture modal
+	$('#custom_lecture_modal').dialog({
+		modal:true,
+		title:"사용자정의 시간표",
+		dialogClass:"custom-lecture-dialog",
+		width:250,
+		open:function(){
+			$('#custom_course_title').val("");
+			$('#custom_location').val("");
+			cancel_lecture_selection();
+		},
+		close:function(){
+			$('#customcell').hide();
+			custom_class_time = null;
+		},
+		resizable:false,
+		autoOpen:false
+	});
+
+	$('#custom_lecture_close_button').click(function(){
+		$('#custom_lecture_modal').dialog('close');
+		return false;
 	});
 
 	//페이스북에 공유하기
@@ -486,11 +515,107 @@ $(function(){
 		}
 		return false;
 	});
+
+	//custom lecture form submit
+	$('#custom_lecture_form').submit(function(){
+		var course_title = $('#custom_course_title').val();
+		var location = $('#custom_location').val();
+		var custom_lecture = {
+			course_number : "custom",
+			lecture_number : custom_lecture_number++,
+			course_title : course_title,
+			class_time : custom_class_time,
+			location : location,
+			color : generate_random_color(),
+			credit : 0
+		};
+		my_lectures.push(custom_lecture);
+		refresh_my_courses_table();
+		generate_timecell(my_lectures);
+		my_course_tooltip_message("강의가 추가되었습니다.");
+		$('#custom_lecture_modal').dialog('close');
+		return false;
+	});
 	
+	//contents scroll
 	touchScroll('lectures_content');
+
+	//custom time 추가
+	function wday_string(wday)
+	{
+		if (wday == "mon") return "월";
+		if (wday == "tue") return "화";
+		if (wday == "wed") return "수";
+		if (wday == "thu") return "목";
+		if (wday == "fri") return "금";
+		if (wday == "sat") return "토";
+		return "";
+	}
+	$('#timetable tbody td').mousedown(function(e){
+		custom_start_cell = $(e.toElement);
+		custom_wday = wday_string(custom_start_cell.attr('class'));
+		custom_start_time = parseFloat(custom_start_cell.attr('time'));
+	}).mousemove(function(e){
+		if (custom_start_cell){
+			custom_end_cell = $(e.toElement);
+			custom_end_time = Math.max(parseFloat(custom_end_cell.attr('time')), custom_start_time) + 0.5;
+			if (custom_class_time == (custom_wday + "(" + custom_start_time + "-" + (custom_end_time - custom_start_time) + ")"))
+				return false;
+
+			custom_class_time = custom_wday + "(" + custom_start_time + "-" + (custom_end_time - custom_start_time) + ")";
+			generate_custom_cell({class_time : custom_class_time});
+		}
+		return false;
+	});
+	$('body').mouseup(function(e){
+		//선택된 칸이 한칸 이상이어야..
+		if (custom_end_cell){
+			if (already_exist_class_time({class_time:custom_class_time})){
+				alert("강의시간이 겹칩니다.");
+				$('#customcell').hide();
+				custom_class_time = null;
+			}
+			else {
+				$('#ui-dialog-title-custom_lecture_modal').text('사용자정의 시간표 - ' + custom_class_time);
+				$('#custom_lecture_modal').dialog('open');
+			}
+		}
+		custom_start_cell = null;
+		custom_end_cell = null;
+	});
 
 	//document load end//
 });
+
+function generate_custom_cell(lecture)
+{
+	var unitcell_width = $('#timetable tbody td').width()+2;
+	var unitcell_height = $('#timetable tbody td').height()+2;
+	var leftcell_width = $('#timetable tbody th').width()+2;
+	var topcell_height = $('#timetable thead th').height()+2;
+	var border_weight = 3;
+	//시간이 유효하지 않으면 스킵
+	if (wday_to_num(lecture.class_time.charAt(0)) == -1) return;
+
+	var class_time = lecture.class_time;
+	//setup variables
+	var wday = wday_to_num(class_time.charAt(0));
+	var start_time = parseFloat(class_time.replace(/[()]/g,"").split('-')[0].slice(1))*2;
+	var duration = parseFloat(class_time.replace(/[()]/g,"").split('-')[1])*2;
+	//기준 셀
+	var criteria_cell = $($('#timetable td')[6*start_time+wday]);
+	var criteria_cell2;
+	if (wday == 5 || wday == 4) criteria_cell2 = criteria_cell.prev();
+	else criteria_cell2 = criteria_cell.next();
+	
+	var width = Math.abs(criteria_cell2.position().left - criteria_cell.position().left) - 2*border_weight;
+	var height = (unitcell_height)*duration - border_weight*2;
+	var left = criteria_cell.position().left - criteria_cell.parent().position().left;
+	var top = criteria_cell.position().top - criteria_cell.parent().parent().position().top + topcell_height;
+
+	//create container
+	var customcell = $('#customcell').css('left', left).css('top', top).width(width).height(height).show();
+}
 
 function get_filter()
 {
@@ -634,15 +759,15 @@ function generate_timecell(lectures)
 
 			//create container
 			var container = $('<div></div>').addClass('timecell-container').appendTo($('#timecells_container'));
-			var div = $('<div></div>').addClass('timecell').width(width).height(height).css('left', left).css('top', top).css('background-color', lecture.color.plane).css('border-color', lecture.color.border).appendTo(container);
-			$('<span></span>').text(lecture.course_title).appendTo(div);
-			$('<br />').appendTo(div);
-			$('<span></span>').text(locations[i]).appendTo(div);
+			var tdiv = $('<div></div>').addClass('timecell').width(width).height(height).css('left', left).css('top', top).css('background-color', lecture.color.plane).css('border-color', lecture.color.border).appendTo(container);
+			$('<span></span>').text(lecture.course_title).appendTo(tdiv);
+			$('<br />').appendTo(tdiv);
+			$('<span></span>').text(locations[i]).appendTo(tdiv);
 			//gray cell이면 gray-cell 클래스 추가
 			if (lecture.color == gray_color)
-				div.addClass('gray-cell');
+				tdiv.addClass('gray-cell');
 
-			div.attr('course-number', lecture.course_number).attr('lecture-number', lecture.lecture_number);
+			tdiv.attr('course-number', lecture.course_number).attr('lecture-number', lecture.lecture_number);
 		}
 	}
 	//graycell click event 추가

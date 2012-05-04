@@ -31,6 +31,8 @@ body {padding-top:45px;}
 #timetable .time {font-size:0.8em;}
 .timecell-container {position:absolute;z-index:100;}
 .timecell {position:relative;border:3px solid #ccc;text-align:center;cursor:pointer;}
+#customcell_container {position:absolute;z-index:100;}
+#customcell {position:relative;border:3px dotted #f00;text-align:center;z-index:200;}
 
 #footer {margin:20px 0 10px 0;padding:10px;text-align:center;border-top:1px solid #ddd;}
 #footer p {font-size:9pt;font-family:"Arial";margin:0;padding:0;margin:3px;}
@@ -56,4 +58,5 @@ body {padding-top:45px;}
 #facebook_loading_modal {background-color:black;}
 #facebook_loading_modal #facebook_loading_image{margin-top:20px;text-align:center;}
 #facebook_loading_modal p{margin-top:15px;text-align:center;}
-.ui-widget-header {display:none;}
+.no-title .ui-widget-header {display:none;}
+.ui-widget-header {font-family:"Arial" !important;font-weight:normal !important;}

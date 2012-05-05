@@ -50,7 +50,7 @@
        }(document));
 
       // Init the SDK upon load
-      window.fbAsyncInit = function() {
+      window.fbAsyncInit = function(){
         FB.init({
           appId      : '373200526066057', // App ID
           channelUrl : '//'+window.location.hostname+'/channel', // Path to your Channel File
@@ -58,7 +58,7 @@
           cookie     : true, // enable cookies to allow the server to access the session
           xfbml      : true  // parse XFBML
         });
-      } 
+      };
     </script>
 		<!-- facebook test end -->
 
@@ -69,7 +69,13 @@
 					<ul class="nav" id="main_navigation">
 						<li class="active"><a href="#search" id="nav_search_result" data-toggle="tab">검색결과</a></li>
 						<li><a href="#my_courses" data-toggle="tab" rel="tooltip" id="nav_my_courses">내 강의 <span class="badge badge-info" id="my_courses_credit">0학점</span></a></li>
+						<li id="social_comment_li"><a href="#social_comment" id="nav_social_comment" data-toggle="tab">소셜댓글</a></li>
 						<li id="export_li"><a href="#export" id="nav_export" data-toggle="tab">내보내기</a></li>
+					</ul>
+					<ul class="nav pull-right">
+						<li id="facebook_like_li">
+						<div class="fb-like" data-href="http://example.com" data-send="true" data-layout="button_count" data-width="170" data-show-faces="false" data-colorscheme="dark"></div>
+						</li>
 					</ul>
 				</div>
 			</div>
@@ -377,6 +383,10 @@
 					* 저장하기 버튼이 작동하지 않으면 위에 있는 그림을 [우클릭 -&gt; 다른 이름으로 사진 저장]으로 직접 저장하세요.
 					</p>
 				</div>
+			</div>
+
+			<div id="social_comment_wrapper">
+				<div class="fb-comments" data-href="http://example.com" data-num-posts="5" data-width="500" id="social_comment"></div>
 			</div>
 
 			<div id="footer">

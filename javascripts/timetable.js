@@ -584,6 +584,34 @@ $(function(){
 		custom_start_cell = null;
 		custom_end_cell = null;
 	});
+	//내보내기 네비게이션
+	$('#nav_export').click(function(){
+		//브라우저가 canvas.toDataURL을 지원할 때에만..
+		if (!supportsToDataURL()){
+			alert("현재 사용중인 브라우저에선 내보내기 기능을 지원하지 않습니다.");
+			return false;
+		}
+		$('#content_wrapper').hide();
+		$('#export_wrapper').show();
+		$('#social_comment_wrapper').hide();
+		export_timetable();
+		current_tab = "export";
+	});
+	$('#main_navigation a').not('#nav_export').not('#nav_social_comment').click(function(){
+		$('#content_wrapper').show();
+		$('#export_wrapper').hide();
+		$('#social_comment_wrapper').hide();
+	});
+	$('#export_wrapper').hide();
+	$('#social_comment_wrapper').hide();
+
+	//소셜댓글 네비게이션
+	$('#nav_social_comment').click(function(){
+		$('#content_wrapper').hide();
+		$('#export_wrapper').hide();
+		$('#social_comment_wrapper').show();
+		current_tab = "social_comment";
+	});
 
 	//document load end//
 });

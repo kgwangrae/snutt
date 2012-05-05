@@ -1,5 +1,8 @@
 * {font-family:"Arial";}
 body {padding-top:45px;}
+
+#facebook_like_li {padding-top:9px;}
+
 #search_form {margin-bottom:0;}
 #search_type {float:left;margin-right:3px;}
 .search-result-table th {text-align:center;}
@@ -60,3 +63,8 @@ body {padding-top:45px;}
 #facebook_loading_modal p{margin-top:15px;text-align:center;}
 .no-title .ui-widget-header {display:none;}
 .ui-widget-header {font-family:"Arial" !important;font-weight:normal !important;}
+
+/* facebook social plugin */
+.fb-comments, .fb-comments iframe[style] {width: 100% !important;}
+.fb-comments, .fb-comments span, .fb-comments.fb_iframe_widget span iframe {width: 100% !important;}
+.fb-comments, .fb-comments.fb_iframe_widget iframe[style], .fb-comments.fb_iframe_widget span[style] {width: 100% !important;}

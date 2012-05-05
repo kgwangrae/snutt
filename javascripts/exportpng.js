@@ -8,27 +8,6 @@ var export_image_url;
 var bg_image;
 
 $(function(){
-	$('#nav_export').click(function(){
-		//브라우저가 canvas.toDataURL을 지원할 때에만..
-		if (!supportsToDataURL()){
-			alert("현재 사용중인 브라우저에선 내보내기 기능을 지원하지 않습니다.");
-			return false;
-		}
-		$('#content_wrapper').hide();
-		$('#export_wrapper').show();
-		export_timetable();
-		current_tab = "export";
-	});
-	$('#main_navigation a').not('#nav_export').click(function(){
-		$('#content_wrapper').show();
-		$('#export_wrapper').hide();
-	});
-	$('#export_wrapper').hide();
-	$('#export_save_button').click(function(){
-		//Canvas2Image.saveAsPNG(canvas); 
-		//return false;
-	});
-
 	//png export를 지원하는 웹브라우저만
 	if (supportsToDataURL()){
 		bg_image = new Image();

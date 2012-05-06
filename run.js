@@ -401,29 +401,26 @@ function upload_timetable_to_facebook(options, socket)
 	var message = options.message.toString('utf8');
 	//message = message + "\nhttp://choco.wafflestudio.net:3784"
 
-	var image_path = save_timetable_image(base64_data);
-	var target_url = 'https://graph.facebook.com/me/photos?message='+encodeURI(message)+'&access_token=' + access_token;
-	restler.post(target_url, {
-		multipart: true,
-		encoding:"utf8",
-		data: {
-			source: restler.file(image_path, null, null, null, 'image/png')
-		}
-	}).on('complete', function(data) {
-		console.log("photo upload complete! : " + image_path);
-		console.log(data);
-		socket.emit('facebook_publish_complete', {data:JSON.parse(data)});
-	});
-}
-
-
-function save_timetable_image(base64_data)
-{
-
-	var filename = 'timetable_images/' + String((new Date()).getTime()) + "_" + Math.floor(Math.random() * 10000) + ".png";
+	var filename = __dirname + '/timetable_images/' + String((new Date()).getTime()) + "_" + Math.floor(Math.random() * 10000) + ".png";
 	var base64Image = base64_data.toString('base64');
 	var decodedImage = new Buffer(base64Image, 'base64');
-	fs.writeFile(filename, decodedImage, function(err) {});
-
-	return filename;
+	fs.writeFile(filename, decodedImage, function(err){
+		if (err){
+			socket.emit('facebook_publish_complete', {data:{error:"file save error"}});
+			console.log(err);
+		}else{
+			var target_url = 'https://graph.facebook.com/me/photos?message='+encodeURI(message)+'&access_token=' + access_token;
+			restler.post(target_url, {
+				multipart: true,
+				encoding:"utf8",
+				data: {
+					source: restler.file(filename)
+				}
+			}).on('complete', function(data) {
+				console.log("photo upload complete! : " + filename);
+				socket.emit('facebook_publish_complete', {data:JSON.parse(data)});
+			});
+			
+		}
+	});
 }

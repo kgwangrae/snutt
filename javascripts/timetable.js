@@ -442,6 +442,7 @@ $(function(){
 	//init modal
 	$('#init_loading_modal').dialog({
 		modal:true,
+		hide:"fade",
 		resizable:false,
 		closeOnEscape:false,
 		dialogClass:"no-title",

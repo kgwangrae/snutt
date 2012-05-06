@@ -58,6 +58,9 @@ body {padding-top:45px;}
 #facebook_message_wrapper {margin-top:5px;}
 #facebook_message_wrapper #facebook_message {width:250px;}
 
+#init_loading_modal {background-color:black;}
+#init_loading_modal #init_loading_image{margin-top:20px;text-align:center;}
+#init_loading_modal p{margin-top:15px;text-align:center;}
 #facebook_loading_modal {background-color:black;}
 #facebook_loading_modal #facebook_loading_image{margin-top:20px;text-align:center;}
 #facebook_loading_modal p{margin-top:15px;text-align:center;}

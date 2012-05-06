@@ -117,6 +117,7 @@ $(function(){
 		$('#data_updated_at').text(data.updated_time);
 		current_year = data.year;
 		current_semester = data.semester;
+		$('#init_loading_modal').dialog('close');
 	});
 	socket.on('search_result', function(data){
 		page_loading_requesting = false;
@@ -436,6 +437,15 @@ $(function(){
 		$('#search_query_text').attr('placeholder', "예) 컴공");
 		search_type = "department";
 		$('#search_query_text').focus().val("");
+	});
+
+	//init modal
+	$('#init_loading_modal').dialog({
+		modal:true,
+		resizable:false,
+		closeOnEscape:false,
+		dialogClass:"no-title",
+		autoOpen:true
 	});
 
 	//facebook modal

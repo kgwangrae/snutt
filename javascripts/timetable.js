@@ -464,6 +464,7 @@ $(function(){
 		title:"사용자정의 시간표",
 		dialogClass:"custom-lecture-dialog",
 		width:250,
+		height:190,
 		open:function(){
 			$('#custom_course_title').val("");
 			$('#custom_location').val("");

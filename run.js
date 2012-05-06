@@ -399,7 +399,7 @@ function upload_timetable_to_facebook(options, socket)
 	var access_token = options.access_token;
 	var base64_data = options.base64_data;
 	var message = options.message.toString('utf8');
-	//message = message + "\nhttp://choco.wafflestudio.net:3784"
+	message = message + "\nhttp://snutt.kr"
 
 	var filename = __dirname + '/timetable_images/' + String((new Date()).getTime()) + "_" + Math.floor(Math.random() * 10000) + ".png";
 	var base64Image = base64_data.toString('base64');

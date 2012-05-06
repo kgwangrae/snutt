@@ -211,7 +211,7 @@ function filter_check(lecture, filter)
 			var etc = filter.etc[i];
 			if (etc == "teaching" && lecture.classification == "교직") result = true;
 			if (etc == "exercise" && lecture.category == "normal_exercise") result = true;
-			if (etc == "etc" && lecture.category != "normal_exercise" && lecture.category.indexOf('normal') != -1) result = true;
+			if (etc == "etc" && lecture.category != "normal_exercise" && s(lecture.category).indexOf('normal') != -1) result = true;
 		}
 	}
 	return result;

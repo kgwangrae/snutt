@@ -6,6 +6,8 @@ var line_horizontal = [];
 var line_width = 3; //weight of line
 var export_image_url;
 var bg_image;
+line_vertical = [0, 31, 50, 69, 88, 107, 126, 145, 164, 183, 202, 221, 240, 259, 278, 297, 316, 335, 354, 373, 392, 411, 430, 449, 468, 487, 506, 525, 544, 563];
+line_horizontal = [0, 81, 189, 297, 405, 513, 621, 729];
 
 $(function(){
 	//png export를 지원하는 웹브라우저만
@@ -24,6 +26,7 @@ $(function(){
 			imgd = ctx.getImageData(0, 0, bg_image.width, bg_image.height); 
 			pix = imgd.data;
 			//init line variables;
+			/*
 			line_vertical = [];
 			line_horizontal = [];
 			for (var i=0;i<bg_image.width*4;i+=4){
@@ -34,6 +37,7 @@ $(function(){
 				if (pix[(bg_image.width-2 + bg_image.width*i)*4] != 255)
 					line_vertical.push(i);
 			}
+			*/
 		}
 	}
 });

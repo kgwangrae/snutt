@@ -54,8 +54,8 @@ function is_duplicated_class_time(l1, l2)
 	for (var i=0;i<t1.length;i++){
 		for (var j=0;j<t2.length;j++){
 			//월(3-3), 월(4-2)
-			var wday1 = t1[i][0];
-			var wday2 = t2[j][0];
+			var wday1 = t1[i].charAt(0);
+			var wday2 = t2[j].charAt(0);
 			var time1 = t1[i].replace(/[()]/g, "").slice(1).split('-');
 			var time2 = t2[j].replace(/[()]/g, "").slice(1).split('-');
 			var start_time1 = parseFloat(time1[0]);

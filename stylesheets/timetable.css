@@ -12,7 +12,7 @@ body {padding-top:45px;}
 .search-result-table .course-number {width:65px;text-align:center;}
 .search-result-table .lecture-number {width:30px;text-align:center;}
 .search-result-table .credit {width:30px;text-align:center;}
-.search-result-table .course-title {width:270px;}
+.search-result-table .course-title {/*width:270px;*/min-width:150px;}
 .search-result-table .quota {width:30px;text-align:center;}
 .search-result-table .enrollment {width:30px;text-align:center;}
 .search-result-table .class-time {width:70px;text-align:center;}

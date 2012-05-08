@@ -1,34 +1,3 @@
-//DEFINE ARRAY FUNCTIONALITIES
-Array.prototype.remove = function(ele){
-	var index = this.indexOf(ele);
-	if (index != -1)
-		this.splice(index, 1);
-	return index;
-}
-Array.prototype.removeIndex = function(index){
-	if (index >= 0 && index < this.length){
-		this.splice(index, 1);
-		return true;
-	}
-	return false;
-}
-Array.prototype.find = function(ele){
-	var index = this.indexOf(ele);
-	if (index == -1)
-		return null;
-	return ele;
-}
-
-Array.prototype.clone = function(){
-  var newObj = (this instanceof Array) ? [] : {};
-  for (i in this) {
-    if (i == 'clone') continue;
-    if (this[i] && typeof this[i] == "object") {
-      newObj[i] = this[i].clone();
-    } else newObj[i] = this[i]
-  } return newObj;
-};
-
 //Lecture object
 function Lecture(options){
 	options = options ||{};
@@ -78,6 +47,7 @@ function init_data()
 			process.kill();
 		}
 		var lines = data.toString().split("\n");
+		lectures = [];
 		year = lines[0].split("/")[0];
 		semester = lines[0].split("/")[1];
 		updated_time = lines[1];
@@ -359,6 +329,13 @@ io.sockets.on('connection', function (socket) {
 	});
 	socket.on('publish_timetable_to_facebook', function(data){
 		upload_timetable_to_facebook(data, socket);
+	});
+	socket.on('coursebook_update', function(data){
+		var password = s(data.password);
+		if (password == "snutt!@"){
+			console.log("coursebook is updated");
+			init_data();
+		}
 	});
 });
 

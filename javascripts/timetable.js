@@ -1,4 +1,10 @@
 var socket;
+
+function coursebook_update(password)
+{
+	socket.emit('coursebook_update', {password:password});
+}
+
 function simplify_class_time(class_time)
 {
 	//월(1.5-1.5) -> 월

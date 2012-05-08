@@ -81,7 +81,7 @@ function handler (req, res) { //http server handler
 	var uri = url.parse(req.url).pathname; 
 	var filename = path.join(process.cwd(), uri);
 	var user_agent = req.headers['user-agent'];
-	var not_support = (/msie 6.0/i.test(user_agent)) || (/msie 7.0/i.test(user_agent)) || (/msie 8.0/i.test(user_agent));
+	var not_support = (/msie 6.0/i.test(user_agent)) || (/msie 7.0/i.test(user_agent));// || (/msie 8.0/i.test(user_agent));
 
 	//supporting browser
 	if (uri == "/"){

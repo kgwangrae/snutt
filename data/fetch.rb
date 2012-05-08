@@ -4,6 +4,7 @@
 #인자 : year semester
 require 'net/http'
 require 'roo'
+require 'json'
 
 if ARGV.length != 2 then
 	puts "Argument error !"
@@ -131,7 +132,7 @@ end
 open(txt_filename, "w") do |file|
 	file.puts "#{year}/#{semester}"
 	file.puts Time.now.localtime("+09:00").strftime("%Y-%m-%d %H:%M:%S")
-	file.puts "classification;department;academic_year;course_number;lecture_number;course_title;credit;class_time;location;instructor;quota;enrollment;remark;category"
+	file.puts "classification;department;academic_year;course_number;lecture_number;course_title;credit;class_time;location;instructor;quota;enrollment;remark;category;snuev_lec_id"
 	3.upto(m.row_size-1) do |i|
 		classification = m[i,0]
 		department = m[i,1]
@@ -147,11 +148,12 @@ open(txt_filename, "w") do |file|
 		enrollment = m[i,15].to_i
 		remark = m[i,16]
 		category = category_map["#{course_number};#{lecture_number}"]
+		snuev_lec_id = JSON.parse(Net::HTTP.get(URI.parse("http://snuev.com/lecture/find?code=#{course_number}&professor=#{instructor}")))["lec_id"]
 
 		#classtime 표기 통일
 		#수(7,8,9) -> 수(7-3)
 		class_time = class_time.split("/").map{|x| convert_classtime(x)}.join("/")
 
-		file.puts "#{classification};#{department};#{academic_year};#{course_number};#{lecture_number};#{course_title};#{credit};#{class_time};#{location};#{instructor};#{quota};#{enrollment};#{remark};#{category}"
+		file.puts "#{classification};#{department};#{academic_year};#{course_number};#{lecture_number};#{course_title};#{credit};#{class_time};#{location};#{instructor};#{quota};#{enrollment};#{remark};#{category};#{snuev_lec_id}"
 	end
 end

@@ -45,7 +45,8 @@ function Lecture(options){
 	this.quota = options["quota"];
 	this.enrollment = options["enrollment"];
 	this.remark = options["remark"];
-	this.category = options["category"];
+	this.category = options["category"] || "";
+	this.snuev_lec_id = options["snuev_lec_id"] || "";
 }
 
 

@@ -148,7 +148,8 @@ open(txt_filename, "w") do |file|
 		enrollment = m[i,15].to_i
 		remark = m[i,16]
 		category = category_map["#{course_number};#{lecture_number}"]
-		snuev_lec_id = JSON.parse(Net::HTTP.get(URI.parse("http://snuev.com/lecture/find?code=#{course_number}&professor=#{instructor}")))["lec_id"]
+		snuev_lec_id = JSON.parse(Net::HTTP.get(URI.parse(URI.escape("http://snuev.com/lecture/find?code=#{course_number}&professor=#{instructor}"))))["lec_id"]
+		puts "(#{i-2}/#{m.row_size-3}) #{course_number} #{instructor} #{course_title} : #{snuev_lec_id}"
 
 		#classtime 표기 통일
 		#수(7,8,9) -> 수(7-3)

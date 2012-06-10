@@ -717,6 +717,7 @@ $(function(){
 		$('#content_wrapper').show();
 		$('#export_wrapper').hide();
 		$('#social_comment_wrapper').hide();
+		generate_timecell(my_lectures);
 	});
 	$('#export_wrapper').hide();
 	$('#social_comment_wrapper').hide();

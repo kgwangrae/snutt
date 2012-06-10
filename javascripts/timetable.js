@@ -120,7 +120,8 @@ var custom_lecture_number = 1;
 $(function(){
 	socket = io.connect();
 	socket.on('init_client', function(data){
-		$('#data_updated_at').text(data.updated_time);
+		console.log(data);
+		//$('#data_updated_at').text(data.updated_time);
 		current_year = data.year;
 		current_semester = data.semester;
 		$('#init_loading_modal').dialog('close');

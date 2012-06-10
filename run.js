@@ -33,24 +33,52 @@ var app = require('http').createServer(handler),
 io.set('log level', 1); //reduce log level
 
 //GLOBAL VARIABLES
-var lectures = [];
-var updated_time = "";
-var year = "";
-var semester = "";
+var coursebook = {}; //{20121:{lectures:[], year:2012, semester:'S', updated_time:"2012-01-01 00:00"}]
 
 function init_data()
 {
-	var datapath = __dirname + "/data/data.txt";
+	load_data(2012 ,'1');
+	load_data(2012 ,'S');
+
+	//timetable_images 폴더가 없으면 생성
+	var stats = fs.stat('timetable_images', function(err, stats){
+		if (err){
+			fs.mkdir('timetable_images');
+		}
+	});
+}
+init_data();
+
+//현재 저장된 수강편람 정보를 리턴
+function get_coursebook_info()
+{
+	var result = {};
+	for (hash in coursebook){
+		result[hash] = {
+			year:coursebook[hash].year,
+			semester:coursebook[hash].semester,
+			updated_time:coursebook[hash].updated_time
+		};
+	}
+	return result;
+}
+
+function load_data(year, semester)
+{
+	var hash = year + semester;
+
+	var datapath = __dirname + "/data/txt/"+year+"_"+semester+".txt";
+	console.log(datapath);
 	fs.readFile(datapath, function(err, data){
 		if (err){
-			console.log('INIT FAIL');
-			process.kill();
+			console.log('DATA LOAD FAIL : ' + year + "_" + semester);
+			return;
 		}
 		var lines = data.toString().split("\n");
-		lectures = [];
-		year = lines[0].split("/")[0];
-		semester = lines[0].split("/")[1];
-		updated_time = lines[1];
+		var lectures = [];
+		var year = lines[0].split("/")[0];
+		var semester = lines[0].split("/")[1];
+		var updated_time = lines[1];
 		var header = lines[2].split(";");
 		for (var i=3;i<lines.length;i++){
 			var line = lines[i];
@@ -61,17 +89,15 @@ function init_data()
 			}
 			lectures.push(new Lecture(options));
 		}
-		console.log('init finished');
-	});
-
-	//timetable_images 폴더가 없으면 생성
-	var stats = fs.stat('timetable_images', function(err, stats){
-		if (err){
-			fs.mkdir('timetable_images');
-		}
+		coursebook[hash] = {
+			lectures : lectures,
+			year : year,
+			semester : semester,
+			updated_time : updated_time
+		};
+		console.log('LOAD COMPLETE : ' + year + "_" + semester);
 	});
 }
-init_data();
 
 var port = process.env.PORT || 3784;
 app.listen(port);
@@ -320,9 +346,7 @@ function class_time_check(lecture_class_time, search_class_time)
 io.sockets.on('connection', function (socket) {
 	socket.emit('init_client', {
 		message:"Hello world!",
-		updated_time:updated_time,
-		year:year,
-		semester:semester
+		coursebook_info:get_coursebook_info(),
 	});
 	socket.on('search_query', function(data){
 		socket.emit('search_result', get_lectures(data));

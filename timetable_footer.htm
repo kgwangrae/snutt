@@ -1,44 +1,7 @@
-<!DOCTYPE html> 
-<html> 
-	<head> 
-		<meta charset="UTF-8">
-		<meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
-		<meta name="og:title" content="서울대학교 시간표 SNUTT" />
-		<meta name="og:type" content="timetable" />
-		<meta name="og:site_name" content="SNUTT" />
-		<meta name="og:description" content="서울대학교 시간표 작성 웹서비스!" />
-		<title>SNUTT - 2012 여름학기</title> 
-		<link href="/stylesheets/timetable.css" media="all" rel="stylesheet" type="text/css" /> 
-		<link href="/stylesheets/timetable.mobile.css" media="handheld, only screen and (max-device-width: 768px)" type="text/css" rel="stylesheet" />
-		<link href="/stylesheets/timetable.mobile.480.css" media="handheld, only screen and (max-device-width: 480px)" type="text/css" rel="stylesheet" />
-
-		<link href="/stylesheets/jquery-ui-1.8.17.custom.css" rel="stylesheet" type="text/css" /> 
-		<link href="/stylesheets/bootstrap.min.css" media="all" rel="stylesheet" type="text/css" /> 
-		<link href="/stylesheets/bootstrap-responsive.min.css" media="all" rel="stylesheet" type="text/css" /> 
-		<script src="/javascripts/jquery.js" type="text/javascript"></script> 
-		<script src="/javascripts/jquery-ui-1.8.17.custom.min.js" type="text/javascript"></script> 
-
-		<script src="/javascripts/utils.js" type="text/javascript"></script> 
-		<script src="/socket.io/socket.io.js" type="text/javascript"></script> 
-		<script src="/javascripts/exportpng.js" type="text/javascript"></script> 
-		<script src="/javascripts/timetable.js" type="text/javascript"></script> 
-		<script type="text/javascript">
-
-		  var _gaq = _gaq || [];
-		  _gaq.push(['_setAccount', 'UA-31273143-1']);
-		  _gaq.push(['_setDomainName', 'snutt.kr']);
-		  _gaq.push(['_trackPageview']);
-
-		  (function() {
-			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-		  })();
-
 		</script>
 
 	</head> 
-	<body ondragstart="return false" onselectstart="return false"> 
+	<body> 
 		<!-- facebook test -->
     <div id="fb-root"></div>
     <script>
@@ -64,19 +27,94 @@
     </script>
 		<!-- facebook test end -->
 
+		<div id="course_detail_wrapper">
+			<h3 class="course-title"></h3>
+			<div id="course_detail">
+				<table id="course_detail_table">
+					<tr>
+						<th>교과목번호</th>
+						<td class="course-number"></td>
+					</tr>
+					<tr>
+						<th>강좌번호</td>
+						<td class="lecture-number"></td>
+					</tr>
+					<tr>
+						<th>과목구분</th>
+						<td class="classification"></td>
+					</tr>
+					<tr>
+						<th>개설학과</th>
+						<td class="department"></td>
+					</tr>
+					<tr>
+						<th>학년</th>
+						<td class="academic-year"></td>
+					</tr>
+					<tr>
+						<th>학점</th>
+						<td class="credit"></td>
+					</tr>
+					<tr>
+						<th>수업교시</th>
+						<td class="class-time"></td>
+					</tr>
+					<tr>
+						<th>교수명</th>
+						<td class="instructor"></td>
+					</tr>
+					<tr>
+						<th>강의실</th>
+						<td class="location"></td>
+					</tr>
+					<tr>
+						<th>정원</th>
+						<td class="quota"></td>
+					</tr>
+					<tr>
+						<th>현원</th>
+						<td class="enrollment"></td>
+					</tr>
+					<tr>
+						<th>비고</th>
+						<td class="remark"></td>
+					</tr>
+					<tr>
+						<th>강의평점</th>
+						<td>
+							<div id="course_detail_rating">
+							</div>
+						</td>
+					</tr>
+				</table>
+			</div>
+			<div id="course_detail_buttons">
+				<a class="btn btn-warning" id="course_detail_snuev_button" target="snuev">강의평보기(SNUEV)</a>
+				<button class="btn btn-warning" id="course_detail_plan_button">강의계획서</button>
+			</div>
+		</div>
+
 		<div class="navbar navbar-fixed-top">
 			<div class="navbar-inner">
 				<div class="container">
 					<a class="brand" href="#" id="brand_button">SNUTT</a>
 					<ul class="nav" id="main_navigation">
+						<li>
+						<div class="btn-group">
+							<a class="btn dropdown-toggle btn-inverse" data-toggle="dropdown" href="#" id="semester_label_button"><span id="semester_label">학기</span> <span class="caret"></span></a>
+							<ul class="dropdown-menu" id="semester_dropdown_ul">
+								<!-- init_client 이후 초기화됨 -->
+							</ul>
+						</div>
+						</li>
 						<li class="active"><a href="#search" id="nav_search_result" data-toggle="tab">검색결과</a></li>
 						<li><a href="#my_courses" data-toggle="tab" rel="tooltip" id="nav_my_courses">내 강의 <span class="badge badge-info" id="my_courses_credit">0학점</span></a></li>
 						<li id="social_comment_li"><a href="#social_comment" id="nav_social_comment" data-toggle="tab">소셜댓글</a></li>
-						<li id="export_li"><a href="#export" id="nav_export" data-toggle="tab">내보내기</a></li>
+						<li id="export_li"><a href="#export" id="nav_export" data-toggle="tab">저장하기</a></li>
 					</ul>
 					<ul class="nav pull-right">
 						<li id="facebook_like_li">
-						<div class="fb-like" data-href="http://snutt.kr" data-send="true" data-layout="button_count" data-width="170" data-show-faces="false" data-colorscheme="dark"></div>
+						<div class="fb-like" data-href="http://snutt.kr" data-send="false" data-layout="button_count" data-width="100" data-show-faces="false" data-colorscheme="dark"></div>
 						</li>
 					</ul>
 				</div>
@@ -155,10 +193,12 @@
 							<table class="table table-condensed table-bordered search-result-table" id="search_result_table">
 								<thead>
 									<tr>
+										<th class="course-rating">강의평점</th>
 										<th class="course-number">교과목</th>
 										<th class="lecture-number">강좌</th>
 										<th class="course-title">교과목명</th>
 										<th class="classification">구분</th>
+										<th class="department">개설학과</th>
 										<th class="academic-year">학년</th>
 										<th class="credit">학점</th>
 										<th class="class-time">수업교시</th>
@@ -171,7 +211,7 @@
 								</thead>
 								<tbody>
 									<tr>
-										<td colspan="12" style="text-align:center;">검색어를 입력하세요.</td>
+										<td colspan="13" style="text-align:center;">검색어를 입력하세요.</td>
 									</tr>
 								</tbody>
 							</table>
@@ -182,10 +222,12 @@
 						<table class="table table-condensed table-bordered search-result-table" id="my_courses_table">
 							<thead>
 								<tr>
+									<th class="course-rating">강의평점</th>
 									<th class="course-number">교과목</th>
 									<th class="lecture-number">강좌</th>
 									<th class="course-title">교과목명</th>
 									<th class="classification">구분</th>
+									<th class="department">개설학과</th>
 									<th class="academic-year">학년</th>
 									<th class="credit">학점</th>
 									<th class="class-time">수업교시</th>
@@ -198,7 +240,7 @@
 							</thead>
 							<tbody>
 								<tr>
-									<td colspan="12" style="text-align:center;">선택된 강의가 없습니다.</td>
+									<td colspan="13" style="text-align:center;">선택된 강의가 없습니다.</td>
 								</tr>
 							</tbody>
 						</table>
@@ -369,21 +411,27 @@
 
 			</div>
 			<div id="export_wrapper">
-				<h3>이미지 내보내기</h3>
-				<canvas id="tt_canvas" style="display:none;">
-				</canvas>
-				<div id="export_image_wrapper">
-				</div>
-				<div id="export_button">
-					<a href="#export_image" id="export_save_button" class="btn btn-danger" download="timetable.png">저장하기</a>
-					<a href="#publish_facebook" id="publish_facebook_toggle_button" class="btn btn-danger" state="off">페이스북에 공유하기 <span class="caret"></span></a>
-					<form id="facebook_message_wrapper" class="form-inline">
-						<input type="text" placeholder="담벼락에 게시될 메시지를 입력하세요." id="facebook_message" />
-						<button type="submit" id="publish_facebook_ok_button" class="btn">확인</button>
-					</form>
-					<p>
-					* 저장하기 버튼이 작동하지 않으면 위에 있는 그림을 [우클릭 -&gt; 다른 이름으로 사진 저장]으로 직접 저장하세요.
+				<div id="database_export">
+					<p>작성한 시간표는 아래의 주소에서 쉽게 열어볼 수 있습니다! <br />
+					<a id="saved_timetable_url" target="_blank"></a>
 					</p>
+				</div>
+				<div id="image_export_wrapper">
+					<canvas id="tt_canvas" style="display:none;">
+					</canvas>
+					<div id="export_image_wrapper">
+					</div>
+					<div id="export_button">
+						<a href="#export_image" id="export_save_button" class="btn btn-danger" download="timetable.png">이미지 저장하기</a>
+						<a href="#publish_facebook" id="publish_facebook_toggle_button" class="btn btn-danger" state="off">페이스북에 공유하기 <span class="caret"></span></a>
+						<form id="facebook_message_wrapper" class="form-inline">
+							<input type="text" placeholder="담벼락에 게시될 메시지를 입력하세요." id="facebook_message" />
+							<button type="submit" id="publish_facebook_ok_button" class="btn">확인</button>
+						</form>
+						<p>
+						* 이미지 저장하기 버튼이 작동하지 않으면 위에 있는 그림을 [우클릭 -&gt; 다른 이름으로 사진 저장]으로 직접 저장하세요.
+						</p>
+					</div>
 				</div>
 			</div>
 
@@ -429,6 +477,7 @@
 				<a id="custom_lecture_close_button" class="btn btn-inverse">취소</a>
 			</form>
 		</div>
+
 
 		<!-- Le javascript
 		================================================== -->

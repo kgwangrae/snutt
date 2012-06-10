@@ -3,6 +3,7 @@
 .search-result-table .class-time {width:auto !important;}
 .search-result-table .instructor {width:auto !important;}
 
+.search-result-table .department {display:none !important;}
 .search-result-table .course-number {display:none !important;}
 .search-result-table .lecture-number {display:none !important;}
 .search-result-table .academic-year {display:none !important;}
@@ -24,3 +25,5 @@
 
 .search-filter-separator {clear:both;}
 .search-filter-container {float:none !important;height:auto !important;margin-bottom:5px !important;}
+
+#course_detail_wrapper {display:none !important;}

@@ -116,15 +116,78 @@ var custom_class_time;
 var custom_end_cell;
 var custom_end_time;
 var custom_lecture_number = 1;
+var coursebook_info;
+
+function semester_to_text(semester)
+{
+	if (semester == '1') return '1학기';
+	if (semester == '2') return '2학기';
+	if (semester == 'S') return '여름학기';
+	if (semester == 'W') return '겨울학기';
+	return 'null';
+}
+
+function get_coursebook_info(year, semester)
+{
+	for (var i=0;i<coursebook_info.length;i++){
+		var coursebook = coursebook_info[i];
+		if (coursebook.year == year && coursebook.semester == semester)
+			return coursebook;
+	}
+	return null;
+}
+
+function change_semester(year, semester)
+{
+	current_year = year;
+	current_semester = semester;
+	$('#semester_label').text(current_year + "-" + current_semester);
+	$('#data_updated_at').text(get_coursebook_info(current_year, current_semester).updated_time);
+}
 
 $(function(){
 	socket = io.connect();
 	socket.on('init_client', function(data){
-		console.log(data);
-		//$('#data_updated_at').text(data.updated_time);
-		current_year = data.year;
-		current_semester = data.semester;
 		$('#init_loading_modal').dialog('close');
+
+		coursebook_info = data.coursebook_info;
+
+		if (!current_year && !current_semester){
+			current_year = data.last_coursebook_info.year;
+			current_semester = data.last_coursebook_info.semester;
+		}
+		//저장된 시간표 불러오기
+		refresh_my_courses_table();
+		generate_timecell(my_lectures);
+		change_semester(current_year, current_semester);
+
+		//학기 dropdown 메뉴 초기화
+		$('#semester_label').text(current_year + "-" + current_semester);
+		var semester_dropdown_ul = $('#semester_dropdown_ul');
+		for (var i=0;i<coursebook_info.length;i++){
+			var year = coursebook_info[i].year;
+			var semester = coursebook_info[i].semester;
+			var list = $('<li></li>').appendTo(semester_dropdown_ul).addClass('semester-li');
+			var link = $('<a href="#">'+year+"년 "+semester_to_text(semester)+'</a>').attr('year', year).attr('semester', semester).appendTo(list).addClass('semester-button');
+			if (year == current_year && semester == current_semester) list.addClass('selected-semester-li')
+		}
+		//학기 변경
+		$('.semester-button').click(function(){
+			var ele = $(this);
+			if (current_year == ele.attr('year') && current_semester == ele.attr('semester')) return true;
+			//학기 변경
+			change_semester(ele.attr('year'), ele.attr('semester'));
+			$('.selected-semester-li').removeClass('selected-semester-li');
+			ele.addClass('selected-semester-li');
+			//검색결과 삭제
+			$('#search_result_table tbody').children().remove();
+			var row = $('<tr></tr>').appendTo($('#search_result_table tbody'));
+			$('<td colspan="13">검색어를 입력하세요.</td>').appendTo(row).css('text-align', 'center');
+			//내 강의 초기화
+			my_lectures = [];
+			refresh_my_courses_table();
+			generate_timecell(my_lectures);
+		});
 	});
 	socket.on('search_result', function(data){
 		page_loading_requesting = false;
@@ -147,6 +210,9 @@ $(function(){
 			$('#facebook_message_wrapper').slideUp();
 			$('#publish_facebook_toggle_button').attr('state', 'off').removeClass('dropup');
 		}
+	});
+	socket.on('export_timetable_result', function(data){
+		$('#saved_timetable_url').attr('href', '/user/'+data.filename).text("http://snutt.kr/user/"+data.filename);
 	});
 
 	//SNUTT 로고 클릭
@@ -215,6 +281,8 @@ $(function(){
 			if (difference < 200 && !page_loading_requesting && !page_loading_complete){
 				page++;
 				socket.emit('search_query', {
+					year:current_year,
+					semester:current_semester,
 					filter:filter,
 					type:search_type,
 					query_text:query_text,
@@ -233,6 +301,8 @@ $(function(){
 		page_loading_complete = false;
 		filter = get_filter();
 		socket.emit('search_query', {
+			year:current_year,
+			semester:current_semester,
 			filter:filter,
 			type:search_type,
 			query_text:query_text,
@@ -485,6 +555,24 @@ $(function(){
 		autoOpen:false
 	});
 
+	//detail dialog
+	$('#course_detail_wrapper').draggable({
+		handle:'h3',
+		containment:"body"
+	}).css('right', 0);
+	$('#course_detail_wrapper').hide();
+
+	//강의계획서 버튼
+	$('#course_detail_plan_button').click(function(){
+		var ele = $(this);
+		show_course_detail({
+			year:current_year,
+			semester:current_semester,
+			course_number:ele.attr('course-number'),
+			lecture_number:ele.attr('lecture-number')
+		});
+	});
+
 	$('#custom_lecture_close_button').click(function(){
 		$('#custom_lecture_modal').dialog('close');
 		return false;
@@ -605,18 +693,27 @@ $(function(){
 	});
 	//내보내기 네비게이션
 	$('#nav_export').click(function(){
+		if (current_tab == "export") return false;
 		//브라우저가 canvas.toDataURL을 지원할 때에만..
 		if (!supportsToDataURL()){
-			alert("현재 사용중인 브라우저에선 내보내기 기능을 지원하지 않습니다.");
-			return false;
+			alert("현재 사용중인 브라우저에선 이미지 내보내기 기능을 지원하지 않습니다.");
+			$('#image_export_wrapper').hide();
 		}
+		else {
+			export_timetable();
+		}
+		socket.emit('export_timetable', {
+			year:current_year,
+			semester:current_semester,
+			my_lectures:my_lectures
+		});
 		$('#content_wrapper').hide();
 		$('#export_wrapper').show();
 		$('#social_comment_wrapper').hide();
-		export_timetable();
 		current_tab = "export";
+		cancel_lecture_selection();
 	});
-	$('#main_navigation a').not('#nav_export').not('#nav_social_comment').click(function(){
+	$('#main_navigation a').not('#nav_export').not('#nav_social_comment').not('#semester_label_button').click(function(){
 		$('#content_wrapper').show();
 		$('#export_wrapper').hide();
 		$('#social_comment_wrapper').hide();
@@ -630,7 +727,12 @@ $(function(){
 		$('#export_wrapper').hide();
 		$('#social_comment_wrapper').show();
 		current_tab = "social_comment";
+		cancel_lecture_selection();
 	});
+
+	$('.search-result-table').disableSelection();
+	$('#timetable_container').disableSelection();
+
 
 	//document load end//
 });
@@ -916,6 +1018,9 @@ function my_courses_row_click_handler()
 	if (!selected_lecture.color)
 		selected_lecture.color = gray_color;
 	generate_timecell(my_lectures.concat([selected_lecture]));
+
+	//refresh course detail
+	refresh_course_detail(selected_lecture);
 }
 
 function row_click_handler()
@@ -939,6 +1044,38 @@ function row_click_handler()
 	if (!selected_lecture.color)
 		selected_lecture.color = gray_color;
 	generate_timecell(my_lectures.concat([selected_lecture]));
+
+	//refresh course detail
+	refresh_course_detail(selected_lecture);
+}
+
+function refresh_course_detail(selected_lecture)
+{
+	$('#course_detail_wrapper .course-title').text(s(selected_lecture.course_title));
+	$('#course_detail_wrapper .course-number').text(s(selected_lecture.course_number));
+	$('#course_detail_wrapper .lecture-number').text(s(selected_lecture.lecture_number));
+	$('#course_detail_wrapper .classification').text(s(category_to_text(selected_lecture.category)));
+	$('#course_detail_wrapper .department').text(s(selected_lecture.department));
+	$('#course_detail_wrapper .academic-year').text(s(selected_lecture.academic_year));
+	$('#course_detail_wrapper .credit').text(s(selected_lecture.credit));
+	$('#course_detail_wrapper .class-time').text(s(selected_lecture.class_time));
+	$('#course_detail_wrapper .instructor').text(s(selected_lecture.instructor));
+	$('#course_detail_wrapper .location').text(s(selected_lecture.location));
+	$('#course_detail_wrapper .quota').text(s(selected_lecture.quota));
+	$('#course_detail_wrapper .enrollment').text(s(selected_lecture.enrollment));
+	$('#course_detail_wrapper .remark').text(s(selected_lecture.remark));
+	$('#course_detail_rating').children().remove();
+	if (!selected_lecture.snuev_lec_id){
+		$('#course_detail_snuev_button').addClass('disabled').attr('href', "#").unbind('click').click(function(){return false;});
+		$('<div>정보 없음</div>').appendTo($('#course_detail_rating'));
+	}
+	else {
+		$('#course_detail_snuev_button').unbind('click').removeClass('disabled').attr('href', "http://snuev.com/#/main/lecture?lec_id="+selected_lecture.snuev_lec_id);
+		$('#course_detail_rating').jRating({score:Math.random()*10, type:'big'});
+	}
+	$('#course_detail_plan_button').attr('course-number', selected_lecture.course_number);
+	$('#course_detail_plan_button').attr('lecture-number', selected_lecture.lecture_number);
+	$('#course_detail_wrapper').fadeIn(300);
 }
 
 function my_courses_row_dblclick_handler(ele)
@@ -969,6 +1106,30 @@ function row_dblclick_handler(ele)
 	}
 }
 
+function category_to_text(category)
+{
+	if (category == "basics") return "학문의 기초 - 학문의 기초";
+	if (category == "basics_foreign") return "학문의 기초 - 외국어와 외국문화";
+	if (category == "basics_korean") return "학문의 기초 - 국어와 작문";
+	if (category == "basics_science") return "학문의 기초 - 기초과학";
+	if (category == "core_art") return "핵심교양 - 문학과 예술";
+	if (category == "core_biology") return "핵심교양 - 생명과 환경";
+	if (category == "core_history") return "핵심교양 - 역사와 철학";
+	if (category == "core_nature") return "핵심교양 - 자연의 이해";
+	if (category == "core_society") return "핵심교양 - 사회와 이념";
+	if (category == "core_technology") return "핵심교양 - 자연과 기술";
+	if (category == "normal_art") return "일반교양 - 문학과 예술";
+	if (category == "normal_exercise") return "일반교양 - 체육 및 기타";
+	if (category == "normal_foreign") return "일반교양 - 외국어와 외국문화";
+	if (category == "normal_history") return "일반교양 - 역사와 철학";
+	if (category == "normal_korean") return "일반교양 - 국어와 작문";
+	if (category == "normal_nature") return "일반교양 - 자연의 이해";
+	if (category == "normal_science") return "일반교양 - 기초과학";
+	if (category == "normal_society") return "일반교양 - 사회와 이념";
+	if (category == "normal_special") return "일반교양 - 기초교육 특별프로그램";
+	return category;
+}
+
 function cancel_lecture_selection()
 {
 	$('.selected').removeClass('selected');
@@ -977,6 +1138,7 @@ function cancel_lecture_selection()
 	selected_row = null;
 	my_courses_selected_row = null;
 	generate_timecell(my_lectures);
+	$('#course_detail_wrapper').fadeOut(300);
 }
 
 function refresh_my_courses_table()
@@ -987,11 +1149,18 @@ function refresh_my_courses_table()
 		var lecture = my_lectures[i];
 		credit += parseInt(lecture.credit);
 		var row = $('<tr></tr>').attr('course-number', lecture.course_number).attr('lecture-number', lecture.lecture_number);
+		//강의평점
+		var rating = $('<td></td>').addClass('course-rating').appendTo(row).text("");
+		if (!lecture.snuev_lec_id)
+			rating.text("정보 없음");
+		else
+			$('<div></div>').appendTo(rating).jRating({score:Math.random()*10});
+		//강의평점 끝
 		$('<td></td>').addClass('course-number').appendTo(row).text(lecture.course_number);
 		$('<td></td>').addClass('lecture-number').appendTo(row).text(lecture.lecture_number);
 		var course_title = $('<td></td>').addClass('course-title').appendTo(row).text(lecture.course_title+" ");
 		$('<td></td>').addClass('classification').appendTo(row).text(lecture.classification);
-		//$('<td></td>').addClass('department').appendTo(row).text(lecture.department);
+		$('<td></td>').addClass('department').appendTo(row).text(lecture.department);
 		$('<td></td>').addClass('academic-year').appendTo(row).text(lecture.academic_year);
 		$('<td></td>').addClass('credit').appendTo(row).text(lecture.credit);
 		$('<td></td>').addClass('class-time').appendTo(row).text(simplify_class_time(lecture.class_time));
@@ -1016,7 +1185,7 @@ function refresh_my_courses_table()
 
 	if (my_lectures.length == 0){
 		var row = $('<tr></tr>').appendTo($('#my_courses_table tbody'));
-		$('<td colspan="12">선택된 강의가 없습니다.</td>').appendTo(row).css('text-align', 'center');
+		$('<td colspan="13">선택된 강의가 없습니다.</td>').appendTo(row).css('text-align', 'center');
 	}
 	//총 학점 갱신
 	$('#my_courses_credit').text(credit+"학점");
@@ -1036,13 +1205,18 @@ function set_result_table(data)
 	for (var i=0;i<data.lectures.length;i++){
 		var lecture = data.lectures[i];
 		var row = $('<tr></tr>').attr('course-number', lecture.course_number).attr('lecture-number', lecture.lecture_number);
+		//강의평점
+		var rating = $('<td></td>').addClass('course-rating').appendTo(row).text("");
+		if (!lecture.snuev_lec_id)
+			rating.text("정보 없음");
+		else
+			$('<div></div>').appendTo(rating).jRating({score:Math.random()*10});
+		//강의평점 끝
 		$('<td></td>').addClass('course-number').appendTo(row).text(lecture.course_number);
-		//var rating = $('<td></td>').addClass('course-number').appendTo(row).text("");
-		//$('<div></div>').appendTo(rating).jRating({score:Math.random()*10});
 		$('<td></td>').addClass('lecture-number').appendTo(row).text(lecture.lecture_number);
 		var course_title = $('<td></td>').addClass('course-title').appendTo(row).text(lecture.course_title+" ");
 		$('<td></td>').addClass('classification').appendTo(row).text(lecture.classification);
-		//$('<td></td>').addClass('department').appendTo(row).text(lecture.department);
+		$('<td></td>').addClass('department').appendTo(row).text(lecture.department);
 		$('<td></td>').addClass('academic-year').appendTo(row).text(lecture.academic_year);
 		$('<td></td>').addClass('credit').appendTo(row).text(lecture.credit);
 		$('<td></td>').addClass('class-time').appendTo(row).text(simplify_class_time(lecture.class_time));
@@ -1065,7 +1239,7 @@ function set_result_table(data)
 	}
 	if (data.lectures.length == 0){
 		var row = $('<tr></tr>').appendTo($('#search_result_table tbody'));
-		$('<td colspan="12">'+data.query.query_text+' : 검색 결과가 없습니다.</td>').appendTo(row).css('text-align', 'center');
+		$('<td colspan="13">'+data.query.query_text+' : 검색 결과가 없습니다.</td>').appendTo(row).css('text-align', 'center');
 	}
 }
 
@@ -1075,7 +1249,7 @@ function show_course_detail(options)
 	var semester = options.semester;
 	var course_number = options.course_number;
 	var lecture_number = options.lecture_number;
-	var url = "http://sugang.snu.ac.kr/sugang/JACC107.do?gaesulYear="+year+"&gaesulHakgi="+semester+"&gyoCode="+course_number+"&gangjwaCode="+lecture_number;
+	var url = "http://sugang.snu.ac.kr/sugang/JACC103.do?gaesulYear="+year+"&gaesulHakgi="+semester+"&gyoCode="+course_number+"&gangjwaCode="+lecture_number + "&sugangFlag=P";
 	window.open(url);
 }
 
@@ -1105,8 +1279,15 @@ function touchScroll(id){
 	}
 }
 
+function s(str)
+{
+	if (!str) return "";
+	return String(str);
+}
+
 
 //파이어폭스 드래그 금지
+/*
 var omitformtags=["input", "textarea", "select"];
 omitformtags=omitformtags.join("|");
 function disableselect(e){
@@ -1122,3 +1303,23 @@ else {
 	document.onmousedown=disableselect;
 	document.onmouseup=reEnable;
 }
+*/
+//drag prevention
+(function($){
+$.fn.disableSelection = function() {
+    return this.each(function() {           
+        $(this).attr('unselectable', 'on')
+               .css({
+                   '-moz-user-select':'none',
+                   '-webkit-user-select':'none',
+                   'user-select':'none',
+                   '-ms-user-select':'none'
+               })
+               .each(function() {
+                   this.onselectstart = function() { return false; };
+               });
+    });
+};
+
+})(jQuery);
+

@@ -20,6 +20,15 @@ function Lecture(options){
 
 
 function sortASC(a, b){return a-b};
+function max(arr)
+{
+	var result = arr[0];
+	for (var i=0;i<arr.length;i++){
+		if (parseInt(arr[i]) > parseInt(result)) 
+			result = arr[i];
+	}
+	return result;
+}
 
 var app = require('http').createServer(handler),
 		url = require('url'),
@@ -27,16 +36,25 @@ var app = require('http').createServer(handler),
 		io = require('socket.io').listen(app),
 		fs = require('fs'),
 		mime = require('mime'),
-		restler = require('restler');
+		restler = require('restler'),
+		querystring = require('querystring'),
 		utils = require('./utils.js');
 
 io.set('log level', 1); //reduce log level
 
 //GLOBAL VARIABLES
 var coursebook = {}; //{20121:{lectures:[], year:2012, semester:'S', updated_time:"2012-01-01 00:00"}]
+var last_coursebook_info = {
+	year:2000,
+	semester:1,
+	updated_time:"2000-01-01 00:00:00"
+};
+var userdata_cnt = max(fs.readdirSync(__dirname + "/timetable_userdata"));
+if (!userdata_cnt) userdata_cnt = 0;
 
 function init_data()
 {
+	load_data(2011 ,'W');
 	load_data(2012 ,'1');
 	load_data(2012 ,'S');
 
@@ -46,21 +64,47 @@ function init_data()
 			fs.mkdir('timetable_images');
 		}
 	});
+	//timetable_userdata 폴더가 없으면 생성
+	var stats = fs.stat('timetable_userdata', function(err, stats){
+		if (err){
+			fs.mkdir('timetable_userdata');
+		}
+	});
 }
 init_data();
 
 //현재 저장된 수강편람 정보를 리턴
 function get_coursebook_info()
 {
-	var result = {};
+	var result = [];
 	for (hash in coursebook){
-		result[hash] = {
+		result.push({
 			year:coursebook[hash].year,
 			semester:coursebook[hash].semester,
 			updated_time:coursebook[hash].updated_time
-		};
+		});
 	}
-	return result;
+	function semester_to_number(s)
+	{
+		if (s == '1') return 1;
+		if (s == 'S') return 2;
+		if (s == '2') return 3;
+		if (s == 'W') return 4;
+		return 5;
+	}
+	function sortSemester(a, b)
+	{
+		var a_s = semester_to_number(a.semester);
+		var b_s = semester_to_number(b.semester);
+		return a_s - b_s;
+	}
+	function sortYear(a, b)
+	{
+		return a.year - b.year;
+	}
+	result.sort(sortSemester);
+	result.sort(sortYear);
+	return result.reverse();
 }
 
 function load_data(year, semester)
@@ -87,6 +131,8 @@ function load_data(year, semester)
 			for (var j=0;j<components.length;j++){
 				options[header[j]] = components[j];
 			}
+			if (s(options["category"]).indexOf('core') != -1)
+				options["classification"] = "핵교";
 			lectures.push(new Lecture(options));
 		}
 		coursebook[hash] = {
@@ -95,6 +141,12 @@ function load_data(year, semester)
 			semester : semester,
 			updated_time : updated_time
 		};
+		if (last_coursebook_info.updated_time < updated_time){
+			last_coursebook_info.year = year;
+			last_coursebook_info.semester = semester;
+			last_coursebook_info.updated_time = updated_time;
+		}
+		
 		console.log('LOAD COMPLETE : ' + year + "_" + semester);
 	});
 }
@@ -103,8 +155,13 @@ var port = process.env.PORT || 3784;
 app.listen(port);
 console.log("Listening on " + port);
 
+//timetable header & footer
+var timetable_header = fs.readFileSync(__dirname + "/timetable_header.htm");
+var timetable_footer = fs.readFileSync(__dirname + "/timetable_footer.htm");
+
 function handler (req, res) { //http server handler 
 	var uri = url.parse(req.url).pathname; 
+	var query = querystring.parse(url.parse(req.url).query);
 	var filename = path.join(process.cwd(), uri);
 	var user_agent = req.headers['user-agent'];
 	var not_support = (/msie 6.0/i.test(user_agent)) || (/msie 7.0/i.test(user_agent));// || (/msie 8.0/i.test(user_agent));
@@ -122,16 +179,45 @@ function handler (req, res) { //http server handler
 				res.end(data);
 			});
 		}
-		else{
-			fs.readFile(__dirname + "/timetable.htm", function(err, data){
+		//저장된 시간표 불러오기 (수정모드)
+		else if (query.user) {
+			fs.readFile(__dirname + "/timetable_userdata/" + query.user, function(err, content){
 				if (err){
 					res.writeHead(200);
-					return res.end("ERROR");
+					res.end("ERROR");
 				}
-				res.writeHead(200, {'Content-Type' : mime.lookup(__dirname + "/timetable.htm")});
-				res.end(data);
+				else {
+					res.writeHead(200, {'Content-Type' : "text/html"});
+					res.write(timetable_header);
+					res.write(content);
+					res.end(timetable_footer);
+				}
 			});
 		}
+		//시간표 처음부터 작성
+		else {
+			res.writeHead(200, {'Content-Type' : "text/html"});
+			res.write(timetable_header);
+			res.end(timetable_footer);
+		}
+	}
+	//저장된 시간표 불러오기 (보기모드)
+	else if (uri.indexOf("/user/") == 0){
+		var filename = uri.replace("/user/", "");
+		fs.readFile(__dirname + "/timetable_userdata/" + filename, function(err, content){
+			if (err){
+				res.writeHead(200);
+				res.end("ERROR");
+			}
+			else {
+				var header = fs.readFileSync(__dirname + "/user_timetable_header.htm");
+				var footer = fs.readFileSync(__dirname + "/user_timetable_footer.htm");
+				res.writeHead(200, {'Content-Type' : "text/html"});
+				res.write(header);
+				res.write(content);
+				res.end(footer);
+			}
+		});
 	}
 	else{
 		fs.readFile(__dirname + uri, function(err, data){
@@ -216,6 +302,9 @@ function filter_check(lecture, filter)
 
 function get_lectures(query)
 {
+	if (!coursebook[s(query.year) + s(query.semester)])
+		return {lectures:[], page:1, per_page:query.per_page, query:query};
+	var lectures = coursebook[s(query.year) + s(query.semester)].lectures;
 	var page = query.page || 1;
 	var per_page = query.per_page || 30;
 	var filter = query.filter;
@@ -301,11 +390,14 @@ function get_lectures(query)
 					skip_count++;
 				else{
 					//비고에 개설학과 추가
+					/*
 					var tmp_lecture = {};
 					for (var key in lectures[i])
 						tmp_lecture[key] = lectures[i][key];
 					tmp_lecture.remark = tmp_lecture.department + "/" + tmp_lecture.remark;
 					result.lectures.push(tmp_lecture);
+					*/
+					result.lectures.push(lectures[i]);
 				}
 			}
 			if (result.lectures.length >= per_page) break;
@@ -347,6 +439,7 @@ io.sockets.on('connection', function (socket) {
 	socket.emit('init_client', {
 		message:"Hello world!",
 		coursebook_info:get_coursebook_info(),
+		last_coursebook_info:last_coursebook_info
 	});
 	socket.on('search_query', function(data){
 		socket.emit('search_result', get_lectures(data));
@@ -360,6 +453,29 @@ io.sockets.on('connection', function (socket) {
 			console.log("coursebook is updated");
 			init_data();
 		}
+	});
+	socket.on('export_timetable', function(data){
+		var my_lectures = data.my_lectures;
+		var content = "var current_year = '" + data.year + "';\n";
+		content = content + "var current_semester = '" + data.semester + "';\n";
+		content = content + "var my_lectures = [";
+		for (var i=0;i<my_lectures.length;i++){
+			content = content + utils.objectToString(my_lectures[i]);
+			if (i != my_lectures.length - 1)
+				content = content + ",";
+		}
+		content = content + "];\n";
+		userdata_cnt++;
+		var filename = userdata_cnt;
+		var filepath = __dirname + '/timetable_userdata/' + filename;
+		fs.writeFile(filepath, content, function(err){
+			if (err){
+				console.log("EXPORT ERROR : " + err);
+				socket.emit('export_timetable_result', {error:err});
+				return;
+			}
+			socket.emit('export_timetable_result', {filename:filename});
+		});
 	});
 });
 

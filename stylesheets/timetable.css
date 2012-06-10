@@ -1,13 +1,17 @@
 * {font-family:"Arial";}
 body {padding-top:45px;}
 
+.selected-semester-li {background-color:#ccf;}
+
 #facebook_like_li {padding-top:9px;}
 
 #search_form {margin-bottom:0;}
 #search_type {float:left;margin-right:3px;}
 .search-result-table th {text-align:center;}
-.search-result-table td {vertical-align:middle;}
+.search-result-table td {vertical-align:middle;font-size:9pt;}
+.search-result-table .course-rating {width:60px;text-align:center;}
 .search-result-table .classification {width:30px;text-align:center;}
+.search-result-table .department {min-width:50px;max-width:80px;text-align:center;}
 .search-result-table .academic-year {width:40px;text-align:center;}
 .search-result-table .course-number {width:65px;text-align:center;}
 .search-result-table .lecture-number {width:30px;text-align:center;}
@@ -71,3 +75,11 @@ body {padding-top:45px;}
 .fb-comments, .fb-comments iframe[style] {width: 100% !important;}
 .fb-comments, .fb-comments span, .fb-comments.fb_iframe_widget span iframe {width: 100% !important;}
 .fb-comments, .fb-comments.fb_iframe_widget iframe[style], .fb-comments.fb_iframe_widget span[style] {width: 100% !important;}
+
+#course_detail_wrapper {border:1px dotted #aaa;width:270px;position:fixed;z-index:10000;background-color:white;}
+#course_detail_wrapper h3 {background-color:#eee;height:25px;font-size:10pt;padding:3px 10px 3px 10px;cursor:move;}
+#course_detail {padding:5px;}
+#course_detail_table {width:100%;}
+#course_detail_table th {text-align:center;padding:3px;width:65px;}
+#course_detail_table td {text-align:left;padding:3px;}
+#course_detail_buttons {text-align:center;border-top:1px solid #eee;padding:5px;margin-top:5px;}

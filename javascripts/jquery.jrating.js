@@ -58,7 +58,7 @@
 			quotient = 
 			$('<div>', 
 			{
-				'class' : 'jRatingColor',
+				//'class' : 'jRatingColor',
 				css:{
 					width:widthColor
 				}
@@ -84,7 +84,9 @@
 					top:- (starHeight*2),
 					background: 'url('+bgPath+') repeat-x'
 				}
-			}).appendTo($(this));
+			}).appendTo($(this)).waitForImages(function(){
+				quotient.addClass('jRatingColor');
+			});
 
 			$(this).css({width: widthRatingContainer,overflow:'hidden',zIndex:1,position:'relative'});
 

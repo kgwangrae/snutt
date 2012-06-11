@@ -143,6 +143,7 @@ function change_semester(year, semester)
 	current_semester = semester;
 	$('#semester_label').text(current_year + "-" + current_semester);
 	$('#data_updated_at').text(get_coursebook_info(current_year, current_semester).updated_time);
+	$('#search_query_text').focus().val("");
 }
 
 $(function(){

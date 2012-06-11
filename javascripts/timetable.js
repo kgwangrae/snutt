@@ -557,7 +557,7 @@ $(function(){
 
 	//detail dialog
 	$('#course_detail_wrapper').draggable({
-		handle:'h3',
+		handle:'.course-title',
 		containment:"body"
 	}).css('right', 0);
 	$('#course_detail_wrapper').hide();
@@ -733,6 +733,21 @@ $(function(){
 
 	$('.search-result-table').disableSelection();
 	$('#timetable_container').disableSelection();
+
+	$('.course_detail_toggle').click(function(){
+		var ele = $(this);
+		var course_detail = $('#course_detail');
+		if (ele.attr('id') == "course_detail_contract"){
+			course_detail.slideUp();
+			ele.hide();
+			$('#course_detail_expand').show();
+		}
+		else {
+			course_detail.slideDown();
+			ele.hide();
+			$('#course_detail_contract').show();
+		}
+	});
 
 
 	//document load end//
@@ -1052,7 +1067,7 @@ function row_click_handler()
 
 function refresh_course_detail(selected_lecture)
 {
-	$('#course_detail_wrapper .course-title').text(s(selected_lecture.course_title));
+	$('#course_detail_wrapper #course_detail_title').text(s(selected_lecture.course_title));
 	$('#course_detail_wrapper .course-number').text(s(selected_lecture.course_number));
 	$('#course_detail_wrapper .lecture-number').text(s(selected_lecture.lecture_number));
 	$('#course_detail_wrapper .classification').text(s(category_to_text(selected_lecture.category)));

@@ -77,9 +77,12 @@ body {padding-top:45px;}
 .fb-comments, .fb-comments.fb_iframe_widget iframe[style], .fb-comments.fb_iframe_widget span[style] {width: 100% !important;}
 
 #course_detail_wrapper {border:1px dotted #aaa;width:270px;position:fixed;z-index:10000;background-color:white;}
-#course_detail_wrapper h3 {background-color:#eee;height:25px;font-size:10pt;padding:3px 10px 3px 10px;cursor:move;}
-#course_detail {padding:5px;}
+#course_detail_wrapper div.course-title {background-color:#eee;height:25px;padding:1px 5px 1px 5px;cursor:move;}
+#course_detail_wrapper #course_detail_title {font-size:10pt;float:left;}
+#course_detail {padding:3px;border-bottom:1px solid #eee;margin-bottom:5px;clear:both;}
 #course_detail_table {width:100%;}
 #course_detail_table th {text-align:center;padding:3px;width:65px;}
 #course_detail_table td {text-align:left;padding:3px;}
-#course_detail_buttons {text-align:center;border-top:1px solid #eee;padding:5px;margin-top:5px;}
+#course_detail_buttons {text-align:center;padding:5px;}
+#course_detail_contract {background-image:url("/images/arrow_contract.png");height:24px;width:24px;float:right;cursor:pointer;}
+#course_detail_expand {background-image:url("/images/arrow_expand.png");height:24px;width:24px;float:right;cursor:pointer;}

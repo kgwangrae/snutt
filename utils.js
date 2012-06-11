@@ -177,10 +177,10 @@ exports.objectToString = function(o){
 				}
 				else {
 					if(typeof t == "string"){
-						a[a.length] = [ p+ ": \"" + t.toString() + "\"" ];
+						a[a.length] = [ p+ ": \"" + t.toString().replace(/"/g, '\\"') + "\"" ];
 					}
 					else{
-						a[a.length] = [ p+ ": " + t.toString()];
+						a[a.length] = [ p+ ": " + t.toString().replace(/"/g, '\\"')];
 					}
 				}
 			}

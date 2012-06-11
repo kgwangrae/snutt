@@ -164,6 +164,7 @@ $(function(){
 		//학기 dropdown 메뉴 초기화
 		$('#semester_label').text(current_year + "-" + current_semester);
 		var semester_dropdown_ul = $('#semester_dropdown_ul');
+		semester_dropdown_ul.children().remove();
 		for (var i=0;i<coursebook_info.length;i++){
 			var year = coursebook_info[i].year;
 			var semester = coursebook_info[i].semester;
@@ -172,7 +173,7 @@ $(function(){
 			if (year == current_year && semester == current_semester) list.addClass('selected-semester-li')
 		}
 		//학기 변경
-		$('.semester-button').click(function(){
+		$('.semester-button').unbind('click').click(function(){
 			var ele = $(this);
 			if (current_year == ele.attr('year') && current_semester == ele.attr('semester')) return true;
 			//학기 변경

@@ -1092,7 +1092,7 @@ function refresh_course_detail(selected_lecture)
 	}
 	$('#course_detail_plan_button').attr('course-number', selected_lecture.course_number);
 	$('#course_detail_plan_button').attr('lecture-number', selected_lecture.lecture_number);
-	$('#course_detail_wrapper').fadeIn(300);
+	$('#course_detail_wrapper').fadeIn();
 }
 
 function my_courses_row_dblclick_handler(ele)
@@ -1155,7 +1155,7 @@ function cancel_lecture_selection()
 	selected_row = null;
 	my_courses_selected_row = null;
 	generate_timecell(my_lectures);
-	$('#course_detail_wrapper').fadeOut(300);
+	$('#course_detail_wrapper').fadeOut();
 }
 
 function refresh_my_courses_table()

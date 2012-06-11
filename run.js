@@ -54,6 +54,7 @@ if (!userdata_cnt) userdata_cnt = 0;
 
 function init_data()
 {
+	load_data(2011 ,'2');
 	load_data(2011 ,'W');
 	load_data(2012 ,'1');
 	load_data(2012 ,'S');

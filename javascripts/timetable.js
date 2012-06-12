@@ -1086,10 +1086,17 @@ function refresh_course_detail(selected_lecture)
 	if (!selected_lecture.snuev_lec_id){
 		$('#course_detail_snuev_button').addClass('disabled').attr('href', "#").unbind('click').click(function(){return false;});
 		$('<div>정보 없음</div>').appendTo($('#course_detail_rating'));
+		$('#course_detail_rating_score').text("");
+	}
+	else if (!selected_lecture.snuev_eval_score){
+		$('#course_detail_snuev_button').unbind('click').removeClass('disabled').attr('href', "http://snuev.com/#/main/lecture?lec_id="+selected_lecture.snuev_lec_id);
+		$('<div>평가 없음</div>').appendTo($('#course_detail_rating'));
+		$('#course_detail_rating_score').text("");
 	}
 	else {
 		$('#course_detail_snuev_button').unbind('click').removeClass('disabled').attr('href', "http://snuev.com/#/main/lecture?lec_id="+selected_lecture.snuev_lec_id);
-		$('#course_detail_rating').jRating({score:Math.random()*10, type:'big'});
+		$('#course_detail_rating').jRating({score:selected_lecture.snuev_eval_score, type:'big'});
+		$('#course_detail_rating_score').text(selected_lecture.snuev_eval_score);
 	}
 	$('#course_detail_plan_button').attr('course-number', selected_lecture.course_number);
 	$('#course_detail_plan_button').attr('lecture-number', selected_lecture.lecture_number);
@@ -1171,8 +1178,10 @@ function refresh_my_courses_table()
 		var rating = $('<td></td>').addClass('course-rating').appendTo(row).text("");
 		if (!lecture.snuev_lec_id)
 			rating.text("정보 없음");
+		else if (!lecture.snuev_eval_score)
+			rating.text("평가 없음");
 		else
-			$('<div></div>').appendTo(rating).jRating({score:Math.random()*10});
+			$('<div></div>').appendTo(rating).jRating({score:lecture.snuev_eval_score});
 		//강의평점 끝
 		$('<td></td>').addClass('course-number').appendTo(row).text(lecture.course_number);
 		$('<td></td>').addClass('lecture-number').appendTo(row).text(lecture.lecture_number);
@@ -1227,8 +1236,10 @@ function set_result_table(data)
 		var rating = $('<td></td>').addClass('course-rating').appendTo(row).text("");
 		if (!lecture.snuev_lec_id)
 			rating.text("정보 없음");
+		else if (!lecture.snuev_eval_score)
+			rating.text("평가 없음");
 		else
-			$('<div></div>').appendTo(rating).jRating({score:Math.random()*10});
+			$('<div></div>').appendTo(rating).jRating({score:lecture.snuev_eval_score});
 		//강의평점 끝
 		$('<td></td>').addClass('course-number').appendTo(row).text(lecture.course_number);
 		$('<td></td>').addClass('lecture-number').appendTo(row).text(lecture.lecture_number);

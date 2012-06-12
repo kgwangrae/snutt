@@ -86,3 +86,5 @@ body {padding-top:45px;}
 #course_detail_buttons {text-align:center;padding:5px;}
 #course_detail_contract {background-image:url("/images/arrow_contract.png");height:24px;width:24px;float:right;cursor:pointer;}
 #course_detail_expand {background-image:url("/images/arrow_expand.png");height:24px;width:24px;float:right;cursor:pointer;}
+#course_detail_rating {width:120px;float:left;}
+#course_detail_rating_score {width:50px;float:left;font-size:12pt;margin-left:3px;padding-top:1px;margin-left:7px;font-weight:bold;}

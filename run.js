@@ -16,6 +16,7 @@ function Lecture(options){
 	this.remark = options["remark"];
 	this.category = options["category"] || "";
 	this.snuev_lec_id = options["snuev_lec_id"] || "";
+	this.snuev_eval_score = parseFloat(options["snuev_eval_score"]);
 }
 
 

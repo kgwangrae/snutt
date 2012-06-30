@@ -149,7 +149,18 @@ open(txt_filename, "w") do |file|
 		remark = m[i,16]
 		category = category_map["#{course_number};#{lecture_number}"]
 
-		snuev_api = JSON.parse(Net::HTTP.get(URI.parse(URI.escape("http://snuev.com/lecture/find?code=#{course_number}&professor=#{instructor}"))))
+		while true
+			snuev_api = nil
+			begin
+				snuev_api = JSON.parse(Net::HTTP.get(URI.parse(URI.escape("http://snuev.com/lecture/find?code=#{course_number}&professor=#{instructor}"))))
+			rescue
+				puts "fail"
+				snuev_api = nil
+			end
+			if snuev_api then
+				break
+			end
+		end
 		snuev_lec_id = snuev_api["lec_id"]
 		snuev_eval_score = (snuev_api["eval_point"].to_f / snuev_api["eval_count"].to_f).round(2)
 		puts "(#{i-2}/#{m.row_size-3}) #{course_number} #{instructor} #{course_title} : #{snuev_lec_id} : #{snuev_eval_score}"

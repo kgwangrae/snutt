@@ -180,7 +180,7 @@ exports.objectToString = function(o){
 						a[a.length] = [ p+ ": \"" + t.toString().replace(/"/g, '\\"') + "\"" ];
 					}
 					else{
-						a[a.length] = [ p+ ": " + t.toString().replace(/"/g, '\\"')];
+						a[a.length] = [ p+ ": " + String(t).replace(/"/g, '\\"')];
 					}
 				}
 			}

@@ -147,7 +147,7 @@ function change_semester(year, semester)
 }
 
 $(function(){
-	socket = io.connect();
+	socket = io.connect(':3784');
 	socket.on('init_client', function(data){
 		$('#init_loading_modal').dialog('close');
 

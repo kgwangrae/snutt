@@ -149,6 +149,7 @@ open(txt_filename, "w") do |file|
 		remark = m[i,16]
 		category = category_map["#{course_number};#{lecture_number}"]
 
+=begin
 		while true
 			snuev_api = nil
 			begin
@@ -164,6 +165,8 @@ open(txt_filename, "w") do |file|
 		snuev_lec_id = snuev_api["lec_id"]
 		snuev_eval_score = (snuev_api["eval_point"].to_f / snuev_api["eval_count"].to_f).round(2)
 		puts "(#{i-2}/#{m.row_size-3}) #{course_number} #{instructor} #{course_title} : #{snuev_lec_id} : #{snuev_eval_score}"
+=end
+		snuev_lec_id = snuev_eval_score = nil
 
 		#classtime 표기 통일
 		#수(7,8,9) -> 수(7-3)

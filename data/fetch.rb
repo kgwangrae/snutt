@@ -93,7 +93,7 @@ puts "category mapping complete"
 
 #download 
 puts "Start fetching...#{year}/#{semester}"
-address="/sugang/JACC100.do?srchGaesulYear=#{year}&srchGaesulHakgi=#{semester}&srchFlag=0&workType=EX"
+address="/sugang/JACC110.do?srchGaesulYear=#{year}&srchGaesulHakgi=#{semester}&srchFlag=0&workType=EX&langKnd=KOR"
 xls_filename="#{Dir.getwd()}/xls/#{year}_#{semester}.xls"
 txt_filename="#{Dir.getwd()}/txt/#{year}_#{semester}.txt"
 

@@ -101,9 +101,14 @@ req=Net::HTTP::Get.new('http://sugang.snu.ac.kr/sugang/JACO010.do')
 res=Net::HTTP.start('sugang.snu.ac.kr',80){|http|
 	http.request(req)
 }
+=begin
 cookie=/JSESSIONID\=[^;]*;/.match(res.get_fields("Set-Cookie").join)[0]
 res=Net::HTTP.start('sugang.snu.ac.kr',80){|http|
 	http.get(address,{"Cookie"=>cookie})
+}
+=end
+res=Net::HTTP.start('sugang.snu.ac.kr',80){|http|
+	http.get(address,{})
 }
 
 open(xls_filename,"w") do |file|

@@ -182,3 +182,6 @@ open("#{txt_filename}.tmp", "w") do |file|
 end
 
 File.rename("#{txt_filename}.tmp", txt_filename)
+
+#make data.zip
+`sh zip.sh`

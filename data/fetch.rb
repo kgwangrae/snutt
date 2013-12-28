@@ -93,23 +93,15 @@ puts "category mapping complete"
 
 #download 
 puts "Start fetching...#{year}/#{semester}"
-address="/sugang/JACC110.do?srchGaesulYear=#{year}&srchGaesulHakgi=#{semester}&srchFlag=0&workType=EX&langKnd=KOR"
+
 xls_filename="#{Dir.getwd()}/xls/#{year}_#{semester}.xls"
 txt_filename="#{Dir.getwd()}/txt/#{year}_#{semester}.txt"
 
-req=Net::HTTP::Get.new('http://sugang.snu.ac.kr/sugang/JACO010.do')
-res=Net::HTTP.start('sugang.snu.ac.kr',80){|http|
-	http.request(req)
-}
-=begin
-cookie=/JSESSIONID\=[^;]*;/.match(res.get_fields("Set-Cookie").join)[0]
-res=Net::HTTP.start('sugang.snu.ac.kr',80){|http|
-	http.get(address,{"Cookie"=>cookie})
-}
-=end
-res=Net::HTTP.start('sugang.snu.ac.kr',80){|http|
-	http.get(address,{})
-}
+http = Net::HTTP.new('sugang.snu.ac.kr', 80)
+path="/sugang/cc/cc100excel.action"
+shtm = "U000200002U000300002"
+data = "srchCond=0&pageNo=1&workType=EX&sortKey=&sortOrder=&srchOpenSchyy=#{year}&currSchyy=#{year}&srchOpenShtm=#{shtm}&srchCptnCorsFg=&srchOpenShyr=&srchSbjtCd=&srchSbjtNm=&srchOpenUpSbjtFldCd=&srchOpenSbjtFldCd=&srchOpenUpDeptCd=&srchOpenDeptCd=&srchOpenSubmattFgCd=&srchOpenPntMin=&srchOpenPntMax=&srchCamp=&srchBdNo=&srchProfNm=&srchTlsnAplyCapaCntMin=&srchTlsnAplyCapaCntMax=&srchTlsnRcntMin=&srchTlsnRcntMax=&srchOpenSbjtTmNm=&srchOpenSbjtTm=&srchOpenSbjtTmVal=&srchLsnProgType=&srchMrksGvMthd="
+res, data = http.post(path, data)
 
 open(xls_filename,"w") do |file|
 	file.print(res.body)
@@ -118,23 +110,31 @@ puts "download complete : #{year}_#{semester}.xls"
 
 #convert
 puts "start converting from xls to txt"
-excel = Excel.new(xls_filename);
+excel = Roo::Excel.new(xls_filename);
 m = excel.to_matrix
 
 def convert_classtime(time)
-	if time.include?(",") then
-		#수(7,8,9) -> 수(7-3)
-		tmp = time.split(",")
-		return "#{tmp[0]}-#{tmp.length})"
-	elsif time.include?("-")
-		return time
-	else
-		#수(1) -> 수(1-1)
-		return time.split(")").join("")+"-1)"
-	end
+  wday = time[0]
+  times = time.split("(")[1].split(")")[0].split("~")
+  from = times[0]
+  from_hour = from.split(":")[0].to_i
+  from_min  = from.split(":")[1].to_i
+  to = times[1]
+  to_hour = to.split(":")[0].to_i
+  to_min  = to.split(":")[1].to_i
+
+  from_ctime = (from_hour-8)
+  from_ctime = from_ctime + 0.5 if from_min == 30
+  to_ctime = (to_hour-8)
+  to_ctime = to_ctime + 0.5 if to_min == 20
+  to_ctime = to_ctime + 1   if to_min == 50
+  duration = to_ctime - from_ctime
+
+
+  return "#{wday}(#{from_ctime}-#{duration})"
 end
 
-open(txt_filename, "w") do |file|
+open("#{txt_filename}.tmp", "w") do |file|
 	file.puts "#{year}/#{semester}"
 	file.puts Time.now.localtime().strftime("%Y-%m-%d %H:%M:%S")
 	file.puts "classification;department;academic_year;course_number;lecture_number;course_title;credit;class_time;location;instructor;quota;enrollment;remark;category;snuev_lec_id;snuev_eval_score"
@@ -180,3 +180,5 @@ open(txt_filename, "w") do |file|
 		file.puts "#{classification};#{department};#{academic_year};#{course_number};#{lecture_number};#{course_title};#{credit};#{class_time};#{location};#{instructor};#{quota};#{enrollment};#{remark};#{category};#{snuev_lec_id};#{snuev_eval_score}"
 	end
 end
+
+File.rename("#{txt_filename}.tmp", txt_filename)

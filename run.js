@@ -57,11 +57,14 @@ function init_data()
 {
 	//load_data(2011 ,'2');
 	//load_data(2011 ,'W');
-	load_data(2012 ,'1');
+	//load_data(2012 ,'1');
 	load_data(2012 ,'S');
 	load_data(2012 ,'2');
 	load_data(2012 ,'W');
 	load_data(2013 ,'1');
+	load_data(2013 ,'S');
+  load_data(2013 ,'2');
+  load_data(2013 ,'W');
 
 	//timetable_images 폴더가 없으면 생성
 	var stats = fs.stat('timetable_images', function(err, stats){
@@ -541,7 +544,7 @@ function upload_timetable_to_facebook(options, socket)
 				}
 			}).on('complete', function(data) {
 				console.log("photo upload complete! : " + filename);
-				socket.emit('facebook_publish_complete', {data:JSON.parse(data)});
+				socket.emit('facebook_publish_complete', {data: data});
 			});
 			
 		}

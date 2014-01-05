@@ -99,7 +99,16 @@ txt_filename="#{Dir.getwd()}/txt/#{year}_#{semester}.txt"
 
 http = Net::HTTP.new('sugang.snu.ac.kr', 80)
 path="/sugang/cc/cc100excel.action"
-shtm = "U000200002U000300002"
+case semester
+when '1'
+  shtm = 'U000200001U000300001'
+when '2'
+  shtm = 'U000200002U000300001'
+when 'S'
+  shtm = 'U000200001U000300002'
+when 'W'
+  shtm = 'U000200002U000300002'
+end
 data = "srchCond=0&pageNo=1&workType=EX&sortKey=&sortOrder=&srchOpenSchyy=#{year}&currSchyy=#{year}&srchOpenShtm=#{shtm}&srchCptnCorsFg=&srchOpenShyr=&srchSbjtCd=&srchSbjtNm=&srchOpenUpSbjtFldCd=&srchOpenSbjtFldCd=&srchOpenUpDeptCd=&srchOpenDeptCd=&srchOpenSubmattFgCd=&srchOpenPntMin=&srchOpenPntMax=&srchCamp=&srchBdNo=&srchProfNm=&srchTlsnAplyCapaCntMin=&srchTlsnAplyCapaCntMax=&srchTlsnRcntMin=&srchTlsnRcntMax=&srchOpenSbjtTmNm=&srchOpenSbjtTm=&srchOpenSbjtTmVal=&srchLsnProgType=&srchMrksGvMthd="
 res, data = http.post(path, data)
 

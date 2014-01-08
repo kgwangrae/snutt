@@ -124,7 +124,11 @@ m = excel.to_matrix
 
 def convert_classtime(time)
   wday = time[0]
-  times = time.split("(")[1].split(")")[0].split("~")
+  begin
+    times = time.split("(")[1].split(")")[0].split("~")
+  rescue
+    return ""
+  end
   from = times[0]
   from_hour = from.split(":")[0].to_i
   from_min  = from.split(":")[1].to_i
@@ -135,8 +139,8 @@ def convert_classtime(time)
   from_ctime = (from_hour-8)
   from_ctime = from_ctime + 0.5 if from_min == 30
   to_ctime = (to_hour-8)
-  to_ctime = to_ctime + 0.5 if to_min == 20
-  to_ctime = to_ctime + 1   if to_min == 50
+  to_ctime = to_ctime + 0.5 if to_min == 20 or to_min == 15
+  to_ctime = to_ctime + 1   if to_min == 50 or to_min == 45
   duration = to_ctime - from_ctime
 
 

@@ -65,6 +65,7 @@ function init_data()
 	load_data(2013 ,'S');
   load_data(2013 ,'2');
   load_data(2013 ,'W');
+	load_data(2014 ,'1');
 
 	//timetable_images 폴더가 없으면 생성
 	var stats = fs.stat('timetable_images', function(err, stats){

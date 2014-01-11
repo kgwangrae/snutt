@@ -164,7 +164,7 @@ open("#{txt_filename}.tmp", "w") do |file|
 		instructor = m[i,13]
 		quota = m[i,14].to_i
 		enrollment = m[i,15].to_i
-		remark = m[i,16]
+		remark = m[i,16].gsub(//, " ")
 		category = category_map["#{course_number};#{lecture_number}"]
 
 =begin
@@ -198,3 +198,4 @@ File.rename("#{txt_filename}.tmp", txt_filename)
 
 #make data.zip
 `sh zip.sh`
+`echo '{"updated_at": #{Time.now.to_i}}' > ../api/sugang.json `

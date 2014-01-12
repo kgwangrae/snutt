@@ -1,5 +1,5 @@
 2014/1
-2014-01-11 19:31:21
+2014-01-12 14:03:44
 classification;department;academic_year;course_number;lecture_number;course_title;credit;class_time;location;instructor;quota;enrollment;remark;category;snuev_lec_id;snuev_eval_score
 교양;국어국문학과;1학년;031.001;001;글쓰기의 기초;3;월(3-1.5)/수(3-1.5);001-207/001-207;조해숙;25;0;®인문대학;;;
 교양;국어국문학과;1학년;031.001;002;글쓰기의 기초;3;화(9-1.5)/목(9-1.5);008-302/008-302;;25;0;®인문대학;;;

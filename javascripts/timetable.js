@@ -1278,7 +1278,24 @@ function show_course_detail(options)
 	var semester = options.semester;
 	var course_number = options.course_number;
 	var lecture_number = options.lecture_number;
-	var url = "http://sugang.snu.ac.kr/sugang/JACC103.do?gaesulYear="+year+"&gaesulHakgi="+semester+"&gyoCode="+course_number+"&gangjwaCode="+lecture_number + "&sugangFlag=P";
+
+  var openShtmFg = null, openDetaShtmFg = null;
+  if (semester == "1"){
+    openShtmFg = "U000200001";
+    openDetaShtmFg = "U000300001";
+  } else if (semester == "2"){
+    openShtmFg = "U000200002";
+    openDetaShtmFg = "U000300001";
+  } else if (semester == "S"){
+    openShtmFg = "U000200001";
+    openDetaShtmFg = "U000300002";  
+  } else if (semester == "W"){
+    openShtmFg = "U000200002";
+    openDetaShtmFg = "U000300002";
+  }
+
+  var url = "http://sugang.snu.ac.kr/sugang/cc/cc103.action?openSchyy="+year+"&openShtmFg="+openShtmFg+"&openDetaShtmFg="+openDetaShtmFg+"&sbjtCd="+course_number+"&ltNo="+lecture_number+"&sbjtSubhCd=000";
+
 	window.open(url);
 }
 

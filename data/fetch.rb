@@ -155,16 +155,22 @@ open("#{txt_filename}.tmp", "w") do |file|
 		classification = m[i,0]
 		department = m[i,1]
 		academic_year = m[i,2]
-		course_number = m[i,3]
-		lecture_number = m[i,4]
-		course_title = m[i,5]
-		credit = m[i,7].to_i
-		class_time = m[i,10]
-		location = m[i,12]
-		instructor = m[i,13]
-		quota = m[i,14].to_i
-		enrollment = m[i,15].to_i
-		remark = m[i,16].gsub(/\n/, " ")
+    if academic_year == "학사"
+      academic_year = m[i,3]
+    end
+		course_number = m[i,4]
+		lecture_number = m[i,5]
+		course_title = m[i,6]
+    if m[i,7].to_s.length > 1
+      course_title = course_title + "(#{m[i,7]})"
+    end
+		credit = m[i,8].to_i
+		class_time = m[i,11]
+		location = m[i,13]
+		instructor = m[i,14]
+		quota = m[i,15].to_i
+		enrollment = m[i,16].to_i
+		remark = m[i,17].gsub(/\n/, " ")
 		category = category_map["#{course_number};#{lecture_number}"]
 
 =begin

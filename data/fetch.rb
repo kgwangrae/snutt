@@ -164,6 +164,7 @@ open("#{txt_filename}.tmp", "w") do |file|
     if m[i,7].to_s.length > 1
       course_title = course_title + "(#{m[i,7]})"
     end
+    course_title = course_title.gsub(/;/, ':')
 		credit = m[i,8].to_i
 		class_time = m[i,11]
 		location = m[i,13]

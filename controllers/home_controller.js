@@ -1,14 +1,14 @@
 //timetable header & footer
-var timetable_header = fs.readFileSync(ROOT_PATH + "/views/timetable_header.htm");
-var timetable_footer = fs.readFileSync(ROOT_PATH + "/views/timetable_footer.htm");
-var user_timetable_header = fs.readFileSync(ROOT_PATH + "/views/user_timetable_header.htm");
-var user_timetable_footer = fs.readFileSync(ROOT_PATH + "/views/user_timetable_footer.htm");
+var timetable_header = fs.readFileSync(ROOT_VIEW_PATH + "/timetable_header.htm");
+var timetable_footer = fs.readFileSync(ROOT_VIEW_PATH + "/timetable_footer.htm");
+var user_timetable_header = fs.readFileSync(ROOT_VIEW_PATH + "/user_timetable_header.htm");
+var user_timetable_footer = fs.readFileSync(ROOT_VIEW_PATH + "/user_timetable_footer.htm");
 
 module.exports = {
   home: function(params, renderer, request){
     // 시간표 짜기
     if (params.user){
-      fs.readFile(ROOT_PATH + "/timetable_userdata/" + params.user, function(err, content){
+      fs.readFile(USER_TIMETABLE_PATH + "/" + params.user, function(err, content){
         if (err){
           renderer.text('ERROR');
         }
@@ -23,7 +23,7 @@ module.exports = {
 
   show: function(params, renderer, request){
     // 저장된 시간표 불러오기 (보기모드)
-    fs.readFile(ROOT_PATH + "/timetable_userdata/" + params.id, function(err, content){
+    fs.readFile(USER_TIMETABLE_PATH + "/" + params.id, function(err, content){
       if (err){
         renderer.text('ERROR');
       }

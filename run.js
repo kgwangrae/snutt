@@ -1,9 +1,20 @@
-// load initializers
-GLOBAL.ROOT_PATH = __dirname;
-require('./initializers/load_modules.js');
-require('./initializers/load_data.js');
+// config
+GLOBAL.TARGET = 'snutt';
 
-// load controllers & models
+GLOBAL.ROOT_PATH = __dirname;
+GLOBAL.ROOT_VIEW_PATH = ROOT_PATH + '/views/' + TARGET;
+GLOBAL.ROOT_DATA_PATH = ROOT_PATH + '/data/' + TARGET;
+GLOBAL.USER_IMAGE_PATH = ROOT_PATH + '/userdata/' + TARGET + '/images';
+GLOBAL.USER_TIMETABLE_PATH = ROOT_PATH + '/userdata/' + TARGET + '/timetables';
+
+// load initializers
+require('./initializers/load_modules.js');
+require('./initializers/load_common_utils.js');
+mkdirp.sync(USER_IMAGE_PATH);
+mkdirp.sync(USER_TIMETABLE_PATH);
+require('./initializers/load_data_' + TARGET + '.js');
+
+// load controllers
 var controllers = require('./controllers/controllers.js');
 
 // define application

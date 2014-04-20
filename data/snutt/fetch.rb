@@ -205,4 +205,4 @@ File.rename("#{txt_filename}.tmp", txt_filename)
 
 #make data.zip
 `sh zip.sh`
-`echo '{"updated_at": #{Time.now.to_i}}' > ../api/sugang.json `
+`echo '{"updated_at": #{Time.now.to_i}}' > ../../api/sugang.json `

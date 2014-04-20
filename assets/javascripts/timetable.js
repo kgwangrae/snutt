@@ -1,9 +1,25 @@
-var socket;
-
-function coursebook_update(password)
-{
-	socket.emit('coursebook_update', {password:password});
-}
+var apiClient = {
+	get: function(path, params, callback) {
+		var base_url = '/api/'
+		$.ajax({
+			url: base_url + path,
+			data: params,
+			dataType: 'json',
+			method: 'get',
+			success: callback
+		})
+	},
+	post: function(path, params, callback){
+		var base_url = '/api/'
+		$.ajax({
+			url: base_url + path,
+			data: params,
+			dataType: 'json',
+			method: 'post',
+			success: callback
+		})
+	}
+};
 
 function simplify_class_time(class_time)
 {
@@ -147,8 +163,7 @@ function change_semester(year, semester)
 }
 
 $(function(){
-	socket = io.connect(':3784');
-	socket.on('init_client', function(data){
+	apiClient.get('init_client', {}, function(data){
 		$('#init_loading_modal').dialog('close');
 
 		coursebook_info = data.coursebook_info;
@@ -190,31 +205,6 @@ $(function(){
 			refresh_my_courses_table();
 			generate_timecell(my_lectures);
 		});
-	});
-	socket.on('search_result', function(data){
-		page_loading_requesting = false;
-		if (data.lectures.length == 0 && data.page > 1)
-			page_loading_complete = true;
-		else {
-			set_result_table(data);
-			$('#nav_search_result').tab('show');
-		}
-	});
-	socket.on('facebook_publish_complete', function(data){
-		$('#publish_facebook_ok_button').removeAttr('disabled');
-		$('#facebook_loading_modal').dialog('close');
-		if (data.data.error){
-			alert('업로드에 실패했습니다.');
-		}
-		else {
-			alert('성공적으로 게시되었습니다!');
-			$('#facebook_message').val("");
-			$('#facebook_message_wrapper').slideUp();
-			$('#publish_facebook_toggle_button').attr('state', 'off').removeClass('dropup');
-		}
-	});
-	socket.on('export_timetable_result', function(data){
-		$('#saved_timetable_url').attr('href', '/user/'+data.filename).text("http://snutt.kr/user/"+data.filename);
 	});
 
 	//SNUTT 로고 클릭
@@ -269,6 +259,20 @@ $(function(){
 	}).tooltip('show');
 	$('.tooltip:last').addClass('search-filter-tooltip').hide();
 
+	// send search_query
+	var sendSearchQuery = function(params) {
+		apiClient.get('search_query', params,
+		function(data){
+			page_loading_requesting = false;
+			if (data.lectures.length == 0 && data.page > 1)
+				page_loading_complete = true;
+			else {
+				set_result_table(data);
+				$('#nav_search_result').tab('show');
+			}
+		});
+	};
+
 	//scroll change
 	$('#lectures_content').scroll(function(){
 		if (current_tab == "search"){
@@ -282,7 +286,7 @@ $(function(){
 			//스크롤이 충분히 밑으로 내려가면 다음 페이지 로딩
 			if (difference < 200 && !page_loading_requesting && !page_loading_complete){
 				page++;
-				socket.emit('search_query', {
+				sendSearchQuery({
 					year:current_year,
 					semester:current_semester,
 					filter:filter,
@@ -295,14 +299,14 @@ $(function(){
 			}
 		}
 	});
-		
+
 	//search query
 	$('#search_form').submit(function(){
 		query_text = $('#search_query_text').val();
 		page = 1;
 		page_loading_complete = false;
 		filter = get_filter();
-		socket.emit('search_query', {
+		sendSearchQuery({
 			year:current_year,
 			semester:current_semester,
 			filter:filter,
@@ -608,10 +612,22 @@ $(function(){
 					var access_token = response.authResponse.accessToken;
 					var base64_data = $('.timetable-image').attr('src').replace(/data:image\/png;base64,/, "");
 					var message = $("#facebook_message").val();
-					socket.emit('publish_timetable_to_facebook', {
+					apiClient.post('publish_to_facebook', {
 						access_token:access_token,
 						base64_data:base64_data,
 						message:message
+					}, function(data){
+						$('#publish_facebook_ok_button').removeAttr('disabled');
+						$('#facebook_loading_modal').dialog('close');
+						if (data.data.error){
+							alert('업로드에 실패했습니다.');
+						}
+						else {
+							alert('성공적으로 게시되었습니다!');
+							$('#facebook_message').val("");
+							$('#facebook_message_wrapper').slideUp();
+							$('#publish_facebook_toggle_button').attr('state', 'off').removeClass('dropup');
+						}
 					});
 					$('#facebook_message').blur();
 					$('#facebook_loading_modal').dialog('open');
@@ -704,10 +720,12 @@ $(function(){
 		else {
 			export_timetable();
 		}
-		socket.emit('export_timetable', {
+		apiClient.post('export_timetable', {
 			year:current_year,
 			semester:current_semester,
-			my_lectures:my_lectures
+			my_lectures: my_lectures
+		}, function(data){
+			$('#saved_timetable_url').attr('href', '/user/'+data.filename).text("http://snutt.kr/user/"+data.filename);
 		});
 		$('#content_wrapper').hide();
 		$('#export_wrapper').show();

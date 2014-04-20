@@ -39,7 +39,7 @@ function init_data()
   //load_data(2011 ,'2');
   //load_data(2011 ,'W');
   //load_data(2012 ,'1');
-  load_data(2012 ,'S');
+  //load_data(2012 ,'S');
   load_data(2012 ,'2');
   load_data(2012 ,'W');
   load_data(2013 ,'1');
@@ -47,6 +47,7 @@ function init_data()
   load_data(2013 ,'2');
   load_data(2013 ,'W');
   load_data(2014 ,'1');
+  load_data(2014 ,'S');
 }
 init_data();
 

@@ -50,6 +50,14 @@ var last_coursebook_info = {
 	semester:1,
 	updated_time:"2000-01-01 00:00:00"
 };
+
+try {
+	//timetable_images 폴더가 없으면 생성
+	fs.mkdirSync('timetable_images');
+	//timetable_userdata 폴더가 없으면 생성
+	fs.mkdirSync('timetable_userdata');
+} catch (e){}
+
 var userdata_cnt = max(fs.readdirSync(__dirname + "/timetable_userdata"));
 if (!userdata_cnt) userdata_cnt = 0;
 
@@ -63,22 +71,9 @@ function init_data()
 	load_data(2012 ,'W');
 	load_data(2013 ,'1');
 	load_data(2013 ,'S');
-  load_data(2013 ,'2');
-  load_data(2013 ,'W');
+	load_data(2013 ,'2');
+	load_data(2013 ,'W');
 	load_data(2014 ,'1');
-
-	//timetable_images 폴더가 없으면 생성
-	var stats = fs.stat('timetable_images', function(err, stats){
-		if (err){
-			fs.mkdir('timetable_images');
-		}
-	});
-	//timetable_userdata 폴더가 없으면 생성
-	var stats = fs.stat('timetable_userdata', function(err, stats){
-		if (err){
-			fs.mkdir('timetable_userdata');
-		}
-	});
 }
 init_data();
 

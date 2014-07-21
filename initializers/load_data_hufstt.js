@@ -46,6 +46,10 @@ function init_data()
   load_data(2012 ,'S'); //여름학기
   load_data(2012 ,'2'); //2학기
   load_data(2013 ,'1');
+  load_data(2013 ,'2');
+  load_data(2013 ,'S');
+  load_data(2014 ,'1');
+  load_data(2014 ,'2');
 }
 init_data();
 

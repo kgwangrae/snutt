@@ -47,6 +47,7 @@ function init_data()
   load_data(2013 ,'W');
   load_data(2014 ,'1');
   load_data(2014 ,'S');
+  load_data(2014 ,'2');
 }
 init_data();
 

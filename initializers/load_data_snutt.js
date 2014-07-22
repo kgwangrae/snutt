@@ -1,5 +1,5 @@
-var Lecture = function(options){
-    options = options ||{};
+var Lecture = function(options) {
+    options = options || {};
     this.classification = options["classification"];
     this.department = options["department"];
     this.academic_year = options["academic_year"];
@@ -25,10 +25,14 @@ last_coursebook_info = {
     semester:1,
     updated_time:"2000-01-01 00:00:00"
 };
-userdata_cnt = _.max(fs.readdirSync(USER_TIMETABLE_PATH), function(x){
+
+userdata_cnt = _.max(fs.readdirSync(USER_TIMETABLE_PATH), function(x) {
     return x;
 });
-if (!userdata_cnt || userdata_cnt < 0) userdata_cnt = 0;
+
+if (!userdata_cnt || userdata_cnt < 0)
+    userdata_cnt = 0;
+
 UNITT.increase_userdata_cnt = function(){
     return ++userdata_cnt;
 }
@@ -267,36 +271,41 @@ function filter_check(lecture, filter)
     if (!filter.basics && !filter.core && !filter.etc) return true;
     var result = false;
     //학문의 기초
-    if (filter.basics){
-        for (var i=0;i<filter.basics.length;i++){
+    if (filter.basics) {
+        for (var i=0;i<filter.basics.length;i++) {
             var basics = filter.basics[i];
-            if (basics == lecture.category) result = true;
+            if (basics == lecture.category)
+                result = true;
         }
     }
     //핵심교양
-    if (filter.core){
-        for (var i=0;i<filter.core.length;i++){
+    if (filter.core) {
+        for (var i=0; i < filter.core.length; i++) {
             var core = filter.core[i];
-            if (core == lecture.category) result = true;
+            if (core == lecture.category)
+                result = true;
         }
     }
     //기타
-    if (filter.etc){
-        for (var i=0;i<filter.etc.length;i++){
+    if (filter.etc) {
+        for (var i = 0; i < filter.etc.length; i++) {
             var etc = filter.etc[i];
-            if (etc == "teaching" && lecture.classification == "교직") result = true;
-            if (etc == "exercise" && lecture.category == "normal_exercise") result = true;
-            if (etc == "etc" && lecture.category != "normal_exercise" && s(lecture.category).indexOf('normal') != -1) result = true;
+            if (etc == "teaching" && lecture.classification == "교직")
+                result = true;
+            if (etc == "exercise" && lecture.category == "normal_exercise")
+                result = true;
+            if (etc == "etc" && lecture.category != "normal_exercise" &&
+                s(lecture.category).indexOf('normal') != -1)
+                result = true;
         }
     }
     return result;
 }
 
 //[월3-2, 수3-2], [월3, 화3]
-function class_times_check(lecture_class_times, search_class_times)
-{
-    for (var i=0;i<lecture_class_times.length;i++){
-        for (var j=0;j<search_class_times.length;j++){
+function class_times_check(lecture_class_times, search_class_times) {
+    for (var i=0;i<lecture_class_times.length;i++) {
+        for (var j=0;j<search_class_times.length;j++) {
             if (class_time_check(lecture_class_times[i], search_class_times[j]))
                 return true;
         }
@@ -306,8 +315,7 @@ function class_times_check(lecture_class_times, search_class_times)
 
 //search_class_time이 lecture_class_time 사이에 존재하는가.
 //월3-2, 월4
-function class_time_check(lecture_class_time, search_class_time)
-{
+function class_time_check(lecture_class_time, search_class_time) {
     if (search_class_time == "") return true;
     var lecture_wday = lecture_class_time[0];
     var lecture_start_time = parseFloat(lecture_class_time.replace(/[()]/g, "").split("-")[0].slice(1));

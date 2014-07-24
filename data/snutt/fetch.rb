@@ -1,7 +1,3 @@
-#coding:utf-8
-#수강편람을 긁어옴
-#인자 : year semester
-
 require 'net/http'
 require 'roo'
 require 'json'
@@ -80,7 +76,7 @@ fields.each do |field|
 	xls_filename="#{Dir.getwd()}/xls/#{year}_#{semester}/#{year}_#{semester}_#{fieldNameEng}.xls"
 	open(xls_filename,"w") do |file|
 	file.print(res.body)
-		puts "download complete: #{year}_#{semester}_#{fieldNameEng}.xls"
+		puts "download complete : #{year}_#{semester}_#{fieldNameEng}.xls"
 	end
 end
 puts "download complete, start converting"
@@ -151,9 +147,9 @@ open("#{txt_filename}.tmp", "w") do |file|
 
 				file.puts "#{classification};#{department};#{academic_year};#{course_number};#{lecture_number};#{course_title};#{credit};#{class_time};#{location};#{instructor};#{quota};#{enrollment};#{remark};#{category};#{snuev_lec_id};#{snuev_eval_score}"
 			end
-			puts "converted : #{fieldNameEng}"
+			puts "converted_#{fieldNameEng}"
 		rescue
-			puts "empty     : #{fieldNameEng}"
+			puts "empty_#{fieldNameEng}"
 		end		
 	end
 end

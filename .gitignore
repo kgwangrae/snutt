@@ -1,4 +1,6 @@
 node_modules
-timetable_images
-timetable_userdata
+userdata
+data/hufstt/htm
+data/snutt/htm
+data/snutt/xls
 *.swp

@@ -6,6 +6,7 @@
 		"restler": "",
     "routes": "",
     "underscore": "",
+		"querystring" : "",
     "node-jquery-deparam": "",
     "mkdirp": ""
   }

@@ -1,9 +1,26 @@
+// MISC function
+function safeString(str) {
+    // undefined -> ""
+    // null -> ""
+    // otherwise, new String(an given argument)
+    
+    if (typeof str == "string")
+        return str;
+    else if (typeof str == "number")
+        return String(str);
+    else
+        return "";
+}
+
+exports.safeString = safeString;
+
+
 ///////////////////SHA1 function
 exports.SHA1 = function (msg) {
 	function rotate_left(n,s) {
 		var t4 = ( n<<s ) | (n>>>(32-s));
 		return t4;
-	};
+	}
  
 	function lsb_hex(val) {
 		var str="";
@@ -17,7 +34,7 @@ exports.SHA1 = function (msg) {
 			str += vh.toString(16) + vl.toString(16);
 		}
 		return str;
-	};
+	}
  
 	function cvt_hex(val) {
 		var str="";
@@ -29,7 +46,7 @@ exports.SHA1 = function (msg) {
 			str += v.toString(16);
 		}
 		return str;
-	};
+	}
  
  
 	function Utf8Encode(string) {
@@ -56,7 +73,7 @@ exports.SHA1 = function (msg) {
 		}
  
 		return utftext;
-	};
+	}
  
 	var blockstart;
 	var i, j;
@@ -73,7 +90,7 @@ exports.SHA1 = function (msg) {
  
 	var msg_len = msg.length;
  
-	var word_array = new Array();
+	var word_array = [];
 	for( i=0; i<msg_len-3; i+=4 ) {
 		j = msg.charCodeAt(i)<<24 | msg.charCodeAt(i+1)<<16 |
 		msg.charCodeAt(i+2)<<8 | msg.charCodeAt(i+3);
@@ -160,33 +177,38 @@ exports.SHA1 = function (msg) {
  
 	}
  
-	var temp = cvt_hex(H0) + cvt_hex(H1) + cvt_hex(H2) + cvt_hex(H3) + cvt_hex(H4);
+	temp = cvt_hex(H0) + cvt_hex(H1) + cvt_hex(H2) + cvt_hex(H3) + cvt_hex(H4);
  
 	return temp.toLowerCase();
  
-}
+};
 
-exports.objectToString = function(o){
-	var parse = function(_o){
-		var a = [], t;
-		for(var p in _o){
-			if(_o.hasOwnProperty(p)){
-				t = _o[p];
-				if(t && typeof t == "object"){
-					a[a.length]= p + ":{ " + arguments.callee(t).join(", ") + "}";
-				}
-				else {
-					if(typeof t == "string"){
-						a[a.length] = [ p+ ": \"" + t.toString().replace(/"/g, '\\"') + "\"" ];
-					}
-					else{
-						a[a.length] = [ p+ ": " + String(t).replace(/"/g, '\\"')];
-					}
-				}
-			}
-		}
-		return a;
-	}
-	return "{" + parse(o).join(", ") + "}";
-}
+exports.objectToString = JSON.stringify;
+exports.stringToObject = JSON.parse;
 
+// Tell if each element of b is a member of a with increasing order
+exports.increasingOrderInclusion = function (a, b) {
+    a = safeString(a).replace(/ /g, "").toLowerCase();
+    b = safeString(b).replace(/ /g, "").toLowerCase();
+
+    var i = 0, j = 0;
+    while (i < a.length && j < b.length) {
+        if (a[i] === b[j]) {
+            j++;
+        } 
+        i++;
+    }
+    return j === b.length;
+};
+
+// Tell if each element of b is a member of a
+exports.permutationInclusion = function(a, b) {
+    a = a.replace(/ /g, "").toLowerCase();
+    b = b.replace(/ /g, "").toLowerCase();
+    
+    for(var i = 0; i < b.length; i++) {
+        if(a.indexOf(b[i]) === -1)
+            return false;
+    }
+    return true;
+};

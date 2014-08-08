@@ -40,6 +40,7 @@ NaiveLectureModel.prototype = {
         this._load_data(2013, 'W');
         this._load_data(2014, '1');
         this._load_data(2014, 'S');
+	this._load_data(2014, '2');
     },
     save: function (lectures, year, semester, callback) {
         /* This function saves this lecture and return a string id identifying lectures.

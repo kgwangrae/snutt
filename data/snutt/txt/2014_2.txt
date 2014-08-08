@@ -1,5 +1,5 @@
 2014/2
-2014-08-05 14:20:49
+2014-08-05 15:20:49
 classification;department;academic_year;course_number;lecture_number;course_title;credit;class_time;location;instructor;quota;enrollment;remark;category;snuev_lec_id;snuev_eval_score
 교양;국어국문학과;1학년;031.001;001;글쓰기의 기초;3;월(4.5-1.5)/수(4.5-1.5);003-108/003-108;김명운;25;23;®자연대학, 의과대학 의예과;;;
 교양;국어국문학과;1학년;031.001;002;글쓰기의 기초;3;월(4.5-1.5)/수(4.5-1.5);003-103/003-103;조연정;25;24;®자연대학, 의과대학 의예과;;;

@@ -61,6 +61,7 @@ puts "Fetching htm files...\n"
 #
 #학부 ; 서울캠퍼스 ; 전공
 get_htm(:sector => "A",:campus => "H1",:gubun => "1",:major =>"AAQ01_H1",:filename => "undergraduate_seoul_major_EU") #EU전공(서울)
+get_htm(:sector => "A",:campus => "H1",:gubun => "1",:major =>"AKA_H1",:filename => "undergraduate_seoul_major_LD") #Language & Diplomacy학부(서울)
 get_htm(:sector => "A",:campus => "H1",:gubun => "1",:major =>"ALA_H1",:filename => "undergraduate_seoul_major_business_department") #경영학부(서울)
 get_htm(:sector => "A",:campus => "H1",:gubun => "1",:major =>"ALAA1_H1",:filename => "undergraduate_seoul_major_business") #경영학전공(서울)
 get_htm(:sector => "A",:campus => "H1",:gubun => "1",:major =>"AEC_H1",:filename => "undergraduate_seoul_major_economy_department") #경제학부(서울)
@@ -96,24 +97,29 @@ get_htm(:sector => "A",:campus => "H1",:gubun => "1",:major =>"A1CB1_H1",:filena
 get_htm(:sector => "A",:campus => "H1",:gubun => "1",:major =>"AFA01_H1",:filename => "undergraduate_seoul_major_english_education") #영어교육과(서울)
 get_htm(:sector => "A",:campus => "H1",:gubun => "1",:major =>"A1CC1_H1",:filename => "undergraduate_seoul_major_english_translation") #영어통번역학과(서울)
 get_htm(:sector => "A",:campus => "H1",:gubun => "1",:major =>"A1CA1_H1",:filename => "undergraduate_seoul_major_english") #영어학과(서울)
+get_htm(:sector => "A",:campus => "H1",:gubun => "1",:major =>"A1B_H1",:filename => "undergraduate_seoul_major_english_united") #영어학부(서울)
 get_htm(:sector => "A",:campus => "H1",:gubun => "1",:major =>"AFH01_H1",:filename => "undergraduate_seoul_major_korean_as_foreign") #외국어로서의한국어교육연계전공(서울)
+get_htm(:sector => "A",:campus => "H1",:gubun => "1",:major =>"AJD_H1",:filename => "undergraduate_seoul_major_japanese_region2") #융합일본지역학부(서울)
 get_htm(:sector => "A",:campus => "H1",:gubun => "1",:major =>"ABI01_H1",:filename => "undergraduate_seoul_major_iranian") #이란어과(서울)
 get_htm(:sector => "A",:campus => "H1",:gubun => "1",:major =>"AAF01_H1",:filename => "undergraduate_seoul_major_italian") #이탈리아어과(서울)
 get_htm(:sector => "A",:campus => "H1",:gubun => "1",:major =>"ABG01_H1",:filename => "undergraduate_seoul_major_indian") #인도어과(서울)
 get_htm(:sector => "A",:campus => "H1",:gubun => "1",:major =>"AJAB1_H1",:filename => "undergraduate_seoul_major_japanese_literature") #일본문학전공(서울)
 get_htm(:sector => "A",:campus => "H1",:gubun => "1",:major =>"AJAA1_H1",:filename => "undergraduate_seoul_major_japanese") #일본어학전공(서울)
+get_htm(:sector => "A",:campus => "H1",:gubun => "1",:major =>"AJC_H1",:filename => "undergraduate_seoul_major_japanese_culture") #일본언어문화학부(서울)
 get_htm(:sector => "A",:campus => "H1",:gubun => "1",:major =>"AJAC1_H1",:filename => "undergraduate_seoul_major_japanese_region") #일본지역학전공(서울)
 get_htm(:sector => "A",:campus => "H1",:gubun => "1",:major =>"AJA_H1",:filename => "undergraduate_seoul_major_japan") #일본학부(서울)
 get_htm(:sector => "A",:campus => "H1",:gubun => "1",:major =>"ACF_H1",:filename => "undergraduate_seoul_major_freedom") #자유전공학부(서울)
 get_htm(:sector => "A",:campus => "H1",:gubun => "1",:major =>"ACBA1_H1",:filename => "undergraduate_seoul_major_political_diplomacy") #정치외교학과(서울)
 get_htm(:sector => "A",:campus => "H1",:gubun => "1",:major =>"AIAB1_H1",:filename => "undergraduate_seoul_major_chinese_literature") #중국문학전공(서울)
 get_htm(:sector => "A",:campus => "H1",:gubun => "1",:major =>"AIAA1_H1",:filename => "undergraduate_seoul_major_chinese") #중국어학전공(서울)
+get_htm(:sector => "A",:campus => "H1",:gubun => "1",:major =>"AIC_H1",:filename => "undergraduate_seoul_major_chinese_culture") #중국언어문화학부(서울)
+get_htm(:sector => "A",:campus => "H1",:gubun => "1",:major =>"AID_H1",:filename => "undergraduate_seoul_major_chinese_commerce") #중국외교통상학부(서울)
 get_htm(:sector => "A",:campus => "H1",:gubun => "1",:major =>"AIAC1_H1",:filename => "undergraduate_seoul_major_chinese_region") #중국지역학전공(서울)
 get_htm(:sector => "A",:campus => "H1",:gubun => "1",:major =>"AIA_H1",:filename => "undergraduate_seoul_major_china") #중국학부(서울)
 get_htm(:sector => "A",:campus => "H1",:gubun => "1",:major =>"ANDA2_H1",:filename => "undergraduate_seoul_major_philosophy") #철학과(서울)
 get_htm(:sector => "A",:campus => "H1",:gubun => "1",:major =>"ABE01_H1",:filename => "undergraduate_seoul_major_thai") #태국어과(서울)
 get_htm(:sector => "A",:campus => "H1",:gubun => "1",:major =>"ABH11_H1",:filename => "undergraduate_seoul_major_turkish") #터키.아제르바이잔어과(서울)
-get_htm(:sector => "A",:campus => "H1",:gubun => "1",:major =>"AAK01_H1",:filename => "undergraduate_seoul_major_portuguese") #포르투갈(브라질)어과(서울)
+get_htm(:sector => "A",:campus => "H1",:gubun => "1",:major =>"AAK01_H1",:filename => "undergraduate_seoul_major_portuguese") #포르투갈어과(서울)
 get_htm(:sector => "A",:campus => "H1",:gubun => "1",:major =>"AAB01_H1",:filename => "undergraduate_seoul_major_french") #프랑스어과(서울)
 get_htm(:sector => "A",:campus => "H1",:gubun => "1",:major =>"AFB01_H1",:filename => "undergraduate_seoul_major_french_education") #프랑스어교육과(서울)
 get_htm(:sector => "A",:campus => "H1",:gubun => "1",:major =>"AFD01_H1",:filename => "undergraduate_seoul_major_korean_education") #한국어교육과(서울)
@@ -132,6 +138,7 @@ get_htm(:sector => "A", :campus => "H1", :gubun => "2", :liberal => "326_H1", :f
 get_htm(:sector => "A", :campus => "H1", :gubun => "2", :liberal => "327_H1", :filename => "undergraduate_seoul_liberal_health") #건강과레포츠(서울)
 get_htm(:sector => "A", :campus => "H1", :gubun => "2", :liberal => "328_H1", :filename => "undergraduate_seoul_liberal_special") #특별교양(서울)
 get_htm(:sector => "A", :campus => "H1", :gubun => "2", :liberal => "329_H1", :filename => "undergraduate_seoul_liberal_korean") #한국학(서울)
+get_htm(:sector => "A", :campus => "H1", :gubun => "2", :liberal => "32Z_H1", :filename => "undergraduate_seoul_liberal_karts") #공동교양(한예종)(서울)
 get_htm(:sector => "A", :campus => "H1", :gubun => "2", :liberal => "61_H1", :filename => "undergraduate_seoul_liberal_army") #군사학(서울)
 
 #대학원 ; 대학원은 전부 서울캠 ; 구분없음
@@ -363,6 +370,7 @@ def get_department(filename)
 			#전공
 			return "EU전공" if str == "EU"
 			return "경영학부" if str == "business_department"
+			return "Language & Diplomacy학부" if str == "LD"
 			return "경영학전공" if str == "business" 
 			return "경제학부" if str =="economy_department"
 			return "경제학전공" if str == "economy"
@@ -397,24 +405,29 @@ def get_department(filename)
 			return "영어교육과" if str == "english_education"
 			return "영어통번역학과" if str == "english_translation"
 			return "영어학과" if str == "english"
+			return "영어학부" if str == "english_united"
 			return "외국어로서의한국어교육연계전공" if str == "korean_as_foreign"
+			return "융합일본지역학부" if str == "japanese_region2"
 			return "이란어과" if str == "iranian"
 			return "이탈리아어과" if str == "italian"
 			return "인도어과" if str == "indian"
 			return "일본문학전공" if str == "japanese_literature"
 			return "일본어학전공" if str == "japanese"
+			return "일본언어문화학부" if str == "japanese_culture"
 			return "일본지역학전공" if str == "japanese_region"
 			return "일본학부" if str == "japan"
 			return "자유전공학부" if str == "freedom"
 			return "정치외교학과" if str == "political_diplomacy"
 			return "중국문학전공" if str == "chinese_literature"
 			return "중국어학전공" if str == "chinese"
+			return "중국언어문화학부" if str == "chinese_culture"
+			return "중국외교통상학부" if str == "chinese_commerce"
 			return "중국지역학전공" if str == "chinese_region"
 			return "중국학부" if str == "china"
 			return "철학과" if str == "philosophy"
 			return "태국어과" if str == "thai"
 			return "터키.아제르바이잔어과" if str == "turkish"
-			return "포르투갈(브라질)어과" if str == "portuguese"
+			return "포르투갈어과" if str == "portuguese"
 			return "프랑스어과" if str == "french"
 			return "프랑스어교육과" if str == "french_education"
 			return "한국어교육과" if str == "korean_education"
@@ -432,6 +445,7 @@ def get_department(filename)
 			return "건강과레포츠" if str == "health"
 			return "특별교양" if str == "special"
 			return "한국학" if str == "korean"
+			return "공동교양(한예종)" if str == "karts"
 			return "군사학" if str == "army"
 		#대학원
 		elsif sector == "graduate"

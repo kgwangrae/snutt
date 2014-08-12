@@ -283,6 +283,10 @@ function get_my_lecture_by_course_number(course_number, lecture_number)
   return null;
 }
 
+function is_equal_timecell(c1, c2)
+{
+  return c1.attr('course-number') == c2.attr('course-number') && c1.attr('lecture-number') == c2.attr('lecture-number')
+}
 
 function generate_timecell(lectures)
 {
@@ -345,7 +349,7 @@ function generate_timecell(lectures)
       lecture.color = generate_random_color(lecture.color);
       $('.timecell').each(function(x){
         var cell = $(this);
-        if (cell.attr('course-number') == ele.attr('course-number') && cell.attr('lecture-number') == ele.attr('lecture-number'))
+        if (is_equal_timecell(ele, cell))
           cell.css('background-color', lecture.color.plane).css('border-color', lecture.color.border);
       });
     }
@@ -357,6 +361,26 @@ function generate_timecell(lectures)
   }).addSwipeEvents().bind('doubletap', function(evt, touch) {
     timecell_dblclick_handler($(this));
   })
+
+    //timecell hover event bind
+  if(!isTouchDevice()){
+    $('.timecell').hover(
+      function() { //mouse-in
+        var ele = $(this);
+        $('.timecell').each(function(x) {
+          var cell = $(this);
+          if (is_equal_timecell(ele, cell)) {
+            cell.append('<div class="close del_hover" style="position:absolute; top:1px; right:2px;">×</span>');
+            cell.find(".del_hover").click(function() {
+              console.log("clicked");
+              timecell_dblclick_handler(cell);
+            })
+          }
+        })
+      }, function() { //mouse-out
+        $('.del_hover').remove();
+      })
+  }
 }
 
 function timecell_dblclick_handler(ele)

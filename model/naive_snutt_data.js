@@ -127,13 +127,13 @@ NaiveLectureModel.prototype = {
                 a_y = a.year,
                 b_y = b.year;
 
-            if (a_s > b_s)
-                return -1;
-            else if(a_s < b_s)
-                return 1;
-            else if(a_y > b_y)
+            if (a_y > b_y)
                 return -1;
             else if(a_y < b_y)
+                return 1;
+            else if(a_s > b_s)
+                return -1;
+            else if(a_s < b_s)
                 return 1;
             else
                 return 0;

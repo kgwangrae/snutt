@@ -22,7 +22,7 @@ function NaiveLectureModel() {
     };
 }
 
-if (!(global.hasOwnProperty('userdata_cnt'))) {
+if (!(global.hasOwnProperty('NaiveLectureModel_userdata_cnt'))) {
     global.NaiveLectureModel_userdata_cnt = _.max([
         _.max(_.reject(_.map(fs.readdirSync(config.snutt.USER_TIMETABLE_PATH),
                              parseInt),

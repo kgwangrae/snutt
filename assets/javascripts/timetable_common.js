@@ -265,7 +265,6 @@ function is_equal_lecture(a, b)
   return false;
 }
 
-
 function get_lecture_by_course_number(course_number, lecture_number)
 {
   for (var i=0;i<lectures.length;i++){

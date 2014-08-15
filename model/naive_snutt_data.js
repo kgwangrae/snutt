@@ -53,7 +53,7 @@ NaiveLectureModel.prototype = {
          *     the former of which is `error' object and the later of which is 
          *     the id of userdata.
          */
-        global.NaiveLectureModel_userdata_cnt += 1;
+        global.NaiveLectureModel_userdata_cnt ++;
         var id = String(global.NaiveLectureModel_userdata_cnt);
 
         var filepath = config.snutt.USER_TIMETABLE_PATH + '/' + id,

@@ -1000,11 +1000,11 @@ $(function(){
   }).mousemove(function(e){
     if (custom_start_cell){
       custom_end_cell = $(this);
-      custom_end_time = Math.max(parseFloat(custom_end_cell.attr('time')), custom_start_time) + 0.5;
-      if (custom_class_time == (custom_wday + "(" + custom_start_time + "-" + (custom_end_time - custom_start_time) + ")"))
+      custom_end_time = parseFloat(custom_end_cell.attr('time'));
+      if (custom_class_time == (custom_wday + "(" + (Math.min(custom_start_time,custom_end_time)) + "-" + (Math.abs(custom_end_time - custom_start_time)+0.5) + ")"))
         return false;
 
-      custom_class_time = custom_wday + "(" + custom_start_time + "-" + (custom_end_time - custom_start_time) + ")";
+      custom_class_time = custom_wday + "(" + (Math.min(custom_start_time,custom_end_time)) + "-" + (Math.abs(custom_end_time - custom_start_time)+0.5) + ")";
       generate_custom_cell({class_time : custom_class_time});
     }
     return false;

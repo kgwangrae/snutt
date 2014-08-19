@@ -38,8 +38,8 @@ body {padding-top:45px;}
 #timetable .time {font-size:0.8em;}
 .timecell-container {position:absolute;z-index:100;}
 .timecell {position:relative;border:3px solid #ccc;text-align:center;cursor:pointer;}
-#customcell_container {position:absolute;z-index:100;}
-#customcell {position:relative;border:3px dotted #f00;text-align:center;z-index:200;}
+#customcell_container {position:absolute;z-index:100;pointer-events:none;}
+#customcell {position:relative;border:3px dotted #f00;text-align:center;z-index:200;pointer-events:none;}
 
 #footer {margin:20px 0 10px 0;padding:10px;text-align:center;border-top:1px solid #ddd;}
 #footer p {font-size:9pt;font-family:"Arial";margin:0;padding:0;margin:3px;}

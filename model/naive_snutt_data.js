@@ -3,6 +3,7 @@ var _ = require("underscore");
 var fs = require("fs");
 var config = require("../config.js");
 var utils = require("../utils.js");
+var mongoose = require('mongoose');
 
 var safeString = utils.safeString;
 var increasingOrderInclusion = utils.increasingOrderInclusion;
@@ -30,6 +31,28 @@ if (!(global.hasOwnProperty('NaiveLectureModel_userdata_cnt'))) {
         0]);
 }
 
+
+/* DB initialization for logging users' search query requests 
+ * TODO make the db address shared across all modules */
+
+mongoose.connect('mongodb://localhost/snuttdb');
+var db = mongoose.connection;
+db.on ('error', function () { 
+	console.error.bind(console, 'connection error! ');
+	throw "Failed to open DB";
+});
+
+var queryLogSchema = mongoose.Schema ({
+	lastQueryTime: { type: Date, default: Date.now },
+	count: { type: Number, min: 1, default: 1 },
+	year: { type: Number, min: 2000, max: 2999 },
+	semester: { type: Number, min: 1, max: 4 },
+	type: { type: String },
+	body: String
+});
+var QueryLog = mongoose.model('QueryLog', queryLogSchema); 
+
+
 NaiveLectureModel.prototype = {
     init: function () {
         this._load_data(2012, '2');
@@ -40,7 +63,7 @@ NaiveLectureModel.prototype = {
         this._load_data(2013, 'W');
         this._load_data(2014, '1');
         this._load_data(2014, 'S');
-	this._load_data(2014, '2');
+				this._load_data(2014, '2');
     },
     save: function (lectures, year, semester, callback) {
         /* This function saves this lecture and return a string id identifying lectures.
@@ -191,7 +214,39 @@ NaiveLectureModel.prototype = {
 
         //교과목명으로 검색
         if (options.type === "course_title") {
-            var title = options.query_text;
+            var title = safeString(options.query_text).trim();
+
+						//Log it!
+						QueryLog.findOne ({
+							year: options.year,
+							semester: options.semester,
+							body: title
+							}, 
+							function (err, prevQuery) {
+								if (err) console.error(err);
+								if (prevQuery == undefined) {
+									var currQuery = new QueryLog ({
+										year: options.year,
+										semester: options.semester,
+										type: options.type,
+										body: title
+									});
+									currQuery.save(function (err) {
+										if (err) return console.error(err);
+										//console.log('new log: '+currQuery.body);
+									});
+								}
+								else { 
+									prevQuery.count++;
+									prevQuery.lastQueryTime = Date.now();
+									prevQuery.save(function (err) {
+										if (err) return console.error(err);
+										//console.log(prevQuery.body+' is hit '+prevQuery.count+' times!');
+									});
+								}
+							}
+						);
+													
             skip_count = 0;
             for (i = 0; i < lectures.length; i++) {
                 if (increasingOrderInclusion(lectures[i].course_title, title) && filter_check(lectures[i], filter)){
@@ -206,7 +261,7 @@ NaiveLectureModel.prototype = {
             return result;
         } else if (options.type === "instructor") {
             //교수명으로 검색
-            var instructor = options.query_text.replace(/ /g, "").toLowerCase();
+            var instructor = safeString(options.query_text).replace(/ /g, "").toLowerCase();
             skip_count = 0;
             for (i=0;i<lectures.length;i++){
                 var lecture_instructor = safeString(lectures[i].instructor).replace(/ /g, "").toLowerCase();
@@ -238,7 +293,7 @@ NaiveLectureModel.prototype = {
             return result;
         } else if (options.type === "class_time") {
             //수업교시로 검색
-            var class_times = options.query_text.replace(/ /g, "").split(',');
+            var class_times = safeString(options.query_text).replace(/ /g, "").split(',');
             skip_count = 0;
             for (i=0; i<lectures.length; i++) {
                 var lecture_class_times = safeString(lectures[i].class_time).split(',');
@@ -257,7 +312,7 @@ NaiveLectureModel.prototype = {
             return result;
         } else if (options.type === "department") {
             //개설학과로 검색
-            var department = options.query_text;
+            var department = safeString(options.query_text);
             skip_count = 0;
             for (i=0;i<lectures.length;i++) {
                 if (increasingOrderInclusion(lectures[i].department, department) && filter_check(lectures[i], filter)){

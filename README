@@ -2,3 +2,8 @@
 
 1. > npm update
 	restler, mime 등 의존모듈 설치를 위해 npm update 명령어를 실행!
+
+* Logging 예시
+
+ var winston = require('winston');
+ winston.log('tag','message');

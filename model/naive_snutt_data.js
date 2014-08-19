@@ -222,7 +222,7 @@ NaiveLectureModel.prototype = {
             return result;
         } else if (options.type === "course_number") {
             //교과목번호로 검색
-            var course_number = options.query_text.replace(/ /g, "").toLowerCase();
+            var course_number = safeString(options.query_text).replace(/ /g, "").toLowerCase();
             skip_count = 0;
             for (i = 0; i < lectures.length; i++){
                 var lecture_course_number = (safeString(lectures[i].course_number)+safeString(lectures[i].lecture_number)).replace(/ /g, "").toLowerCase();

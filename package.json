@@ -8,6 +8,7 @@
     "underscore": "",
 		"querystring" : "",
     "node-jquery-deparam": "",
-    "mkdirp": ""
+    "mkdirp": "",
+		"winston": ""
   }
 }

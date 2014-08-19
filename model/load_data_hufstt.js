@@ -232,7 +232,7 @@ UNITT.get_lectures = function(query)
     }
     //교과목번호로 검색
     else if (query.type == "course_number"){
-        var course_number = query.query_text.replace(/ /g, "").toLowerCase();
+        var course_number = s(query.query_text).replace(/ /g, "").toLowerCase();
         var skip_count = 0;
         for (var i=0;i<lectures.length;i++){
             var lecture_course_number = (s(lectures[i].course_number)+s(lectures[i].lecture_number)).replace(/ /g, "").toLowerCase();

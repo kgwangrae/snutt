@@ -283,6 +283,19 @@ function get_my_lecture_by_course_number(course_number, lecture_number)
   return null;
 }
 
+function is_equal_timecell(c1, c2)
+{
+  return c1.attr('course-number') == c2.attr('course-number') && c1.attr('lecture-number') == c2.attr('lecture-number')
+}
+
+function for_equal_lecture_timecells(cell, thenDo)
+{
+  $('.timecell').each(function(x) {
+    var eachSibling = $(this);
+    if (is_equal_timecell(cell, eachSibling))
+      thenDo (eachSibling);
+  })
+}
 
 function generate_timecell(lectures)
 {
@@ -343,26 +356,39 @@ function generate_timecell(lectures)
     var lecture = get_my_lecture_by_course_number(ele.attr('course-number'), ele.attr('lecture-number'));
     if (lecture && !ele.hasClass('gray-cell')){ //회색이 아닐때만 바꿈
       lecture.color = generate_random_color(lecture.color);
-      $('.timecell').each(function(x){
-        var cell = $(this);
-        if (cell.attr('course-number') == ele.attr('course-number') && cell.attr('lecture-number') == ele.attr('lecture-number'))
-          cell.css('background-color', lecture.color.plane).css('border-color', lecture.color.border);
-      });
+      for_equal_lecture_timecells(ele, function(sbl) {
+        sbl.css('background-color', lecture.color.plane).css('border-color', lecture.color.border);
+      })
     }
   });
 
   //timecell dblclick event bind
   $('.timecell').dblclick(function(){
-    timecell_dblclick_handler($(this));
+    timecell_delete_handler($(this));
   }).addSwipeEvents().bind('doubletap', function(evt, touch) {
-    timecell_dblclick_handler($(this));
+    timecell_delete_handler($(this));
   })
+
+  //timecell hover event bind
+  if(!isTouchDevice()){
+    $('.timecell').hover(
+      function() { //mouse-in
+        for_equal_lecture_timecells($(this), function(sbl) {
+          sbl.append('<div class="close del_hover" style="position:absolute; top:1px; right:2px;">×</span>');
+          sbl.find(".del_hover").click(function() {
+            timecell_delete_handler(sbl);
+          })
+        })
+      }, function() { //mouse-out
+        $('.del_hover').remove();
+      })
+  }
 }
 
-function timecell_dblclick_handler(ele)
+function timecell_delete_handler(ele)
 {
   var lecture = get_my_lecture_by_course_number(ele.attr('course-number'), ele.attr('lecture-number'));
-  //더블클릭하면 삭제
+  //더블클릭하거나 호버링하면 삭제
   var con = confirm("["+lecture.course_title+"]를 시간표에서 제거하시겠습니까?");
   if (con){
     remove_lecture_from_my_lectures(lecture);

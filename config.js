@@ -12,10 +12,8 @@ function make_config(TARGET) {
 }
 
 snutt_config = make_config("snutt");
-hufstt_config = make_config("hufstt");
 
 module.exports = {
     ROOT_PATH: ROOT_PATH,
     snutt: snutt_config,
-    hufstt: hufstt_config
 }

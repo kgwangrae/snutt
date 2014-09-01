@@ -39,10 +39,9 @@ router.addRoute("/api/publish_to_facebook", controllers.api_controller.publishTo
 // views
 router.addRoute("/", controllers.home_controller.home);
 router.addRoute("/user/:id", controllers.home_controller.show);
-router.addRoute("/user/:id/cal", controllers.home_controller.cal);
 
 //http server handler
-function handler (req, res) {
+function handler (req, res) { 
 	var uri = url.parse(req.url).pathname;
 	var params = deparam(url.parse(req.url).query);
 	var renderer = {

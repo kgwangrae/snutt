@@ -33,7 +33,7 @@ function payload_template(options) {
     _.each(my_lectures, function (lec) {
         join(objectToString(lec));
     });
-
+   
     content += acc;
     content += "];\n";
 
@@ -46,7 +46,6 @@ module.exports = {
         var timetable_footer = fs.readFileSync(config[target].ROOT_VIEW_PATH + "/timetable_footer.htm");
         var user_timetable_header = fs.readFileSync(config[target].ROOT_VIEW_PATH + "/user_timetable_header.htm");
         var user_timetable_footer = fs.readFileSync(config[target].ROOT_VIEW_PATH + "/user_timetable_footer.htm");
-        var export_google_footer = fs.readFileSync(config[target].ROOT_VIEW_PATH + "/export_google_footer.htm");
 
         return {
             home: function(params, renderer, request) {
@@ -71,17 +70,6 @@ module.exports = {
                         renderer.text('ERROR');
                     } else {
                         renderer.text(timetable_header + payload_template(loaded_info) + timetable_footer);
-                    }
-                });
-            },
-            cal: function(params, renderer, request) {
-                // 캘린더로 내보내는 화면
-                lectureModel.load(params.id, function (err, loaded_info) {
-                    if (err) {
-                        renderer.text('ERROR');
-                    } else {
-                        renderer.text("<html><head><title></title></head><body><script type='text/javascript'>"
-                            + payload_template(loaded_info) + export_google_footer);
                     }
                 });
             }

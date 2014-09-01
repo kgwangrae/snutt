@@ -76,7 +76,7 @@ function is_duplicated_class_time(l1, l2)
       var start_time2 = parseFloat(time2[0]);
       var duration1 = parseFloat(time1[1]);
       var duration2 = parseFloat(time2[1]);
-      if (wday1 == wday2 && 
+      if (wday1 == wday2 &&
          (increasing_sequence(start_time1, start_time2, start_time1+duration1) ||
           increasing_sequence(start_time1, start_time2+duration2, start_time1+duration1) ||
           increasing_sequence(start_time2, start_time1, start_time2+duration2) ||
@@ -580,7 +580,7 @@ $(function(){
   //tab transition
   $('a[data-toggle="tab"]').on('show', function (e) {
     switch ($(e.target).attr('href')){
-    case "#my_courses": 
+    case "#my_courses":
       current_tab = "my_courses";
       break;
     case "#search":
@@ -590,7 +590,7 @@ $(function(){
   })
   $('a[data-toggle="tab"]').on('shown', function (e) {
     switch ($(e.target).attr('href')){
-    case "#my_courses": 
+    case "#my_courses":
       generate_timecell(my_lectures);
       break;
     case "#search":
@@ -977,7 +977,7 @@ $(function(){
     $('#custom_lecture_modal').dialog('close');
     return false;
   });
-  
+
   //contents scroll
   touchScroll('lectures_content');
 
@@ -1042,6 +1042,7 @@ $(function(){
       my_lectures: my_lectures
     }, function(data){
       $('#saved_timetable_url').attr('href', '/user/'+data.filename).text(window.location.origin + "/user/"+data.filename);
+      $('#export_google_button').attr('href', '/user/'+ data.filename + '/cal');
     });
 
     $('#content_wrapper').hide();

@@ -162,8 +162,10 @@ function generate_custom_cell(lecture)
   var topcell_height = $('#timetable thead th').height()+2;
   var border_weight = 3;
   //시간이 유효하지 않으면 스킵
-  if (wday_to_num(lecture.class_time.charAt(0)) == -1) return;
-
+  if (wday_to_num(lecture.class_time.charAt(0)) == -1) {
+		console.log("User tried to generate timetables with invalid class time");
+		return;
+	}
   var class_time = lecture.class_time;
   //setup variables
   var wday = wday_to_num(class_time.charAt(0));
@@ -557,7 +559,7 @@ $(function(){
       //검색결과 삭제
       $('#search_result_table tbody').children().remove();
       var row = $('<tr></tr>').appendTo($('#search_result_table tbody'));
-      $('<td colspan="13">검색어를 입력하세요.</td>').appendTo(row).css('text-align', 'center');
+      $('<td colspan="13"><h2>검색어를 입력하세요!</h2></td>').appendTo(row).css('text-align', 'center');
       //내 강의 초기화
       my_lectures = [];
       refresh_my_courses_table();
@@ -585,6 +587,9 @@ $(function(){
       break;
     case "#search":
       current_tab = "search";
+      break;
+    case "#export":
+      current_tab = "export";
       break;
     }
   })
@@ -1027,9 +1032,9 @@ $(function(){
   });
   //내보내기 네비게이션
   $('#nav_export').click(function(){
-    if (current_tab == "export") return false;
     //브라우저가 canvas.toDataURL을 지원할 때에만..
-    if (!supportsToDataURL()){
+   	supportsToDataURL(); 
+		if (!supportsToDataURL()){
       alert("현재 사용중인 브라우저에선 이미지 내보내기 기능을 지원하지 않습니다.");
       $('#image_export_wrapper').hide();
     }
@@ -1045,11 +1050,12 @@ $(function(){
     });
 
     $('#content_wrapper').hide();
-    $('#export_wrapper').show();
     $('#social_comment_wrapper').hide();
+    $('#export_wrapper').show();
     current_tab = "export";
     cancel_lecture_selection();
   });
+
   $('#main_navigation a').not('#nav_export').not('#nav_social_comment').not('#semester_label_button').click(function(){
     $('#content_wrapper').show();
     $('#export_wrapper').hide();

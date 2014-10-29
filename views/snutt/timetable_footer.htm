@@ -25,7 +25,6 @@
         });
       };
     </script>
-		<!-- facebook test end -->
 
 		<div id="course_detail_wrapper" style="display:none;">
 			<div class="course-title">
@@ -101,41 +100,45 @@
 				<button class="btn btn-warning" id="course_detail_plan_button">강의계획서</button>
 			</div>
 		</div>
-
-		<div class="navbar navbar-fixed-top">
-			<div class="navbar-inner">
-				<div class="container">
-					<a class="brand" href="#" id="brand_button">SNUTT</a>
-					<ul class="nav" id="main_navigation">
+		<div class="navbar navbar-default navbar-fixed-top">
+			<div class="container">
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+						<span class="sr-only">Toggle navigation</span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</button>
+					<a class="navbar-brand" href="#" id="brand_button"><b>SNUTT</b></a>
+				</div>
+				<div class="navbar-collapse collapse">
+					<ul class="nav navbar-nav" id="main_navigation">
 						<li>
-						<div class="btn-group">
-							<a class="btn dropdown-toggle btn-inverse" data-toggle="dropdown" href="#" id="semester_label_button"><span id="semester_label">학기</span> <span class="caret"></span></a>
+							<a class="btn dropdown-toggle btn-inverse" data-toggle="dropdown" href="#"><span id="semester_label">학기</span><span class="caret"></span></a>
 							<ul class="dropdown-menu" id="semester_dropdown_ul">
 								<!-- init_client 이후 초기화됨 -->
 							</ul>
-						</div>
 						</li>
-						<li class="active"><a href="#search" id="nav_search_result" data-toggle="tab">검색결과</a></li>
-						<li><a href="#my_courses" data-toggle="tab" rel="tooltip" id="nav_my_courses">내 강의 <span class="badge badge-info" id="my_courses_credit">0학점</span></a></li>
-						<li id="social_comment_li"><a href="#social_comment" id="nav_social_comment" data-toggle="tab">소셜댓글</a></li>
-						<li id="export_li"><a href="#export" id="nav_export" data-toggle="tab">저장하기</a></li>
+						<li class="active"><a href="#search" id="nav_search_result" data-toggle="tab">강의 찾기</a></li>
+						<li><a href="#my_courses" data-toggle="tab" rel="tooltip" id="nav_my_courses">내 강의 / <b class="badge-info">0학점</b></a></li>
+						<li><a href="#export" id="nav_export" data-toggle="tab">저장하기</a></li>
+						<!--li class="hidden" id="social_comment_li"><a href="#social_comment" id="nav_social_comment" data-toggle="tab">소셜 댓글</a></li-->
 					</ul>
-					<ul class="nav pull-right">
+					<ul class="nav navbar-nav navbar-right hidden-xs">
 						<li id="facebook_like_li">
-						<div class="fb-like" data-href="http://snutt.kr" data-send="false" data-layout="button_count" data-width="100" data-show-faces="false" data-colorscheme="dark"></div>
+						<div style="vertical-align:center;"class="fb-like" data-href="http://snutt.kr" data-send="false" data-layout="button_count" data-width="100" data-show-faces="false" data-colorscheme="dark"></div>
 						</li>
 					</ul>
 				</div>
 			</div>
 		</div>
+		
 		<div class="container">
-			<div id="rating">
-			</div>
 			<div id="content_wrapper">
 				<div id="search_form_container">
 					<form class="well form-search" id="search_form">
 						<div class="btn-group" id="search_type">
-							<a class="btn dropdown-toggle" data-toggle="dropdown" href="#"><span id="stype_dropdown_label">교과목명</span> <span class="caret"></span></a>
+							<a class="btn dropdown-toggle big_label" data-toggle="dropdown" href="#"><span id="stype_dropdown_label">교과목명</span> <span class="caret"></span></a>
 							<ul class="dropdown-menu">
 								<li><a href="#" id="stype_course_title">교과목명으로 검색</a></li>
 								<li><a href="#" id="stype_department">개설학과로 검색</a></li>
@@ -148,7 +151,7 @@
 						<button type="submit" class="btn">검색</button>
 
 						<!-- 검색필터 버튼 -->
-						<a class="btn" id="search_filter_toggle_button" state="off">검색필터 <span class="caret"></span></a>
+						<a class="btn big_label" id="search_filter_toggle_button" state="off">검색필터 <span class="caret"></span></a>
 
 						<div id="search_filter" style="display:none;">
 							<div class="search-filter-container" id="filter_basics">
@@ -201,25 +204,23 @@
 							<table class="table table-condensed table-bordered search-result-table" id="search_result_table">
 								<thead>
 									<tr>
-										<th class="course-rating">강의평점</th>
 										<th class="course-number">교과목</th>
 										<th class="lecture-number">강좌</th>
 										<th class="course-title">교과목명</th>
-										<th class="classification">구분</th>
-										<th class="department">개설학과</th>
-										<th class="academic-year">학년</th>
+										<th class="classification hidden-xs">구분</th>
+										<th class="department hidden-xs">개설학과</th>
+										<th class="academic-year hidden-xs">학년</th>
 										<th class="credit">학점</th>
 										<th class="class-time">수업교시</th>
 										<th class="location">강의실</th>
 										<th class="instructor">교수</th>
-										<th class="quota">정원</th>
-										<th class="enrollment">현원</th>
+										<th class="quota hidden-xs">정원</th>
 										<th class="remark">비고</th>
 									</tr>
 								</thead>
 								<tbody>
 									<tr>
-										<td colspan="13" style="text-align:center;">검색어를 입력하세요.</td>
+										<td colspan="13" style="text-align:center;"><h2>검색어를 입력하세요!</h2></td>
 									</tr>
 								</tbody>
 							</table>
@@ -230,25 +231,23 @@
 						<table class="table table-condensed table-bordered search-result-table" id="my_courses_table">
 							<thead>
 								<tr>
-									<th class="course-rating">강의평점</th>
 									<th class="course-number">교과목</th>
 									<th class="lecture-number">강좌</th>
 									<th class="course-title">교과목명</th>
-									<th class="classification">구분</th>
-									<th class="department">개설학과</th>
-									<th class="academic-year">학년</th>
+									<th class="classification hidden-xs">구분</th>
+									<th class="department hidden-xs">개설학과</th>
+									<th class="academic-year hidden-xs">학년</th>
 									<th class="credit">학점</th>
 									<th class="class-time">수업교시</th>
 									<th class="location">강의실</th>
 									<th class="instructor">교수</th>
-									<th class="quota">정원</th>
-									<th class="enrollment">현원</th>
+									<th class="quota hidden-xs">정원</th>
 									<th class="remark">비고</th>
 								</tr>
 							</thead>
 							<tbody>
 								<tr>
-									<td colspan="13" style="text-align:center;">선택된 강의가 없습니다.</td>
+									<td colspan="13" style="text-align:center;"><h2>선택된 강의가 없습니다.</h2></td>
 								</tr>
 							</tbody>
 						</table>
@@ -448,13 +447,16 @@
 			</div>
 
 			<div id="footer">
-				<p>
-				Developed by <a href="http://www.facebook.com/jongmin.rok" target="_blank">Jongmin</a> in <a href="http://www.wafflestudio.com" target="_blank">Wafflestudio</a>
-				</p>
-				<p>
-				<a href="mailto:secury@wafflestudio.com">secury@wafflestudio.com</a>
-				</p>
-				<p>
+				<h6>
+				Initially Developed by <a href="http://www.facebook.com/jongmin.rok" target="_blank">Jongmin</a> in <a href="http://www.wafflestudio.com" target="_blank">Wafflestudio</a>
+				</h6>
+				<h6>
+				Currently Maintained and Improved by <a href="https://www.facebook.com/wafflestudio" target="_blank">Wafflestudio</a> SNUTT Team members.
+				</h6>
+				<h6>
+				Source code and contributor information are available on <a href="https://github.com/wafflestudio/snutt" target="_blank">this GitHub repository</a>.
+				</h6>
+				<p style="display:none;">
 				최근 수강편람 업데이트 : <span id="data_updated_at"></span>
 				</p>
 			</div>
@@ -486,13 +488,5 @@
 			</form>
 		</div>
 
-
-		<!-- Le javascript
-		================================================== -->
-		<!-- Placed at the end of the document so the pages load faster -->
-		<script src="/assets/javascripts/bootstrap-dropdown.js"></script>
-		<script src="/assets/javascripts/bootstrap-tab.js"></script>
-		<script src="/assets/javascripts/bootstrap-tooltip.js"></script>
-		<script src="/assets/javascripts/bootstrap-button.js"></script>
 	</body> 
 </html> 

@@ -49,11 +49,16 @@ module.exports = {
 
         return {
             home: function(params, renderer, request) {
-
+							//Only for rapid development. delete before release
+							var timetable_header = fs.readFileSync(config[target].ROOT_VIEW_PATH + "/timetable_header.htm");
+							var timetable_footer = fs.readFileSync(config[target].ROOT_VIEW_PATH + "/timetable_footer.htm");
+							var user_timetable_header = fs.readFileSync(config[target].ROOT_VIEW_PATH + "/user_timetable_header.htm");
+							var user_timetable_footer = fs.readFileSync(config[target].ROOT_VIEW_PATH + "/user_timetable_footer.htm");
                 if ("user" in params) {
                     id = params.user;
                     lectureModel.load(params.user, function (err, loaded_info) {
                         if (err) {
+														console.log('Error while showing home');
                             renderer.text('ERROR');
                         } else {
                             renderer.text(timetable_header + payload_template(loaded_info) + timetable_footer);
@@ -65,8 +70,14 @@ module.exports = {
             },
             show: function(params, renderer, request) {
                 // 저장된 시간표 불러오기 (보기모드)
+								//Only for rapid development. delete before release
+								var timetable_header = fs.readFileSync(config[target].ROOT_VIEW_PATH + "/timetable_header.htm");
+								var timetable_footer = fs.readFileSync(config[target].ROOT_VIEW_PATH + "/timetable_footer.htm");
+								var user_timetable_header = fs.readFileSync(config[target].ROOT_VIEW_PATH + "/user_timetable_header.htm");
+								var user_timetable_footer = fs.readFileSync(config[target].ROOT_VIEW_PATH + "/user_timetable_footer.htm");
                 lectureModel.load(params.id, function (err, loaded_info) {
                     if (err) {
+												console.log('Error while showing table');
                         renderer.text('ERROR');
                     } else {
                         renderer.text(timetable_header + payload_template(loaded_info) + timetable_footer);

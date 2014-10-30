@@ -18,24 +18,27 @@ body {padding-top:56px;}
 
 .label-info {background-color:#aaddff;}
 
-#search_form {margin-bottom:0;}
+th {font-size:11px;}
+input#search_query_text {min-width:40%;margin-right:5px}
+
+#search_form {padding:3px;margin-bottom:10px;}
 #search_type {float:left;margin-right:3px;}
 .search-result-table th {text-align:center;}
 .search-result-table td {vertical-align:middle;font-size:9pt;}
-.search-result-table .classification {width:40px;text-align:center;}
-.search-result-table .department {min-width:85px;max-width:120px;text-align:center;}
-.search-result-table .academic-year {width:40px;text-align:center;}
-.search-result-table .course-number {min-width:65px;text-align:center;}
-.search-result-table .lecture-number {width:40px;text-align:center;}
-.search-result-table .credit {width:40px;text-align:center;}
-.search-result-table .course-title {/*width:270px;*/min-width:90px;max-width:220px}
-.search-result-table .quota {width:40px;text-align:center;}
-.search-result-table .class-time {min-width:45px;text-align:center;}
-.search-result-table .instructor {min-width:30px;text-align:center;}
-.search-result-table .location {width:70px;text-align:center;}
-.search-result-table th.remark {text-align:center;}
+.search-result-table .classification {width:5%;text-align:center;}
+.search-result-table .department {width:10%;text-align:center;}
+.search-result-table .academic-year {width:5%;text-align:center;}
+.search-result-table .course-number {width:8%;text-align:center;}
+.search-result-table .lecture-number {width:6%;text-align:center;}
+.search-result-table .credit {width:6%;text-align:center;}
+.search-result-table .course-title {width:25%;}
+.search-result-table .quota {width:5%;text-align:center;}
+.search-result-table .class-time {width:10%;text-align:center;}
+.search-result-table .instructor {width:5%;text-align:center;overflow:hidden;}
+.search-result-table .location {width:5%;text-align:center;}
+.search-result-table .remark {width:15%;text-align:center;}
 .search-result-table tbody tr {cursor:pointer;}
-#lectures_content {min-height:100px;max-height:400px;overflow:scroll;overflow-x:hidden;border:1px solid #ccc;}
+#lectures_content {min-height:100px;max-height:180px;overflow:scroll;overflow-x:hidden;border:1px solid #ccc;}
 #timetable_container {margin-top:10px;}
 
 #search_result_table tr.selected {background-color:#ccf}
@@ -53,7 +56,7 @@ body {padding-top:56px;}
 #customcell {position:relative;border:3px dotted #f00;text-align:center;z-index:200;pointer-events:none;}
 
 #footer {margin:20px 0 10px 0;padding:10px;text-align:center;border-top:1px solid #ddd;}
-#footer p {font-size:9pt;font-family:"Arial";margin:0;padding:0;margin:3px;}
+#footer p {font-size:9pt;margin:0;padding:0;margin:3px;}
 #footer a:visited {color:#c53535;text-decoration:none;}
 #footer a:link {color:#c53535;text-decoration:none;}
 #footer a:hover {color:#c53535;text-decoration:none;}
@@ -74,7 +77,6 @@ body {padding-top:56px;}
 #facebook_message_wrapper {margin-top:5px;}
 #facebook_message_wrapper #facebook_message {width:250px;}
 
-#init_loading_modal {background-color:black;}
 #init_loading_modal #init_loading_image{margin-top:20px;text-align:center;}
 #init_loading_modal p{margin-top:15px;text-align:center;}
 #facebook_loading_modal {background-color:black;}
@@ -89,7 +91,7 @@ body {padding-top:56px;}
 .fb-comments, .fb-comments.fb_iframe_widget iframe[style], .fb-comments.fb_iframe_widget span[style] {width: 100% !important;}
 
 #course_detail_wrapper {border:1px dotted #aaa;width:270px;position:fixed;z-index:10000;background-color:white;}
-#course_detail_wrapper div.course-title {background-color:#eee;height:25px;padding:1px 5px 1px 5px;cursor:move;}
+#course_detail_wrapper div.course-title {background-color:#ddf;height:37px;padding:1px 5px 1px 5px;cursor:move;overflow:hidden;}
 #course_detail_wrapper #course_detail_title {font-size:10pt;float:left;}
 #course_detail {padding:3px;border-bottom:1px solid #eee;margin-bottom:5px;clear:both;}
 #course_detail_table {width:100%;}

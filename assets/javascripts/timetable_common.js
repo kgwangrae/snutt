@@ -567,6 +567,10 @@ $(function(){
     });
   });
 
+	$('.my-toggle').click(function () {
+		 if(window.innerWidth<768) $('.navbar-collapse').collapse('hide');
+	});
+
   //SNUTT 로고 클릭
   $('#brand_button').click(function(){
     $('#nav_search_result').trigger('click');

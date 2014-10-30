@@ -115,13 +115,13 @@
 					<ul class="nav navbar-nav" id="main_navigation">
 						<li>
 							<a class="btn dropdown-toggle btn-inverse" data-toggle="dropdown" href="#"><span id="semester_label">학기</span><span class="caret"></span></a>
-							<ul class="dropdown-menu" id="semester_dropdown_ul">
+							<ul class="dropdown-menu my-toggle"  id="semester_dropdown_ul">
 								<!-- init_client 이후 초기화됨 -->
 							</ul>
 						</li>
-						<li class="active"><a href="#search" id="nav_search_result" data-toggle="tab">강의 찾기</a></li>
-						<li><a href="#my_courses" data-toggle="tab" rel="tooltip" id="nav_my_courses">내 강의 / <b class="badge-info">0학점</b></a></li>
-						<li><a href="#export" id="nav_export" data-toggle="tab">저장하기</a></li>
+						<li class="active my-toggle"><a href="#search" id="nav_search_result" data-toggle="tab">강의 찾기</a></li>
+						<li class="my-toggle"><a href="#my_courses" data-toggle="tab" rel="tooltip" id="nav_my_courses">내 강의 / <b class="badge-info">0학점</b></a></li>
+						<li class="my-toggle"><a href="#export" id="nav_export" data-toggle="tab">저장하기</a></li>
 						<!--li class="hidden" id="social_comment_li"><a href="#social_comment" id="nav_social_comment" data-toggle="tab">소셜 댓글</a></li-->
 					</ul>
 					<ul class="nav navbar-nav navbar-right hidden-xs">
@@ -204,18 +204,18 @@
 							<table class="table table-condensed table-bordered search-result-table" id="search_result_table">
 								<thead>
 									<tr>
-										<th class="course-number">교과목</th>
-										<th class="lecture-number">강좌</th>
-										<th class="course-title">교과목명</th>
+										<th class="course-number hidden-xs">코드</th>
+										<th class="lecture-number hidden-xs">번호</th>
+										<th class="course-title">이름</th>
 										<th class="classification hidden-xs">구분</th>
 										<th class="department hidden-xs">개설학과</th>
 										<th class="academic-year hidden-xs">학년</th>
 										<th class="credit">학점</th>
-										<th class="class-time">수업교시</th>
-										<th class="location">강의실</th>
+										<th class="class-time">시간</th>
+										<th class="location">장소</th>
 										<th class="instructor">교수</th>
 										<th class="quota hidden-xs">정원</th>
-										<th class="remark">비고</th>
+										<th class="remark hidden-xs">비고</th>
 									</tr>
 								</thead>
 								<tbody>
@@ -231,18 +231,18 @@
 						<table class="table table-condensed table-bordered search-result-table" id="my_courses_table">
 							<thead>
 								<tr>
-									<th class="course-number">교과목</th>
-									<th class="lecture-number">강좌</th>
-									<th class="course-title">교과목명</th>
+									<th class="course-number hidden-xs">코드</th>
+									<th class="lecture-number hidden-xs">번호</th>
+									<th class="course-title">이름</th>
 									<th class="classification hidden-xs">구분</th>
 									<th class="department hidden-xs">개설학과</th>
 									<th class="academic-year hidden-xs">학년</th>
 									<th class="credit">학점</th>
-									<th class="class-time">수업교시</th>
-									<th class="location">강의실</th>
+									<th class="class-time">시간</th>
+									<th class="location">장소</th>
 									<th class="instructor">교수</th>
 									<th class="quota hidden-xs">정원</th>
-									<th class="remark">비고</th>
+									<th class="remark hidden-xs">비고</th>
 								</tr>
 							</thead>
 							<tbody>

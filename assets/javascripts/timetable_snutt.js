@@ -211,8 +211,8 @@ function set_result_table(data)
 	for (var i=0;i<data.lectures.length;i++){
 		var lecture = data.lectures[i];
 		var row = $('<tr></tr>').attr('course-number', lecture.course_number).attr('lecture-number', lecture.lecture_number);
-		$('<td></td>').addClass('course-number').appendTo(row).text(lecture.course_number);
-		$('<td></td>').addClass('lecture-number').appendTo(row).text(lecture.lecture_number);
+		$('<td class="hidden-xs"></td>').addClass('course-number').appendTo(row).text(lecture.course_number);
+		$('<td class="hidden-xs"></td>').addClass('lecture-number').appendTo(row).text(lecture.lecture_number);
 		var course_title = $('<td></td>').addClass('course-title').appendTo(row).text(lecture.course_title+" ");
 		$('<td class="hidden-xs"></td>').addClass('classification').appendTo(row).text(lecture.classification);
 		$('<td class="hidden-xs"></td>').addClass('department').appendTo(row).text(lecture.department);
@@ -222,7 +222,7 @@ function set_result_table(data)
 		$('<td></td>').addClass('location').appendTo(row).html(simplify_location(lecture.location));
 		$('<td></td>').addClass('instructor').appendTo(row).text(lecture.instructor);
 		$('<td class="hidden-xs"></td>').addClass('quota').appendTo(row).text(lecture.quota);
-		$('<td></td>').addClass('remark').appendTo(row).text(lecture.remark);
+		$('<td class="hidden-xs"></td>').addClass('remark').appendTo(row).text(lecture.remark);
 
 		row.appendTo($('#search_result_table tbody'));
 		//bind row click event

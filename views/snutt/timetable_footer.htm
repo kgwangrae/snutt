@@ -26,80 +26,6 @@
       };
     </script>
 
-		<div id="course_detail_wrapper" style="display:none;">
-			<div class="course-title">
-				<h3 id="course_detail_title"></h3>
-				<div id="course_detail_contract" class="course_detail_toggle"></div>
-				<div id="course_detail_expand" style="display:none;" class="course_detail_toggle"></div>
-			</div>
-			<div id="course_detail">
-				<table id="course_detail_table">
-					<tr>
-						<th>교과목번호</th>
-						<td class="course-number"></td>
-					</tr>
-					<tr>
-						<th>강좌번호</td>
-						<td class="lecture-number"></td>
-					</tr>
-					<tr>
-						<th>과목구분</th>
-						<td class="classification"></td>
-					</tr>
-					<tr>
-						<th>개설학과</th>
-						<td class="department"></td>
-					</tr>
-					<tr>
-						<th>학년</th>
-						<td class="academic-year"></td>
-					</tr>
-					<tr>
-						<th>학점</th>
-						<td class="credit"></td>
-					</tr>
-					<tr>
-						<th>수업교시</th>
-						<td class="class-time"></td>
-					</tr>
-					<tr>
-						<th>교수명</th>
-						<td class="instructor"></td>
-					</tr>
-					<tr>
-						<th>강의실</th>
-						<td class="location"></td>
-					</tr>
-					<tr>
-						<th>정원</th>
-						<td class="quota"></td>
-					</tr>
-					<tr>
-						<th>현원</th>
-						<td class="enrollment"></td>
-					</tr>
-					<tr>
-						<th>비고</th>
-						<td class="remark"></td>
-					</tr>
-					<tr>
-						<th>강의평점</th>
-						<td>
-							<div id="course_detail_rating_wrapper">
-								<div id="course_detail_rating">
-								</div>
-								<div id="course_detail_rating_score">
-								</div>
-							</div>
-						</td>
-					</tr>
-				</table>
-			</div>
-			<div id="course_detail_buttons">
-				<a class="btn btn-warning" id="course_detail_snuev_button" target="snuev">강의평보기(SNUEV)</a>
-				<button class="btn btn-warning" id="course_detail_plan_button">강의계획서</button>
-			</div>
-		</div>
 		<div class="navbar navbar-default navbar-fixed-top">
 			<div class="container">
 				<div class="navbar-header">
@@ -137,65 +63,71 @@
 			<div id="content_wrapper">
 				<div id="search_form_container">
 					<form class="well form-search" id="search_form">
-						<div class="btn-group" id="search_type">
-							<a class="btn dropdown-toggle big_label" data-toggle="dropdown" href="#"><span id="stype_dropdown_label">교과목명</span> <span class="caret"></span></a>
-							<ul class="dropdown-menu">
-								<li><a href="#" id="stype_course_title">교과목명으로 검색</a></li>
-								<li><a href="#" id="stype_department">개설학과로 검색</a></li>
-								<li><a href="#" id="stype_class_time">수업교시로 검색</a></li>
-								<li><a href="#" id="stype_instructor">교수명으로 검색</a></li>
-								<li><a href="#" id="stype_course_number">교과목번호로 검색</a></li>
-							</ul>
+						<div id="search_cond_table">
+							<div id="search_btns">
+								<div class="child btn-group" id="search_type">
+									<a class="btn dropdown-toggle big_label" data-toggle="dropdown" href="#"><span id="stype_dropdown_label">과목 이름</span> <span class="caret"></span></a>
+									<ul class="dropdown-menu">
+										<li><a href="#" id="stype_course_title">과목 이름으로 검색</a></li>
+										<li><a href="#" id="stype_department">개설학과로 검색</a></li>
+										<li><a href="#" id="stype_class_time">수업교시로 검색</a></li>
+										<li><a href="#" id="stype_instructor">교수명으로 검색</a></li>
+										<li><a href="#" id="stype_course_number">교과목 번호로 검색</a></li>
+									</ul>
+								</div>
+								<div class="child" id="search_input_container">
+									<input type="text" class="input-medium" id="search_query_text" placeholder="예) 컴개실" />
+								</div>
+								<div class="child" id="search_button_container">
+									<button type="submit" class="btn well">검색</button>
+								</div>
+							</div>
+							<!-- 검색필터 버튼 -->
+							<a class="btn big_label" id="search_filter_toggle_button" state="off">검색필터 <span class="caret"></span></a>
+
+							<div id="search_filter" style="display:none;">
+								<div class="search-filter-container" id="filter_basics">
+									<span class="header">학문의 기초</span>
+									<span class="label" value="basics_korean">국어와 작문</span>
+									<span class="label" value="basics_foreign">외국어와 외국문화</span>
+									<span class="label" value="basics_science">기초과학</span>
+									<span class="label" value="basics">학문의 기초</span>
+								</div>
+								<div class="search-filter-container" id="filter_core">
+									<span class="header">핵심교양</span>
+									<span class="label" value="core_art">문학과 예술</span>
+									<span class="label" value="core_history">역사와 철학</span>
+									<span class="label" value="core_society">사회와 이념</span>
+									<span class="label" value="core_nature">자연의 이해</span>
+									<span class="label" value="core_technology">자연과 기술</span>
+									<span class="label" value="core_biology">생명과 환경</span>
+								</div>
+								<div class="search-filter-container" id="filter_etc">
+									<span class="header">기타</span>
+									<span class="label" value="teaching">교직</span>
+									<span class="label" value="exercise">예체능</span>
+									<span class="label" value="etc">기타교양</span>
+								</div>
+								<div class="search-filter-container" id="filter_academic_year">
+									<span class="header">학년</span>
+									<span class="label" value="1">1학년</span>
+									<span class="label" value="2">2학년</span>
+									<span class="label" value="3">3학년</span>
+									<span class="label" value="4">4학년 이상</span>
+									<span class="label" value="5">대학원</span>
+								</div>
+								<div class="search-filter-container" id="filter_credit">
+									<span class="header">학점</span>
+									<span class="label" value="1">1학점</span>
+									<span class="label" value="2">2학점</span>
+									<span class="label" value="3">3학점</span>
+									<span class="label" value="4">4학점</span>
+									<span class="label" value="5">5학점 이상</span>
+								</div>
+								<div id="search_filter_footer">
+								</div>
+							</div>
 						</div>
-						<input type="text" class="input-medium" id="search_query_text" placeholder="예) 컴개실" />
-						<button type="submit" class="btn">검색</button>
-
-						<!-- 검색필터 버튼 -->
-						<a class="btn big_label" id="search_filter_toggle_button" state="off">검색필터 <span class="caret"></span></a>
-
-						<div id="search_filter" style="display:none;">
-							<div class="search-filter-container" id="filter_basics">
-								<span class="header">학문의 기초</span>
-								<span class="label" value="basics_korean">국어와 작문</span>
-								<span class="label" value="basics_foreign">외국어와 외국문화</span>
-								<span class="label" value="basics_science">기초과학</span>
-								<span class="label" value="basics">학문의 기초</span>
-							</div>
-							<div class="search-filter-container" id="filter_core">
-								<span class="header">핵심교양</span>
-								<span class="label" value="core_art">문학과 예술</span>
-								<span class="label" value="core_history">역사와 철학</span>
-								<span class="label" value="core_society">사회와 이념</span>
-								<span class="label" value="core_nature">자연의 이해</span>
-								<span class="label" value="core_technology">자연과 기술</span>
-								<span class="label" value="core_biology">생명과 환경</span>
-							</div>
-							<div class="search-filter-container" id="filter_etc">
-								<span class="header">기타</span>
-								<span class="label" value="teaching">교직</span>
-								<span class="label" value="exercise">예체능</span>
-								<span class="label" value="etc">기타교양</span>
-							</div>
-							<div class="search-filter-container" id="filter_academic_year">
-								<span class="header">학년</span>
-								<span class="label" value="1">1학년</span>
-								<span class="label" value="2">2학년</span>
-								<span class="label" value="3">3학년</span>
-								<span class="label" value="4">4학년 이상</span>
-								<span class="label" value="5">대학원</span>
-							</div>
-							<div class="search-filter-container" id="filter_credit">
-								<span class="header">학점</span>
-								<span class="label" value="1">1학점</span>
-								<span class="label" value="2">2학점</span>
-								<span class="label" value="3">3학점</span>
-								<span class="label" value="4">4학점</span>
-								<span class="label" value="5">5학점 이상</span>
-							</div>
-							<div id="search_filter_footer">
-							</div>
-						</div>
-
 					</form>
 				</div>
 				<div class="tab-content" id="lectures_content">
@@ -206,16 +138,15 @@
 									<tr>
 										<th class="course-number hidden-xs">코드</th>
 										<th class="lecture-number hidden-xs">번호</th>
-										<th class="course-title">이름</th>
+										<th class="course-title hidden-xs">이름</th>
 										<th class="classification hidden-xs">구분</th>
 										<th class="department hidden-xs">개설학과</th>
 										<th class="academic-year hidden-xs">학년</th>
-										<th class="credit">학점</th>
-										<th class="class-time">시간</th>
-										<th class="location">장소</th>
-										<th class="instructor">교수</th>
+										<th class="credit hidden-xs">학점</th>
+										<th class="class-time hidden-xs">시간</th>
+										<th class="location hidden-xs">장소</th>
+										<th class="instructor hidden-xs">교수</th>
 										<th class="quota hidden-xs">정원</th>
-										<th class="remark hidden-xs">비고</th>
 									</tr>
 								</thead>
 								<tbody>
@@ -233,16 +164,15 @@
 								<tr>
 									<th class="course-number hidden-xs">코드</th>
 									<th class="lecture-number hidden-xs">번호</th>
-									<th class="course-title">이름</th>
+									<th class="course-title hidden-xs">이름</th>
 									<th class="classification hidden-xs">구분</th>
 									<th class="department hidden-xs">개설학과</th>
 									<th class="academic-year hidden-xs">학년</th>
-									<th class="credit">학점</th>
-									<th class="class-time">시간</th>
-									<th class="location">장소</th>
-									<th class="instructor">교수</th>
+									<th class="credit hidden-xs">학점</th>
+									<th class="class-time hidden-xs">시간</th>
+									<th class="location hidden-xs">장소</th>
+									<th class="instructor hidden-xs">교수</th>
 									<th class="quota hidden-xs">정원</th>
-									<th class="remark hidden-xs">비고</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -252,6 +182,13 @@
 							</tbody>
 						</table>
 					</div>
+				</div>
+				<div id="course_detail_wrapper" style="display:none;">
+					<div id="course_detail_info" class="vcenter">
+						<h3 id="course_detail_title" class="course_detail_toggle"></h3>
+						<h5 class="remark"></h5>
+					</div>
+					<button class="vcenter btn btn-warning" id="course_detail_plan_button">강의계획서</button>
 				</div>
 				<div id="timetable_container">
 					<div id="timecells_container">
@@ -263,12 +200,18 @@
 						<thead>
 							<tr>
 								<th>&nbsp;</th>
-								<th class="mon">월요일</th>
-								<th class="tue">화요일</th>
-								<th class="wed">수요일</th>
-								<th class="thu">목요일</th>
-								<th class="fri">금요일</th>
-								<th class="sat">토요일</th>
+								<th class="mon hidden-xs">월요일</th>
+								<th class="tue hidden-xs">화요일</th>
+								<th class="wed hidden-xs">수요일</th>
+								<th class="thu hidden-xs">목요일</th>
+								<th class="fri hidden-xs">금요일</th>
+								<th class="sat hidden-xs">토요일</th>
+								<th class="mon visible-xs">월</th>
+								<th class="tue visible-xs">화</th>
+								<th class="wed visible-xs">수</th>
+								<th class="thu visible-xs">목</th>
+								<th class="fri visible-xs">금</th>
+								<th class="sat visible-xs">토</th>
 							</tr>
 						</thead>
 						<tbody>

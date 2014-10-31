@@ -97,34 +97,8 @@ function get_filter()
 
 function refresh_course_detail(selected_lecture)
 {
-	$('#course_detail_wrapper #course_detail_title').text(s(selected_lecture.course_title));
-	$('#course_detail_wrapper .course-number').text(s(selected_lecture.course_number));
-	$('#course_detail_wrapper .lecture-number').text(s(selected_lecture.lecture_number));
-	$('#course_detail_wrapper .classification').text(s(category_to_text(selected_lecture.category)));
-	$('#course_detail_wrapper .department').text(s(selected_lecture.department));
-	$('#course_detail_wrapper .academic-year').text(s(selected_lecture.academic_year));
-	$('#course_detail_wrapper .credit').text(s(selected_lecture.credit));
-	$('#course_detail_wrapper .class-time').text(s(selected_lecture.class_time));
-	$('#course_detail_wrapper .instructor').text(s(selected_lecture.instructor));
-	$('#course_detail_wrapper .location').text(s(selected_lecture.location));
-	$('#course_detail_wrapper .quota').text(s(selected_lecture.quota));
+	$('#course_detail_wrapper #course_detail_title').text(s(selected_lecture.course_title)+" "+s(selected_lecture.lecture_number)+" "+s(selected_lecture.instructor));
 	$('#course_detail_wrapper .remark').text(s(selected_lecture.remark));
-	$('#course_detail_rating').children().remove();
-	if (!selected_lecture.snuev_lec_id){
-		$('#course_detail_snuev_button').addClass('disabled').attr('href', "#").unbind('click').click(function(){return false;});
-		$('<div>정보 없음</div>').appendTo($('#course_detail_rating'));
-		$('#course_detail_rating_score').text("");
-	}
-	else if (!selected_lecture.snuev_eval_score){
-		$('#course_detail_snuev_button').unbind('click').removeClass('disabled').attr('href', "http://snuev.com/#/main/lecture?lec_id="+selected_lecture.snuev_lec_id);
-		$('<div>평가 없음</div>').appendTo($('#course_detail_rating'));
-		$('#course_detail_rating_score').text("");
-	}
-	else {
-		$('#course_detail_snuev_button').unbind('click').removeClass('disabled').attr('href', "http://snuev.com/#/main/lecture?lec_id="+selected_lecture.snuev_lec_id);
-		$('#course_detail_rating').jRating({score:selected_lecture.snuev_eval_score, type:'big'});
-		$('#course_detail_rating_score').text(selected_lecture.snuev_eval_score);
-	}
 	$('#course_detail_plan_button').attr('course-number', selected_lecture.course_number);
 	$('#course_detail_plan_button').attr('lecture-number', selected_lecture.lecture_number);
 	$('#course_detail_wrapper').fadeIn();
@@ -162,18 +136,29 @@ function refresh_my_courses_table()
 		var lecture = my_lectures[i];
 		credit += parseInt(lecture.credit);
 		var row = $('<tr></tr>').attr('course-number', lecture.course_number).attr('lecture-number', lecture.lecture_number);
-		$('<td></td>').addClass('course-number').appendTo(row).text(lecture.course_number);
-		$('<td></td>').addClass('lecture-number').appendTo(row).text(lecture.lecture_number);
-		var course_title = $('<td></td>').addClass('course-title').appendTo(row).text(lecture.course_title+" ");
+		$('<td class="hidden-xs"></td>').addClass('course-number').appendTo(row).text(lecture.course_number);
+		$('<td class="hidden-xs"></td>').addClass('lecture-number').appendTo(row).text(lecture.lecture_number);
+		var course_title = $('<td class="hidden-xs"></td>').addClass('course-title').appendTo(row).text(lecture.course_title+" ");
 		$('<td class="hidden-xs"></td>').addClass('classification').appendTo(row).text(lecture.classification);
 		$('<td class="hidden-xs"></td>').addClass('department').appendTo(row).text(lecture.department);
 		$('<td class="hidden-xs"></td>').addClass('academic-year').appendTo(row).text(lecture.academic_year);
-		$('<td></td>').addClass('credit').appendTo(row).text(lecture.credit);
-		$('<td></td>').addClass('class-time').appendTo(row).text(simplify_class_time(lecture.class_time));
-		$('<td></td>').addClass('location').appendTo(row).html(simplify_location(lecture.location));
-		$('<td></td>').addClass('instructor').appendTo(row).text(lecture.instructor);
+		$('<td class="hidden-xs"></td>').addClass('credit').appendTo(row).text(lecture.credit);
+		$('<td class="hidden-xs"></td>').addClass('class-time').appendTo(row).text(simplify_class_time(lecture.class_time));
+		$('<td class="hidden-xs"></td>').addClass('location').appendTo(row).html(simplify_location(lecture.location));
+		$('<td class="hidden-xs"></td>').addClass('instructor').appendTo(row).text(lecture.instructor);
 		$('<td class="hidden-xs"></td>').addClass('quota').appendTo(row).text(lecture.quota);
-		$('<td></td>').addClass('remark').appendTo(row).text(lecture.remark);
+		
+		//For mobile
+		var mobile_str = "<b>"+lecture.course_title+"</b>";
+		if (lecture.instructor) mobile_str+=" / <b>"+lecture.instructor+"</b>";
+		//if (lecture.class_time) mobile_str+=" / "+lecture.class_time;
+		//if (lecture.location) mobile_str+=" / "+simplify_location(lecture.location);
+		mobile_str+=" / "+lecture.course_number+", "+lecture.lecture_number;
+		mobile_str+=" / "+lecture.credit+"학점";
+		mobile_str+=" / "+lecture.department+" "+lecture.academic_year+" "+lecture.classification;
+		mobile_str+=" / 정원 "+lecture.quota+"명";
+		if (lecture.remark) mobile_str+=" / "+lecture.remark;
+		$('<td class="mobile-info visible-xs"></td>').appendTo(row).html(mobile_str);
 
 		row.appendTo($('#my_courses_table tbody'));
 		//bind row click event
@@ -193,8 +178,12 @@ function refresh_my_courses_table()
 		$('<td colspan="13"><h2>선택된 강의가 없습니다.</h2></td>').appendTo(row).css('text-align', 'center');
 	}
 	//총 학점 갱신
-	$('#my_courses_credit').text(credit+"학점");
+	$('.badge-info').text(credit+"학점");
 	my_courses_selected_row = null;
+	if (selected_row) {
+		selected_row.removeClass('selected');
+		$("#course_detail_wrapper").fadeOut();
+	}
 }
 
 //TODO : duplicate code
@@ -213,16 +202,28 @@ function set_result_table(data)
 		var row = $('<tr></tr>').attr('course-number', lecture.course_number).attr('lecture-number', lecture.lecture_number);
 		$('<td class="hidden-xs"></td>').addClass('course-number').appendTo(row).text(lecture.course_number);
 		$('<td class="hidden-xs"></td>').addClass('lecture-number').appendTo(row).text(lecture.lecture_number);
-		var course_title = $('<td></td>').addClass('course-title').appendTo(row).text(lecture.course_title+" ");
+		var course_title = $('<td class="hidden-xs"></td>').addClass('course-title').appendTo(row).text(lecture.course_title+" ");
 		$('<td class="hidden-xs"></td>').addClass('classification').appendTo(row).text(lecture.classification);
 		$('<td class="hidden-xs"></td>').addClass('department').appendTo(row).text(lecture.department);
 		$('<td class="hidden-xs"></td>').addClass('academic-year').appendTo(row).text(lecture.academic_year);
-		$('<td></td>').addClass('credit').appendTo(row).text(lecture.credit);
-		$('<td></td>').addClass('class-time').appendTo(row).text(simplify_class_time(lecture.class_time));
-		$('<td></td>').addClass('location').appendTo(row).html(simplify_location(lecture.location));
-		$('<td></td>').addClass('instructor').appendTo(row).text(lecture.instructor);
+		$('<td class="hidden-xs"></td>').addClass('credit').appendTo(row).text(lecture.credit);
+		$('<td class="hidden-xs"></td>').addClass('class-time').appendTo(row).text(simplify_class_time(lecture.class_time));
+		$('<td class="hidden-xs"></td>').addClass('location').appendTo(row).html(simplify_location(lecture.location));
+		$('<td class="hidden-xs"></td>').addClass('instructor').appendTo(row).text(lecture.instructor);
 		$('<td class="hidden-xs"></td>').addClass('quota').appendTo(row).text(lecture.quota);
-		$('<td class="hidden-xs"></td>').addClass('remark').appendTo(row).text(lecture.remark);
+		$('<td class="hidden-xs"></td>').addClass('remark').appendTo(row).text(lecture.quota);
+		
+		//For mobile
+		var mobile_str = "<b>"+lecture.course_title+"</b>";
+		if (lecture.instructor) mobile_str+=" / <b>"+lecture.instructor+"</b>";
+		//if (lecture.class_time) mobile_str+=" / "+lecture.class_time;
+		//if (lecture.location) mobile_str+=" / "+simplify_location(lecture.location);
+		mobile_str+=" / "+lecture.course_number+", "+lecture.lecture_number;
+		mobile_str+=" / "+lecture.credit+"학점";
+		mobile_str+=" / "+lecture.department+" "+lecture.academic_year+" "+lecture.classification;
+		mobile_str+=" / 정원 "+lecture.quota+"명";
+		if (lecture.remark) mobile_str+=" / "+lecture.remark;
+		$('<td class="mobile-info visible-xs"></td>').appendTo(row).html(mobile_str);
 
 		row.appendTo($('#search_result_table tbody'));
 		//bind row click event

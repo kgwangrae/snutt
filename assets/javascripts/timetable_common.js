@@ -302,10 +302,10 @@ function for_equal_lecture_timecells(cell, thenDo)
 function generate_timecell(lectures)
 {
   $('.timecell-container').remove();
-  var unitcell_width = $('#timetable tbody td').width()+2;
-  var unitcell_height = $('#timetable tbody td').height()+2;
-  var leftcell_width = $('#timetable tbody th').width()+2;
-  var topcell_height = $('#timetable thead th').height()+2;
+  var unitcell_width = $('#timetable_container td.mon').outerWidth();
+  var unitcell_height = $('#timetable_container td.mon').outerHeight();
+  var leftcell_width = $('#timetable tbody th').outerWidth();
+  var topcell_height = $('#timetable thead th').outerHeight();
   var border_weight = 3;
 
   for (var a=0;a<lectures.length;a++){
@@ -327,8 +327,8 @@ function generate_timecell(lectures)
       if (wday == 5 || wday == 4) criteria_cell2 = criteria_cell.prev();
       else criteria_cell2 = criteria_cell.next();
 
-      var width = Math.abs(criteria_cell2.position().left - criteria_cell.position().left) - 2*border_weight;
-      var height = (unitcell_height)*duration - border_weight*2;
+      var width = unitcell_width;//Math.abs(criteria_cell2.position().left - criteria_cell.position().left) - 2*border_weight;
+      var height = (unitcell_height)*duration;// - border_weight*2;
       var left = criteria_cell.position().left - criteria_cell.parent().position().left;
       var top = criteria_cell.position().top - criteria_cell.parent().parent().position().top + topcell_height;
 
@@ -389,7 +389,7 @@ function generate_timecell(lectures)
 
 function timecell_delete_handler(ele)
 {
-  var lecture = get_my_lecture_by_course_number(ele.attr('course-number'), ele.attr('lecture-number'));
+  var lecture = get_lecture_by_course_number(ele.attr('course-number'), ele.attr('lecture-number'));
   //더블클릭하거나 호버링하면 삭제
   var con = confirm("["+lecture.course_title+"]를 시간표에서 제거하시겠습니까?");
   if (con){
@@ -413,7 +413,12 @@ function my_courses_row_click_handler()
   remove_button.click(function(){
     if (my_courses_selected_row) my_courses_selected_row.trigger('dblclick');
   });
-
+  var mobile_info = my_courses_selected_row.find('.mobile-info');
+  remove_button = $('<span class="badge badge-important">제거</span>').addClass('remove-course-button').appendTo(mobile_info);
+  //remove 버튼 핸들러 추가
+  remove_button.click(function(){
+    if (my_courses_selected_row) my_courses_selected_row.trigger('dblclick');
+  });
   //timetable refreshing
   var selected_lecture = get_my_lecture_by_course_number(ele.attr('course-number'), ele.attr('lecture-number'));
   if (!selected_lecture.color)
@@ -431,7 +436,7 @@ function row_click_handler()
   var ele = $(this);
   ele.addClass('selected');
   selected_row = ele;
-  //add 버튼 추가
+	//add 버튼 추가
   $('.add-course-button').remove();
   var course_title = selected_row.find('.course-title');
   var add_button = $('<span class="badge badge-success">추가</span>').addClass('add-course-button').appendTo(course_title);
@@ -439,7 +444,12 @@ function row_click_handler()
   add_button.click(function(){
     if (selected_row) selected_row.trigger('dblclick');
   });
-
+  var mobile_info = selected_row.find('.mobile-info');
+  add_button = $('<span class="badge badge-success">추가</span>').addClass('add-course-button').appendTo(mobile_info);
+  //add버튼 핸들러 추가
+  add_button.click(function(){
+    if (selected_row) selected_row.trigger('dblclick');
+  });
   //timetable refreshing
   var selected_lecture = get_lecture_by_course_number(ele.attr('course-number'), ele.attr('lecture-number'));
   if (!selected_lecture.color)
@@ -852,7 +862,7 @@ $(function(){
     }
   });
 
-  set_dropdown_handler();
+	set_dropdown_handler();
 
   //init modal
   $('#init_loading_modal').dialog({
@@ -893,11 +903,6 @@ $(function(){
     autoOpen:false
   });
 
-  //detail dialog
-  $('#course_detail_wrapper').draggable({
-    handle:'.course-title',
-    containment:"body"
-  }).css('right', 0);
   $('#course_detail_wrapper').hide();
 
   //강의계획서 버튼
@@ -1084,15 +1089,11 @@ $(function(){
   $('.course_detail_toggle').click(function(){
     var ele = $(this);
     var course_detail = $('#course_detail');
-    if (ele.attr('id') == "course_detail_contract"){
+    if (course_detail.is(':visible')){
       course_detail.slideUp();
-      ele.hide();
-      $('#course_detail_expand').show();
     }
     else {
       course_detail.slideDown();
-      ele.hide();
-      $('#course_detail_contract').show();
     }
   });
 

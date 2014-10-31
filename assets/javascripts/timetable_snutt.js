@@ -157,7 +157,6 @@ function refresh_my_courses_table()
 		mobile_str+=" / "+lecture.credit+"학점";
 		mobile_str+=" / "+lecture.department+" "+lecture.academic_year+" "+lecture.classification;
 		mobile_str+=" / 정원 "+lecture.quota+"명";
-		if (lecture.remark) mobile_str+=" / "+lecture.remark;
 		$('<td class="mobile-info visible-xs"></td>').appendTo(row).html(mobile_str);
 
 		row.appendTo($('#my_courses_table tbody'));
@@ -222,7 +221,6 @@ function set_result_table(data)
 		mobile_str+=" / "+lecture.credit+"학점";
 		mobile_str+=" / "+lecture.department+" "+lecture.academic_year+" "+lecture.classification;
 		mobile_str+=" / 정원 "+lecture.quota+"명";
-		if (lecture.remark) mobile_str+=" / "+lecture.remark;
 		$('<td class="mobile-info visible-xs"></td>').appendTo(row).html(mobile_str);
 
 		row.appendTo($('#search_result_table tbody'));

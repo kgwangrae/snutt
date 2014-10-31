@@ -18,14 +18,6 @@ body {padding-top:56px;}
 
 .label-info {background-color:#aaddff;}
 
-th {font-size:10px;}
-@media (min-width:768px) {
-	th {font-size:11.5px;}
-}
-@media (min-width:1024px) {
-	th {font-size:13.5px;}
-}
-
 
 #search_form {padding:3px;margin-bottom:10px;}
 #search_cond_table {width:100%;display:table;}
@@ -144,3 +136,12 @@ button.btn.well {padding:6px 12px;margin:0px;border:1px solid #aaa;}
 	vertical-align: middle;
 	float:none;
 }
+
+th {font-size:10px;}
+@media (min-width:768px) {
+	th {font-size:11.5px;}
+}
+@media (min-width:1024px) {
+	th {font-size:13.5px;}
+}
+

@@ -210,7 +210,6 @@ function set_result_table(data)
 		$('<td class="hidden-xs"></td>').addClass('location').appendTo(row).html(simplify_location(lecture.location));
 		$('<td class="hidden-xs"></td>').addClass('instructor').appendTo(row).text(lecture.instructor);
 		$('<td class="hidden-xs"></td>').addClass('quota').appendTo(row).text(lecture.quota);
-		$('<td class="hidden-xs"></td>').addClass('remark').appendTo(row).text(lecture.quota);
 		
 		//For mobile
 		var mobile_str = "<b>"+lecture.course_title+"</b>";

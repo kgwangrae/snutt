@@ -78,14 +78,18 @@ button.btn.well {padding:6px 12px;margin:0px;border:1px solid #aaa;}
 #search_result_table tr.selected {background-color:#ccf}
 #my_courses_table tr.selected {background-color:#ccf}
 #timetable {width:100%;}
-#timetable th, #timetable td{text-align:center;vertical-align:middle;border:1px solid #ddd;line-height:100%;padding:0;}
+#timetable th, #timetable td{text-align:center;vertical-align:middle;border:1px solid #ddd;border-right:1px solid #f3f3f3;line-height:100%;padding:0;}
+#timetable tr td:last-child, #timetable tr th:last-child{border-right:1px solid #ddd;}
+#timetable .halftimetr td{border-top:1px dashed #ddd;}
+#timetable tr:not(.halftimetr) td{border-bottom-style:none;}
 #timetable thead th {height:30px;}
 #timetable tbody th {width:10%;padding:2px;line-height:1.3}
 #timetable tbody td {height:18px;}
 #timetable .period {font-size:1.2em;}
 #timetable .time {font-size:0.8em;}
 .timecell-container {position:absolute;z-index:100;}
-.timecell {font-size:11px;position:relative;border:2px solid #ceb;text-align:center;cursor:pointer;}
+.timecell {position:relative;border-style:none;border-radius:8px;border:2px solid #ceb;text-align:center;cursor:pointer;}
+.timecellinfo-containter{position:relative;top:50%;transform:translateY(-50%);}
 #customcell_container {position:absolute;z-index:100;pointer-events:none;}
 #customcell {font-size:11px;position:relative;border:3px dotted #f00;text-align:center;z-index:200;pointer-events:none;}
 

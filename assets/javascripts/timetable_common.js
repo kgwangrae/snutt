@@ -105,12 +105,12 @@ var search_result_scroll_top = 0;
 var current_tab = "search";
 var gray_color = {border:"#ccc",plane:"#ddd"};
 var colors = [
-  {border:"#faa",plane:"#fcc"},
-  {border:"#9f9",plane:"#cfc"},
-  {border:"#aaf",plane:"#ccf"},
-  {border:"#dd9",plane:"#ffa"},
-  {border:"#d9d",plane:"#faf"},
-  {border:"#9dd",plane:"#cff"}
+  {border:"#2B8728",plane:"#B6F9B2"},
+  {border:"#45B2B8",plane:"#BFF7F8"},
+  {border:"#1579C2",plane:"#94E6FE"},
+  {border:"#A337A1",plane:"#F6B5F5"},
+  {border:"#B8991B",plane:"#FFF49A"},
+  {border:"#BA313B",plane:"#FFB2BC"}
 ];
 var search_type = "course_title";
 var current_year;
@@ -307,7 +307,6 @@ function generate_timecell(lectures)
   var leftcell_width = $('#timetable tbody th').outerWidth();
   var topcell_height = $('#timetable thead th').outerHeight();
   var border_weight = 3;
-
   for (var a=0;a<lectures.length;a++){
     var lecture = lectures[a];
     //시간이 유효하지 않으면 스킵
@@ -334,10 +333,11 @@ function generate_timecell(lectures)
 
       //create container
       var container = $('<div></div>').addClass('timecell-container').appendTo($('#timecells_container'));
-      var tdiv = $('<div></div>').addClass('timecell').width(width).height(height).css('left', left).css('top', top).css('background-color', lecture.color.plane).css('border-color', lecture.color.border).appendTo(container);
-      $('<span></span>').text(lecture.course_title).appendTo(tdiv);
-      $('<br />').appendTo(tdiv);
-      $('<span></span>').text(locations[i]).appendTo(tdiv);
+      var tdiv = $('<div></div>').addClass('timecell').width(width).height(height).css('left', left).css('top', top).css('background-color', lecture.color.plane).css('color', lecture.color.border).appendTo(container);
+      var tdivc = $('<div class="timecellinfo-containter">').appendTo(tdiv);
+      $('<span></span>').text(lecture.course_title).appendTo(tdivc);
+      $('<br />').appendTo(tdivc);
+      $('<span></span>').text(locations[i]).appendTo(tdivc);
       //gray cell이면 gray-cell 클래스 추가
       if (lecture.color == gray_color)
         tdiv.addClass('gray-cell');
@@ -359,7 +359,7 @@ function generate_timecell(lectures)
     if (lecture && !ele.hasClass('gray-cell')){ //회색이 아닐때만 바꿈
       lecture.color = generate_random_color(lecture.color);
       for_equal_lecture_timecells(ele, function(sbl) {
-        sbl.css('background-color', lecture.color.plane).css('border-color', lecture.color.border);
+        sbl.css('background-color', lecture.color.plane).css('color', lecture.color.border);
       })
     }
   });

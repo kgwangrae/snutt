@@ -362,8 +362,7 @@ function generate_timecell(lectures)
         sbl.css('background-color', lecture.color.plane).css('color', lecture.color.border);
       })
     }
-  });
-
+  });i
   //timecell dblclick event bind
   $('.timecell').dblclick(function(){
     timecell_delete_handler($(this));
@@ -389,7 +388,7 @@ function generate_timecell(lectures)
 
 function timecell_delete_handler(ele)
 {
-  var lecture = get_lecture_by_course_number(ele.attr('course-number'), ele.attr('lecture-number'));
+  var lecture = get_my_lecture_by_course_number(ele.attr('course-number'), ele.attr('lecture-number'));
   //더블클릭하거나 호버링하면 삭제
   var con = confirm("["+lecture.course_title+"]를 시간표에서 제거하시겠습니까?");
   if (con){

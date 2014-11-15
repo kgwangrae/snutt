@@ -1049,7 +1049,7 @@ $(function(){
     else {
       export_timetable();
     }
-    apiClient.post('export_timetable', {
+    piClient.get('export_timetable', {
       year:current_year,
       semester:current_semester,
       my_lectures: my_lectures

@@ -95,6 +95,7 @@ NaiveLectureModel.prototype = {
                 semester: semester,
                 lectures: lectures
             });
+
         fs.writeFile(filepath, content, function (err) {
             return callback(err, id);
         });

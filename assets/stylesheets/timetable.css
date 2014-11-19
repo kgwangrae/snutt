@@ -89,7 +89,7 @@ button.btn.well {padding:6px 12px;margin:0px;border:1px solid #aaa;}
 #timetable .time {font-size:0.8em;}
 .timecell-container {position:absolute;z-index:100;}
 .timecell {position:relative;border-style:none;border-radius:8px;text-align:center;cursor:pointer;}
-.timecellinfo-containter{position:relative;top:50%;-webkit-transfrom:translateY(-50%); -ms-transfrom: translateY(-50%); transform:translateY(-50%);}
+.timecellinfo-containter{position:relative;top:50%;-webkit-transform:translateY(-50%); -ms-transform: translateY(-50%); transform:translateY(-50%);}
 #customcell_container {position:absolute;z-index:101;pointer-events:none;}
 #customcell {font-size:11px;position:relative;border:2px dotted #f00;text-align:center;z-index:200;pointer-events:none;}
 

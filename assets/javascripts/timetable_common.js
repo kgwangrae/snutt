@@ -157,10 +157,10 @@ function change_semester(year, semester)
 function generate_custom_cell(lecture)
 {
   var unitcell_width = $('#timetable tbody td').width()+2;
-  var unitcell_height = $('#timetable tbody td').height()+2;
+  var unitcell_height = $('#timetable tbody td').height()+0.75;
   var leftcell_width = $('#timetable tbody th').width()+2;
   var topcell_height = $('#timetable thead th').height()+2;
-  var border_weight = 3;
+  var border_weight = 2;
   //시간이 유효하지 않으면 스킵
   if (wday_to_num(lecture.class_time.charAt(0)) == -1) {
 		console.log("User tried to generate timetables with invalid class time");
@@ -171,16 +171,18 @@ function generate_custom_cell(lecture)
   var wday = wday_to_num(class_time.charAt(0));
   var start_time = parseFloat(class_time.replace(/[()]/g,"").split('-')[0].slice(1))*2;
   var duration = parseFloat(class_time.replace(/[()]/g,"").split('-')[1])*2;
+  var end_time = start_time + duration;
   //기준 셀
   var criteria_cell = $($('#timetable td')[6*start_time+wday]);
   var criteria_cell2;
+  var criteria_cell3 = $($('#timetable td')[6*(start_time+duration-1)+wday]);
   if (wday == 5 || wday == 4) criteria_cell2 = criteria_cell.prev();
   else criteria_cell2 = criteria_cell.next();
 
-  var width = Math.abs(criteria_cell2.position().left - criteria_cell.position().left) - 2*border_weight;
-  var height = (unitcell_height)*duration - border_weight*2;
-  var left = criteria_cell.position().left - criteria_cell.parent().position().left;
-  var top = criteria_cell.position().top - criteria_cell.parent().parent().position().top + topcell_height;
+  var width = Math.abs(criteria_cell2.position().left - criteria_cell.position().left) -  border_weight;
+  var height = criteria_cell3.position().top - criteria_cell.position().top+criteria_cell3.innerHeight() - 0*border_weight;
+  var left = criteria_cell.position().left - criteria_cell.parent().position().left - border_weight/2;
+  var top = criteria_cell.position().top - criteria_cell.parent().parent().position().top + topcell_height - border_weight/2;
 
   //create container
   var customcell = $('#customcell').css('left', left).css('top', top).width(width).height(height).show();
@@ -221,7 +223,15 @@ function generate_random_color(color)
   }
   return result;
 }
-
+function generate_next_color(color)
+{
+  var i;
+  for(i=0;i<colors.length;i++)
+  {
+    if(color == colors[i])
+	return colors[(i+1)%colors.length];
+  }
+}
 function my_course_tooltip_message(message)
 {
   $('.my-course-tooltip .tooltip-inner').text(message);
@@ -306,7 +316,7 @@ function generate_timecell(lectures)
   var unitcell_height = $('#timetable_container td.mon').outerHeight();
   var leftcell_width = $('#timetable tbody th').outerWidth();
   var topcell_height = $('#timetable thead th').outerHeight();
-  var border_weight = 3;
+  var border_weight = 1;
   for (var a=0;a<lectures.length;a++){
     var lecture = lectures[a];
     //시간이 유효하지 않으면 스킵
@@ -323,11 +333,12 @@ function generate_timecell(lectures)
       //기준 셀
       var criteria_cell = $($('#timetable td')[6*start_time+wday]);
       var criteria_cell2;
+      var criteria_cell3 = $($('#timetable td')[6*(start_time+duration-1)+wday]);
       if (wday == 5 || wday == 4) criteria_cell2 = criteria_cell.prev();
       else criteria_cell2 = criteria_cell.next();
 
-      var width = unitcell_width;//Math.abs(criteria_cell2.position().left - criteria_cell.position().left) - 2*border_weight;
-      var height = (unitcell_height)*duration;// - border_weight*2;
+      var width = Math.abs(criteria_cell2.position().left - criteria_cell.position().left) + border_weight;
+      var height = criteria_cell3.position().top - criteria_cell.position().top+criteria_cell3.innerHeight() +2* border_weight;
       var left = criteria_cell.position().left - criteria_cell.parent().position().left;
       var top = criteria_cell.position().top - criteria_cell.parent().parent().position().top + topcell_height;
 
@@ -357,7 +368,7 @@ function generate_timecell(lectures)
     var ele = $(this);
     var lecture = get_my_lecture_by_course_number(ele.attr('course-number'), ele.attr('lecture-number'));
     if (lecture && !ele.hasClass('gray-cell')){ //회색이 아닐때만 바꿈
-      lecture.color = generate_random_color(lecture.color);
+      lecture.color = generate_next_color(lecture.color);
       for_equal_lecture_timecells(ele, function(sbl) {
         sbl.css('background-color', lecture.color.plane).css('color', lecture.color.border);
       })
@@ -376,7 +387,8 @@ function generate_timecell(lectures)
       function() { //mouse-in
         for_equal_lecture_timecells($(this), function(sbl) {
           sbl.append('<div class="close del_hover" style="position:absolute; top:1px; right:2px;">×</span>');
-          sbl.find(".del_hover").click(function() {
+          sbl.find(".del_hover").click(function(event) {
+            event.stopPropagation();
             timecell_delete_handler(sbl);
           })
         })

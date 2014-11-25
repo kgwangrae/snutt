@@ -375,9 +375,8 @@ function generate_timecell(lectures)
     }
   });i
   //timecell dblclick event bind
-  $('.timecell').dblclick(function(){
-    timecell_delete_handler($(this));
-  }).addSwipeEvents().bind('doubletap', function(evt, touch) {
+  $('.timecell').addSwipeEvents().bind('doubletap', function(event, touch) {
+    event.stopPropagation();
     timecell_delete_handler($(this));
   })
 

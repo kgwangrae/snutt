@@ -6,14 +6,14 @@ var line_horizontal = [];
 var line_width = 3; //weight of line
 var export_image_url;
 var bg_image;
-line_vertical = [0, 31, 50, 69, 88, 107, 126, 145, 164, 183, 202, 221, 240, 259, 278, 297, 316, 335, 354, 373, 392, 411, 430, 449, 468, 487, 506, 525, 544, 563];
-line_horizontal = [0, 81, 189, 297, 405, 513, 621, 729];
+line_vertical = [0, 33, 53, 75, 95, 117, 138, 159, 180, 201, 221, 243, 263, 285, 305, 327, 348, 368, 390, 410, 431, 452, 473, 494, 515, 536, 557, 579, 600, 621];
+line_horizontal = [0, 74, 182, 290, 397, 505, 613, 721];
 
 $(function(){
 	//png export를 지원하는 웹브라우저만
 	if (supportsToDataURL()){
 		bg_image = new Image();
-		bg_image.src = '/assets/images/tt_background.png';
+		bg_image.src = '/assets/images/tt_background2.png';
 
 		bg_image.onload = function(){
 			$('#export_image_wrapper').width(bg_image.width);
@@ -86,6 +86,32 @@ function get_y(class_time)
 	return {y:line_vertical[start_time+1]+(line_width/2)+1, length:line_vertical[end_time+1]-line_vertical[start_time+1]-line_width};
 }
 
+function roundRect(ctx, x, y, width, height, radius, fill, stroke) {
+  if (typeof stroke == "undefined" ) {
+    stroke = true;
+  }
+  if (typeof radius === "undefined") {
+    radius = 5;
+  }
+  ctx.beginPath();
+  ctx.moveTo(x + radius, y);
+  ctx.lineTo(x + width - radius, y);
+  ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+  ctx.lineTo(x + width, y + height - radius);
+  ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+  ctx.lineTo(x + radius, y + height);
+  ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+  ctx.lineTo(x, y + radius);
+  ctx.quadraticCurveTo(x, y, x + radius, y);
+  ctx.closePath();
+  if (stroke) {
+    ctx.stroke();
+  }
+  if (fill) {
+    ctx.fill();
+  }        
+}
+
 function draw_lecture(lecture)
 {
 	var class_times = lecture.class_time.split('/');
@@ -94,16 +120,21 @@ function draw_lecture(lecture)
 		var class_time = class_times[i];
 		var x = get_x(class_time);
 		var y = get_y(class_time);
-		set_rect_style(lecture.color);
-		ctx.fillRect(x.x,y.y,x.length,y.length);
+                var rect_style = {plane:lecture.color.plane, border:lecture.color.plane};
+		set_rect_style(rect_style);
+		roundRect(ctx,x.x,y.y,x.length,y.length,5,true,true);
+                /*
+                ctx.fillRect(x.x,y.y,x.length,y.length);
 		ctx.strokeRect(x.x,y.y,x.length,y.length);  
-
+                */
 		//text
 		var line_height = 14;
 		ctx.textAlign = "center";
-		ctx.font = "9pt Gulim"
-		ctx.fillStyle = "#000";
-		var location_y = wrapText(ctx, lecture.course_title, x.x+2 + x.length/2, y.y+line_height, x.length, line_height);
+		ctx.font = "9pt Nanum Gothic";
+
+                console.log(lecture.color);
+		ctx.fillStyle = lecture.color.border;
+		var location_y = wrapText(ctx, lecture.course_title, x.x+2 + x.length/2, y.y+y.length/2-line_height/4, x.length, line_height);
 		wrapText(ctx, locations[i], x.x+2 + x.length/2, location_y+line_height, x.length, line_height);
 	}
 }

@@ -171,7 +171,8 @@ open("#{txt_filename}.tmp", "w") do |file|
 		instructor = m[i,14]
 		quota = m[i,15].to_i
 		enrollment = m[i,16].to_i
-		remark = m[i,17].gsub(/\n/, " ")
+		remark = m[i,17].gsub(/
+\n/, " ")
 		category = category_map["#{course_number};#{lecture_number}"]
 
 =begin

@@ -1,12 +1,31 @@
 
 @import url(http://fonts.googleapis.com/earlyaccess/nanumgothic.css);
-* {font-family:'Nanum Gothic', serif,verdana; font-weight:normal;}
+* {
+	font-family:'Nanum Gothic', serif,verdana; 
+	font-weight:normal;
+	box-shadow:none !important;
+	text-shadow:none !important
+}
 body {padding-top:56px;}
 
 .selected-semester-li {background-color:#ccf;}
 
 #facebook_like_li {line-height:2.5;}
-#brand_button {font-weight:bold;font-size:24px;color:#153888;}
+.pluginButton {
+	background: #4c69ba;
+	border: none !important;
+	font-family:'Nanum Gothic'
+}
+#brand_button {font-weight:900;font-size:22px;color:#008800;}
+
+.ui-dialog-titlebar {
+	background:#eeffee !important;
+	border:none !important;
+}
+
+.navbar-default .navbar-nav>.active>a {
+	background:#e0ffe8;
+}
 
 .label{color:#555;}
 .label:hover {color:#000;}
@@ -18,8 +37,7 @@ body {padding-top:56px;}
 
 .label-info {background-color:#aaddff;}
 
-
-#search_form {padding:3px;margin-bottom:10px;}
+#search_form {padding:3px;margin-bottom:10px;background:#ffffff !important}
 #search_cond_table {width:100%;display:table;}
 
 #search_btns {display:table-row;}
@@ -32,7 +50,7 @@ body {padding-top:56px;}
 #search_input_container {padding-right:6px;}
 input#search_query_text {width:100%;padding:3px 5px;vertical-align:middle;}
 #search_button_container {width:52px;margin-bottom:2px;}
-button.btn.well {padding:6px 12px;margin:0px;border:1px solid #aaa;}
+button.btn.well {padding:6px 12px;margin:0px;border:1px solid #aaa;background:none}
 
 .search-result-table th {text-align:center;}
 .search-result-table td {vertical-align:middle;font-size:9pt;}
@@ -49,28 +67,7 @@ button.btn.well {padding:6px 12px;margin:0px;border:1px solid #aaa;}
 .search-result-table .location {width:5%;text-align:center;}
 .search-result-table .remark {width:15%;text-align:center;}
 .search-result-table tbody tr {cursor:pointer;}
-#lectures_content {min-height:50px;max-height:105px;overflow:scroll;overflow-x:hidden;border:1px solid #ccc;}
-@media (min-height:600px) {
-	#lectures_content {max-height: 130px}
-}
-@media (min-height:702px) {
-	#lectures_content {max-height: 145px}
-}
-@media (min-height:804px) {
-	#lectures_content {max-height: 160px}
-}
-@media (min-height:906px) {
-	#lectures_content {max-height: 180px}
-}
-@media (min-height:1008px) {
-	#lectures_content {max-height: 200px}
-}
-@media (min-height:1110px) {
-	#lectures_content {max-height: 220px}
-}
-@media (min-height:1212px) {
-	#lectures_content {max-height: 240px}
-}
+#lectures_content {min-height:50px;height:300px;overflow:scroll;overflow-x:hidden;border:1px solid #ccc;}
 #timetable_container {margin-top:10px;}
 
 
@@ -128,12 +125,22 @@ button.btn.well {padding:6px 12px;margin:0px;border:1px solid #aaa;}
 .fb-comments, .fb-comments span, .fb-comments.fb_iframe_widget span iframe {width: 100% !important;}
 .fb-comments, .fb-comments.fb_iframe_widget iframe[style], .fb-comments.fb_iframe_widget span[style] {width: 100% !important;}
 
-#course_detail_wrapper {width:100%;margin-top:5px;border-radius:4px;border:1px solid #aaa;background-color:#efefff;display:table;}
+#course_detail_wrapper {width:100%;margin-top:5px;border-radius:4px;background-color:#ddffdd;display:table;}
 #course_detail_wrapper #course_detail_title {float:none;font-size:15px;font-weight:normal;margin:0px;padding:10px}
 #course_detail_wrapper .remark {float:none;font-size:13px;font-weight:400;margin:0px;padding:10px}
 
 #course_detail_info {width:100%;}
-#course_detail_plan_button {width:120px;margin:10px}
+#course_detail_plan_button {width:130px;margin:15px;background-color:#aaffaa;border:solid 1px #99dd99;font-size:11pt}
+
+#bar-top { 
+	background: #f0fff0 !important;
+	border-bottom: solid 1px #e1efe1;
+}
+
+#export_save_button, #publish_facebook_toggle_button {
+	background: #d13e4a;
+	border: none;
+}
 
 .vcenter {
 	display:table-cell;

@@ -9,9 +9,9 @@
 		"querystring" : "",
     "node-jquery-deparam": "",
     "mkdirp": "",
-		"winston": "",
-		"mongodb": "",
-		"mongoose": "",
-		"grunt": ""
+    "winston": "",
+    "mongodb": "",
+    "mongoose": "",
+    "grunt": ""
   }
 }

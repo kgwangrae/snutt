@@ -26,20 +26,16 @@ function NaiveLectureModel() {
 if (!(global.hasOwnProperty('NaiveLectureModel_userdata_cnt'))) {
     global.NaiveLectureModel_userdata_cnt = _.max([
         _.max(
-			_.reject(
-				_.map(
-					fs.readdirSync(config.snutt.USER_TIMETABLE_PATH),
-                    function (num) { return parseInt(num); }
-					),
-                isNaN
-				)
-			),
+          _.reject(
+            _.map(
+              fs.readdirSync(config.snutt.USER_TIMETABLE_PATH),
+              function (num) { return parseInt(num); }
+              ),
+            isNaN
+            )
+          ),
         0]);
-	console.log("User data cnt INIT");
-    console.log(_.map(fs.readdirSync(config.snutt.USER_TIMETABLE_PATH),
-                             function (num) { return parseInt(num); }));
 }
-
 
 /* DB initialization for logging users' search query requests 
  * TODO make the db address shared across all modules */
@@ -47,17 +43,17 @@ if (!(global.hasOwnProperty('NaiveLectureModel_userdata_cnt'))) {
 mongoose.connect('mongodb://localhost/snuttdb');
 var db = mongoose.connection;
 db.on ('error', function () { 
-	console.error.bind(console, 'connection error! ');
-	throw "Failed to open DB";
+  console.error.bind(console, 'connection error! ');
+  throw "Failed to open DB";
 });
 
 var queryLogSchema = mongoose.Schema ({
-	lastQueryTime: { type: Date, default: Date.now },
-	count: { type: Number, min: 1, default: 1 },
-	year: { type: Number, min: 2000, max: 2999 },
-	semester: { type: String },
-	type: { type: String },
-	body: String
+  lastQueryTime: { type: Date, default: Date.now },
+  count: { type: Number, min: 1, default: 1 },
+  year: { type: Number, min: 2000, max: 2999 },
+  semester: { type: String },
+  type: { type: String },
+  body: String
 });
 var QueryLog = mongoose.model('QueryLog', queryLogSchema); 
 
@@ -72,8 +68,8 @@ NaiveLectureModel.prototype = {
         this._load_data(2013, 'W');
         this._load_data(2014, '1');
         this._load_data(2014, 'S');
-		this._load_data(2014, '2');
-		this._load_data(2014, 'W');
+        this._load_data(2014, '2');
+        this._load_data(2014, 'W');
         this._load_data(2015, '1');
     },
     save: function (lectures, year, semester, callback) {
@@ -96,7 +92,7 @@ NaiveLectureModel.prototype = {
                 semester: semester,
                 lectures: lectures
             });
-
+        console.log("Writing timetable to disk..");
         fs.writeFile(filepath, content, function (err) {
             return callback(err, id);
         });
@@ -228,37 +224,37 @@ NaiveLectureModel.prototype = {
         if (options.type === "course_title") {
             var title = safeString(options.query_text).trim();
 
-			//Log it!
-			QueryLog.findOne ({
-				year: options.year,
-				semester: options.semester,
-				body: title
-			}, 
-			function (err, prevQuery) {
-				if (err) console.error(err);
-				if (prevQuery == undefined) {
-					var currQuery = new QueryLog ({
-						year: options.year,
-						semester: options.semester,
-						type: options.type,
-						body: title
-					});
-					currQuery.save(function (err) {
-						if (err) return console.error(err);
-						//console.log('new log: '+currQuery.body);
-					});
-				}
-				else { 
-					prevQuery.count++;
-					prevQuery.lastQueryTime = Date.now();
-					prevQuery.save(function (err) {
-						if (err) return console.error(err);
-						//console.log(prevQuery.body+' is hit '+prevQuery.count+' times!');
-					});
-				}
-			}
-			);
-													
+            //Log it!
+            QueryLog.findOne ({
+              year: options.year,
+              semester: options.semester,
+              body: title
+            }, 
+            function (err, prevQuery) {
+              if (err) console.error(err);
+              if (prevQuery == undefined) {
+                var currQuery = new QueryLog ({
+                  year: options.year,
+                  semester: options.semester,
+                  type: options.type,
+                  body: title
+                });
+                currQuery.save(function (err) {
+                  if (err) return console.error(err);
+                  //console.log('new log: '+currQuery.body);
+                });
+              }
+              else { 
+                prevQuery.count++;
+                prevQuery.lastQueryTime = Date.now();
+                prevQuery.save(function (err) {
+                  if (err) return console.error(err);
+                  //console.log(prevQuery.body+' is hit '+prevQuery.count+' times!');
+                });
+              }
+            }
+            );
+                          
             skip_count = 0;
             for (i = 0; i < lectures.length; i++) {
                 if (increasingOrderInclusion(lectures[i].course_title, title) && filter_check(lectures[i], filter)){

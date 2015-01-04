@@ -19,6 +19,7 @@ function functor(config, target, lectureModel) {
             var lectures = params.my_lectures;
             var year = params.year;
             var semester = params.semester;
+            console.log("Trying to export timetable"+semester);
             lectureModel.save(lectures, year, semester, function(err, id) {
                 if (err) {
                     renderer.json({error: err});

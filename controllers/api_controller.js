@@ -27,6 +27,8 @@ function functor(config, target, lectureModel) {
                 } else {
                     renderer.json({filename: id});
                 }
+                console.log("callback function finished at");
+                console.log(new Date().getTime());
             });
         },
         publishToFacebook: function(options, renderer, request) {

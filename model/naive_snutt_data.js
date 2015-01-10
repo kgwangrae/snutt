@@ -60,8 +60,6 @@ var QueryLog = mongoose.model('QueryLog', queryLogSchema);
 
 NaiveLectureModel.prototype = {
     init: function () {
-        this._load_data(2012, '2');
-        this._load_data(2012, 'W');
         this._load_data(2013, '1');
         this._load_data(2013, 'S');
         this._load_data(2013, '2');

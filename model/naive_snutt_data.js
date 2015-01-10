@@ -92,9 +92,14 @@ NaiveLectureModel.prototype = {
                 semester: semester,
                 lectures: lectures
             });
-        console.log("Writing timetable to disk..");
         fs.writeFile(filepath, content, function (err) {
-            return callback(err, id);
+          if (err) {
+            console.log("Export failed due to the reason below..");
+            console.log(err);
+            global.NaiveLectureModel_userdata_cnt -= 1;
+          
+          }
+          return callback(err, id);
         });
     },
     load: function (id, callback) {

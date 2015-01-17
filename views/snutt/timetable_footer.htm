@@ -3,24 +3,23 @@
 	</head>
 	<body>
 		<!-- facebook test -->
-        <script>
-	  window.fbAsyncInit = function() {
-	    FB.init({
-	      appId      : '903282846383973',
-	      xfbml      : true,
-	      version    : 'v2.2'
-	    });
-	  };
-
-	  (function(d, s, id){
-	     var js, fjs = d.getElementsByTagName(s)[0];
-	     if (d.getElementById(id)) {return;}
-	     js = d.createElement(s); js.id = id;
-	     js.src = "//connect.facebook.net/en_US/sdk.js";
-	     fjs.parentNode.insertBefore(js, fjs);
-	   }(document, 'script', 'facebook-jssdk'));
-	</script>
-		<div class="navbar navbar-default navbar-fixed-top">
+    <script>
+      window.fbAsyncInit = function() {
+        FB.init({
+      appId      : '903282846383973',
+      xfbml      : true,
+      version    : 'v2.2'
+      });
+      };
+      (function(d, s, id){
+       var js, fjs = d.getElementsByTagName(s)[0];
+       if (d.getElementById(id)) {return;}
+       js = d.createElement(s); js.id = id;
+       js.src = "//connect.facebook.net/en_US/sdk.js";
+       fjs.parentNode.insertBefore(js, fjs);
+       }(document, 'script', 'facebook-jssdk'));
+    </script>
+		<div id="bar-top" class="navbar navbar-default navbar-fixed-top">
 			<div class="container">
 				<div class="navbar-header">
 					<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -46,8 +45,8 @@
 					</ul>
 					<ul class="nav navbar-nav navbar-right hidden-xs">
 						<li id="facebook_like_li">
-               			                <div class="fb-login-button" data-max-rows="1" data-size="medium" data-show-faces="false" data-scope="email"  data-auto-logout-link="true"></div>
-<!--
+            <div class="fb-login-button" data-max-rows="1" data-size="medium" data-show-faces="false" data-scope="email"  data-auto-logout-link="true"></div>
+            <!--
 <div style="vertical-align:center;"class="fb-like" data-href="http://snutt.kr" data-send="false" data-layout="button_count" data-width="100" data-show-faces="false" data-colorscheme="dark"></div>
 -->						</li>
 					</ul>
@@ -184,7 +183,7 @@
 						<h3 id="course_detail_title" class="course_detail_toggle"></h3>
 						<h5 class="remark"></h5>
 					</div>
-					<button class="vcenter btn btn-warning" id="course_detail_plan_button">강의계획서</button>
+					<button class="vcenter btn" id="course_detail_plan_button">강의계획서</button>
 				</div>
 				<div id="timetable_container">
 					<div id="timecells_container">
@@ -386,19 +385,22 @@
 			</div>
 
 			<div id="footer">
-				<h6>
-				Initially Developed by <a href="http://www.facebook.com/jongmin.rok" target="_blank">Jongmin</a> in <a href="http://www.wafflestudio.com" target="_blank">Wafflestudio</a>
-				</h6>
-				<h6>
-				Currently Maintained and Improved by <a href="https://www.facebook.com/wafflestudio" target="_blank">Wafflestudio</a> SNUTT Team members.
-				</h6>
-				<h6>
-				Source code and contributor information are available on <a href="https://github.com/wafflestudio/snutt" target="_blank">this GitHub repository</a>.
-				</h6>
-				<p style="display:none;">
-				최근 수강편람 업데이트 : <span id="data_updated_at"></span>
-				</p>
-			</div>
+        <h6>
+          <a href="https://www.facebook.com/wafflestudio" target="_blank">
+            <img id="waffle_logo" src="/assets/images/waffle_logo.png" alt="와플스튜디오 로고, WaffleStudio Logo"/> <br/>
+          </a>
+          Initially Developed by <a href="http://www.facebook.com/jongmin.rok" target="_blank">Jongmin Lee</a> in <a href="http://www.wafflestudio.com" target="_blank">Wafflestudio</a>
+        </h6>
+        <h6>
+          Currently Managed by <a href="https://www.facebook.com/wafflestudio" target="_blank">Wafflestudio</a> SNUTT Team members.
+        </h6>
+        <h6>
+          Source code and contributor information are available on <a href="https://github.com/wafflestudio/snutt" target="_blank">this SNUTT GitHub repository</a>.
+        </h6>
+        <p style="display:none;">
+        최근 수강편람 업데이트 : <span id="data_updated_at"></span>
+        </p>
+      </div>
 
 		</div> <!-- /container -->
 		<div id="init_loading_modal">

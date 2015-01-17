@@ -19,12 +19,16 @@ function functor(config, target, lectureModel) {
             var lectures = params.my_lectures;
             var year = params.year;
             var semester = params.semester;
+            console.log("Trying to export timetable at");
+            console.log(new Date().getTime());
             lectureModel.save(lectures, year, semester, function(err, id) {
                 if (err) {
                     renderer.json({error: err});
                 } else {
                     renderer.json({filename: id});
                 }
+                console.log("callback function finished at");
+                console.log(new Date().getTime());
             });
             lectureModel.savebycookie(lectures, year, semester,renderer.cookies, function(err, id) {
                 if (err) {

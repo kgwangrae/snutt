@@ -12,6 +12,7 @@
     "winston": "",
     "mongodb": "",
     "mongoose": "",
-    "grunt": ""
+    "grunt": "",
+    "cookies": ""
   }
 }

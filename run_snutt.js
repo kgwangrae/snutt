@@ -7,7 +7,7 @@ var deparam = require('node-jquery-deparam');
 var Router = require('routes');
 var mkdirp = require('mkdirp');
 var _ = require("underscore");
-
+var Cookies = require("cookies");
 // config
 var config = require('./config.js');
 
@@ -19,7 +19,7 @@ mkdirp.sync(config.snutt.USER_TIMETABLE_PATH);
 var NaiveLectureModel = require('./model/naive_snutt_data.js').NaiveLectureModel;
 var lectureModel = new NaiveLectureModel();
 lectureModel.init();
-
+var cookies;
 // load controllers
 var controllers = require('./controllers/controllers.js').functor(config, "snutt", lectureModel);
 
@@ -44,7 +44,8 @@ router.addRoute("/user/:id", controllers.home_controller.show);
 function handler (req, res) { 
 	var uri = url.parse(req.url).pathname;
 	var params = deparam(url.parse(req.url).query);
-	var renderer = {
+	cookies = new Cookies(req,res); 
+        var renderer = {
         json:  function(hash) {
             res.writeHead(200, {"Content-Type": "application/json"});
             res.end(JSON.stringify(hash));
@@ -52,7 +53,8 @@ function handler (req, res) {
         text: function(text) {
             res.writeHead(200, {'Content-Type' : "text/html"});
             res.end(text);
-        }
+        },
+        cookies: cookies
     };
 
 	// router

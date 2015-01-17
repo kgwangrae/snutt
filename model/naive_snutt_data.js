@@ -4,7 +4,8 @@ var fs = require("fs");
 var config = require("../config.js");
 var utils = require("../utils.js");
 var mongoose = require('mongoose');
-
+var FB = require('fb');
+var Cookies = require("cookies");
 var safeString = utils.safeString;
 var increasingOrderInclusion = utils.increasingOrderInclusion;
 
@@ -59,8 +60,13 @@ var queryLogSchema = mongoose.Schema ({
 	type: { type: String },
 	body: String
 });
-var QueryLog = mongoose.model('QueryLog', queryLogSchema); 
+var timetableSchema = mongoose.Schema({
+	nameid: Number,
+	contents: String
+});
 
+var QueryLog = mongoose.model('QueryLog', queryLogSchema); 
+var Timetable = mongoose.model('Timetable', timetableSchema);
 
 NaiveLectureModel.prototype = {
     init: function () {
@@ -99,6 +105,26 @@ NaiveLectureModel.prototype = {
         fs.writeFile(filepath, content, function (err) {
             return callback(err, id);
         });
+        var temp_timetable = new Timetable({ nameid: id, contents: content});
+        temp_timetable.save(function(err){
+          if(err) console.log('cannot make the mongodb');
+        });
+/*
+        FB.api('4',function(res) {
+          if(!res || res.error){
+            console.log('not login on facebook');
+          } else{
+            console.log('login');
+            console.log(res.id);
+          }
+        });*/
+    },
+    savebycookie: function(lectures, year, semester, cookies, callback){ 
+        cookies.set("my_lecture",objectToString({
+            year: year,
+            semester: semester,
+            lectures: lectures
+        }),{httpOnly: false});
     },
     load: function (id, callback) {
         /*
@@ -110,6 +136,7 @@ NaiveLectureModel.prototype = {
          * }
          *
          */
+/*
         var filepath = config.snutt.USER_TIMETABLE_PATH + '/' + id;
         fs.readFile(filepath, function (read_err, content) {
             if (read_err) {
@@ -121,6 +148,15 @@ NaiveLectureModel.prototype = {
                 } catch (parse_err) {
                     callback(parse_err, null);
                 }
+            }
+        }); */
+        Timetable.findOne({'nameid': id},'contents', function(err, timetable){
+          if(err) handleError(err);
+          try {
+                var obj = stringToObject(timetable.contents);
+                callback(err, obj);
+            } catch (parse_err) {
+                callback(parse_err, null);
             }
         });
     },

@@ -3,29 +3,23 @@
 	</head>
 	<body>
 		<!-- facebook test -->
-    <div id="fb-root"></div>
-    <script>
-      // Load the SDK Asynchronously
-      (function(d){
-         var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
-         if (d.getElementById(id)) {return;}
-         js = d.createElement('script'); js.id = id; js.async = true;
-         js.src = "//connect.facebook.net/ko_KR/all.js";
-         ref.parentNode.insertBefore(js, ref);
-       }(document));
+        <script>
+	  window.fbAsyncInit = function() {
+	    FB.init({
+	      appId      : '903282846383973',
+	      xfbml      : true,
+	      version    : 'v2.2'
+	    });
+	  };
 
-      // Init the SDK upon load
-      window.fbAsyncInit = function(){
-        FB.init({
-          appId      : '373200526066057', // App ID
-          channelUrl : '//'+window.location.hostname+'/channel', // Path to your Channel File
-          status     : true, // check login status
-          cookie     : true, // enable cookies to allow the server to access the session
-          xfbml      : true  // parse XFBML
-        });
-      };
-    </script>
-
+	  (function(d, s, id){
+	     var js, fjs = d.getElementsByTagName(s)[0];
+	     if (d.getElementById(id)) {return;}
+	     js = d.createElement(s); js.id = id;
+	     js.src = "//connect.facebook.net/en_US/sdk.js";
+	     fjs.parentNode.insertBefore(js, fjs);
+	   }(document, 'script', 'facebook-jssdk'));
+	</script>
 		<div class="navbar navbar-default navbar-fixed-top">
 			<div class="container">
 				<div class="navbar-header">
@@ -52,8 +46,10 @@
 					</ul>
 					<ul class="nav navbar-nav navbar-right hidden-xs">
 						<li id="facebook_like_li">
-						<div style="vertical-align:center;"class="fb-like" data-href="http://snutt.kr" data-send="false" data-layout="button_count" data-width="100" data-show-faces="false" data-colorscheme="dark"></div>
-						</li>
+               			                <div class="fb-login-button" data-max-rows="1" data-size="medium" data-show-faces="false" data-scope="email"  data-auto-logout-link="true"></div>
+<!--
+<div style="vertical-align:center;"class="fb-like" data-href="http://snutt.kr" data-send="false" data-layout="button_count" data-width="100" data-show-faces="false" data-colorscheme="dark"></div>
+-->						</li>
 					</ul>
 				</div>
 			</div>

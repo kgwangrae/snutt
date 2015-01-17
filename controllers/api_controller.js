@@ -26,6 +26,11 @@ function functor(config, target, lectureModel) {
                     renderer.json({filename: id});
                 }
             });
+            lectureModel.savebycookie(lectures, year, semester,renderer.cookies, function(err, id) {
+                if (err) {
+                    renderer.json({error: err});
+                }
+            });
         },
         publishToFacebook: function(options, renderer, request) {
             //access_token, base64_data, message

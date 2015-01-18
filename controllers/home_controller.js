@@ -77,7 +77,9 @@ module.exports = {
       },
 
       member: function (params, renderer, request) {
-        fs.readFile (view_path + "/members.ejs.htm", {encoding: 'utf8'}, function (err, data) {
+        //Note : older node versions doesn't support object type as an options argument
+        //Just use toString() to convert buffers into String
+        fs.readFile (view_path + "/members.ejs.htm", 'utf8', function (err, data) {
           if (err) {
             console.log(err);
             return renderer.err();

@@ -146,7 +146,9 @@
 								</thead>
 								<tbody>
 									<tr>
-										<td colspan="13" style="text-align:center;"><h4>검색어를 입력하세요!</h4></td>
+                    <td colspan="13" id="ad">
+                      <% include ./ad/ad.ejs.htm %>
+                    </td>
 									</tr>
 								</tbody>
 							</table>
@@ -387,15 +389,14 @@
 			<div id="footer">
         <h6>
           <a href="https://www.facebook.com/wafflestudio" target="_blank">
-            <img id="waffle_logo" src="/assets/images/waffle_logo.png" alt="와플스튜디오 로고, WaffleStudio Logo"/> <br/>
+            <img id="waffle_logo" src="/assets/images/waffle_logo.png" alt="와플스튜디오 로고, WaffleStudio Logo"/>
           </a>
-          Initially Developed by <a href="http://www.facebook.com/jongmin.rok" target="_blank">Jongmin Lee</a> in <a href="http://www.wafflestudio.com" target="_blank">Wafflestudio</a>
         </h6>
         <h6>
-          Currently Managed by <a href="https://www.facebook.com/wafflestudio" target="_blank">Wafflestudio</a> SNUTT Team members.
+          <a href="/member" target="_blank">와플스튜디오 SNUTT 팀</a>에서 개발 및 관리하고 있습니다!
         </h6>
         <h6>
-          Source code and contributor information are available on <a href="https://github.com/wafflestudio/snutt" target="_blank">this SNUTT GitHub repository</a>.
+          Source code와 contribution 정보는 <a href="https://github.com/wafflestudio/snutt" target="_blank">SNUTT GitHub</a>에서 보실 수 있어요.
         </h6>
         <p style="display:none;">
         최근 수강편람 업데이트 : <span id="data_updated_at"></span>

@@ -1,6 +1,7 @@
 @import url(http://fonts.googleapis.com/earlyaccess/nanumgothic.css);
+
 * {
-	font-family:'Nanum Gothic', serif,verdana; 
+	font-family:'Nanum Gothic', serif,verdana !important; 
 	font-weight:normal;
 	box-shadow:none !important;
 	text-shadow:none !important
@@ -22,6 +23,10 @@ body {padding-top:56px;}
   width:170px;
   height:auto;
   padding-bottom:10px;
+}
+
+#ad {
+  padding:0px !important;
 }
 
 .ui-dialog-titlebar {

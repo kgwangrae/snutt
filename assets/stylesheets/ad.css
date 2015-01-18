@@ -1,0 +1,22 @@
+div#ad_wrapper {
+  display: table;
+  width: 100%;
+  text-align: center;
+}
+
+span#ad_text {
+  display: table-cell;
+  font-size: 15px;
+  padding: 15px;
+  vertical-align: middle;
+}
+
+@media (min-width:768px) {
+  span#ad_text {
+    font-size: 18px;
+  }
+}
+
+img {
+  vertical-align: middle;
+}

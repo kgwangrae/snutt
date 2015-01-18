@@ -38,6 +38,9 @@ router.addRoute("/api/export_timetable?", controllers.api_controller.exportTimet
 router.addRoute("/api/publish_to_facebook", controllers.api_controller.publishToFacebook)
 // views
 router.addRoute("/", controllers.home_controller.home);
+router.addRoute("/member", controllers.home_controller.member);
+router.addRoute("/image/:path1", controllers.home_controller.image);
+router.addRoute("/image/:path1/:path2", controllers.home_controller.image);
 router.addRoute("/user/:id", controllers.home_controller.show);
 
 //http server handler
@@ -47,14 +50,22 @@ function handler (req, res) {
 	cookies = new Cookies(req,res); 
         var renderer = {
         json:  function(hash) {
-            res.writeHead(200, {"Content-Type": "application/json"});
-            res.end(JSON.stringify(hash));
+          res.writeHead(200, {"Content-Type": "application/json"});
+          res.end(JSON.stringify(hash));
         },
         text: function(text) {
-            res.writeHead(200, {'Content-Type' : "text/html"});
-            res.end(text);
+          res.writeHead(200, {'Content-Type' : "text/html"});
+          res.end(text);
         },
-        cookies: cookies
+        image: function (img, extension) {
+          res.writeHead(200, {'Content-Type' : "image/"+extension});
+          res.end(img);
+        },
+        cookies: cookies,
+        err: function () {
+          res.writeHead(404);
+          res.end("페이지를 찾을 수 없습니다! 주소를 확인해주세요.");
+        }
     };
 
 	// router
@@ -64,7 +75,7 @@ function handler (req, res) {
 		route.fn.apply(null, [params, renderer, req]);
 	} else {
 		var filename = path.join(process.cwd(), uri);
-		fs.readFile(config.ROOT_PATH + uri, function(err, data){
+		fs.readFile(config.ROOT_PATH + uri, function(err, data) {
 			if (err){
 				res.writeHead(404);
 				return res.end("ERROR");

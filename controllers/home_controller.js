@@ -61,16 +61,16 @@ module.exports = {
             if (err) {
               console.log('Error while showing home');
               renderer.text('ERROR');
-            } 
+            }
             else {
               renderer.text(timetable_header + payload_template(loaded_info) + timetable_footer);
             }
           });
-        } 
+        }
         else if(renderer.cookies.get("my_lecture")) {
           var loaded_info = stringToObject(renderer.cookies.get("my_lecture"));
           renderer.text(timetable_header + payload_template(loaded_info) + timetable_footer);
-        } 
+        }
         else {
           renderer.text (timetable_header + timetable_footer);
         }
@@ -109,7 +109,7 @@ module.exports = {
           if (err) {
             console.log('Error while showing table');
             renderer.text('ERROR');
-          } 
+          }
           else {
             renderer.text(timetable_header + payload_template(loaded_info) + timetable_footer);
           }

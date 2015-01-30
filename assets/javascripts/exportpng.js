@@ -185,3 +185,12 @@ function supportsToDataURL()
 	var data = c.toDataURL("image/png");
 	return (data.indexOf("data:image/png") == 0);
 }
+
+function exportCal(serviceType) {
+  console.log(my_lectures);
+  params = $.param(
+    {'type': serviceType,
+    'lectures': my_lectures}
+  );
+  window.open("/calendar/export?" + params, "_blank");
+}

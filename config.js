@@ -8,6 +8,7 @@ function make_config(TARGET) {
   config.ROOT_DATA_PATH = ROOT_PATH + '/data/' + TARGET;
   config.IMAGE_PATH = ROOT_PATH + '/assets/images';
   config.USER_IMAGE_PATH = ROOT_PATH + '/userdata/' + TARGET + '/images';
+  config.USER_ICS_PATH = ROOT_PATH + '/userdata/' + TARGET + '/ics';
   config.USER_TIMETABLE_PATH = ROOT_PATH + '/userdata/' + TARGET + '/timetables';
   return config;
 }

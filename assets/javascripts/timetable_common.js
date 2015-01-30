@@ -105,12 +105,13 @@ var search_result_scroll_top = 0;
 var current_tab = "search";
 var gray_color = {border:"#ccc",plane:"#ddd"};
 var colors = [
-  {border:"#2B8728",plane:"#B6F9B2"},
-  {border:"#45B2B8",plane:"#BFF7F8"},
-  {border:"#1579C2",plane:"#94E6FE"},
-  {border:"#A337A1",plane:"#F6B5F5"},
-  {border:"#B8991B",plane:"#FFF49A"},
-  {border:"#BA313B",plane:"#FFB2BC"}
+  {border:"#2B8728",plane:"#B6F9B2"}, //green
+  {border:"#45B2B8",plane:"#BFF7F8"}, //really light blue
+  {border:"#1579C2",plane:"#94E6FE"}, //light blue
+  {border:"#A337A1",plane:"#F6B5F5"}, //purple
+  {border:"#B8991B",plane:"#FFF49A"}, //beige/yello
+  {border:"#BA313B",plane:"#FFB2BC"}, //pink/red
+  {border:"#BA6C31",plane:"#FFCFB2"}  //skin-tone/brown
 ];
 var search_type = "course_title";
 var current_year;

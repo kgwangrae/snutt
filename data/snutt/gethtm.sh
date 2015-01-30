@@ -5,9 +5,9 @@ year=$1
 semester=$2
 
 if test $# -lt 2; then
-	echo "argument error"
-	echo "ex) 2012 S"
-	exit
+  echo "argument error"
+  echo "ex) 2012 S"
+  exit
 fi
 
 #학문의기초 - ALL

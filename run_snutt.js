@@ -44,50 +44,50 @@ router.addRoute("/image/:path1/:path2", controllers.home_controller.image);
 router.addRoute("/user/:id", controllers.home_controller.show);
 
 //http server handler
-function handler (req, res) { 
-	var uri = url.parse(req.url).pathname;
-	var params = deparam(url.parse(req.url).query);
-	cookies = new Cookies(req,res); 
-        var renderer = {
-        json:  function(hash) {
-          res.writeHead(200, {"Content-Type": "application/json"});
-          res.end(JSON.stringify(hash));
-        },
-        text: function(text) {
-          res.writeHead(200, {'Content-Type' : "text/html"});
-          res.end(text);
-        },
-        image: function (img, extension) {
-          res.writeHead(200, {'Content-Type' : "image/"+extension});
-          res.end(img);
-        },
-        cookies: cookies,
-        err: function () {
-          res.writeHead(404);
-          res.end("페이지를 찾을 수 없습니다! 주소를 확인해주세요.");
-        }
-    };
+function handler (req, res) {
+  var uri = url.parse(req.url).pathname;
+  var params = deparam(url.parse(req.url).query);
+  cookies = new Cookies(req,res);
+  var renderer = {
+    json:  function(hash) {
+      res.writeHead(200, {"Content-Type": "application/json"});
+      res.end(JSON.stringify(hash));
+    },
+    text: function(text) {
+      res.writeHead(200, {'Content-Type' : "text/html"});
+      res.end(text);
+    },
+    image: function (img, extension) {
+      res.writeHead(200, {'Content-Type' : "image/"+extension});
+      res.end(img);
+    },
+    cookies: cookies,
+    err: function () {
+      res.writeHead(404);
+      res.end("페이지를 찾을 수 없습니다! 주소를 확인해주세요.");
+    }
+  };
 
-	// router
-	var route = router.match(uri);
-	if (route) {
-		_.extend(params, route.params);
-		route.fn.apply(null, [params, renderer, req]);
-	} else {
-		var filename = path.join(process.cwd(), uri);
-		fs.readFile(config.ROOT_PATH + uri, function(err, data) {
-			if (err){
-				res.writeHead(404);
-				return res.end("ERROR");
-			}
-			//write header
-			var filestat = fs.statSync(filename);
-			var filemime = mime.lookup(filename);
-			res.writeHead(200, {
-				'Content-Type' : filemime,
-				'Content-Length' : filestat.size
-			});
-			res.end(data);
-		});
-	}
+  // router
+  var route = router.match(uri);
+  if (route) {
+    _.extend(params, route.params);
+    route.fn.apply(null, [params, renderer, req]);
+  } else {
+    var filename = path.join(process.cwd(), uri);
+    fs.readFile(config.ROOT_PATH + uri, function(err, data) {
+      if (err){
+        res.writeHead(404);
+        return res.end("ERROR");
+      }
+      //write header
+      var filestat = fs.statSync(filename);
+      var filemime = mime.lookup(filename);
+      res.writeHead(200, {
+        'Content-Type' : filemime,
+        'Content-Length' : filestat.size
+      });
+      res.end(data);
+    });
+  }
 }

@@ -149,7 +149,9 @@ button.btn.well {padding:6px 12px;margin:0px;border:1px solid #aaa;background:no
 	border-bottom: solid 1px #e1efe1;
 }
 
-#export_save_button, #publish_facebook_toggle_button {
+#export_save_button, #publish_facebook_toggle_button,
+#export_ncal_button, #export_gcal_button,
+{
 	background: #d13e4a;
 	border: none;
 }

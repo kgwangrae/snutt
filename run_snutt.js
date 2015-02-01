@@ -14,6 +14,7 @@ var config = require('./config.js');
 // make directories if not exist
 mkdirp.sync(config.snutt.USER_IMAGE_PATH);
 mkdirp.sync(config.snutt.USER_TIMETABLE_PATH);
+mkdirp.sync(config.snutt.USER_ICS_PATH);
 
 // load model
 var NaiveLectureModel = require('./model/naive_snutt_data.js').NaiveLectureModel;
@@ -42,6 +43,7 @@ router.addRoute("/member", controllers.home_controller.member);
 router.addRoute("/image/:path1", controllers.home_controller.image);
 router.addRoute("/image/:path1/:path2", controllers.home_controller.image);
 router.addRoute("/user/:id", controllers.home_controller.show);
+router.addRoute("/calendar/export", controllers.home_controller.export_cal);
 
 //http server handler
 function handler (req, res) {
@@ -60,6 +62,13 @@ function handler (req, res) {
     image: function (img, extension) {
       res.writeHead(200, {'Content-Type' : "image/"+extension});
       res.end(img);
+    },
+    cal: function (ics) {
+      res.writeHead(200, 
+      {'Content-Type' : "application/octet-stream",
+        "Content-Disposition": "attachment; filename=snutt-calendar.ics"
+      });
+      res.end(ics);
     },
     cookies: cookies,
     err: function () {

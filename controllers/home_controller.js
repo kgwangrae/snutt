@@ -2,6 +2,8 @@ var fs = require("fs");
 var ejs = require("ejs");
 var utils = require("../utils.js");
 var url = require("url");
+var icalendar = require("icalendar");
+var restler = require('restler');
 
 var stringToObject = utils.stringToObject;
 var objectToString = utils.objectToString;
@@ -114,7 +116,99 @@ module.exports = {
             renderer.text(timetable_header + payload_template(loaded_info) + timetable_footer);
           }
         });
-      }
+      },
+
+      export_cal: function (params, renderer, request) {
+        // get parameters
+        var serviceType = params.type
+        var lectures = params.lectures
+
+        var ical = new icalendar.iCalendar();
+        // initialize icalendar
+        ical.addProperty('TZID', 'Asia/Seoul');
+        ical.addProperty('CALSCALE', 'GREGORIAN');
+        ical.addProperty('METHOD', 'PUBLISH');
+        var semesterEndedAt = "20150619T000000Z"
+        // end initialize
+        // constant
+        var WEEKDAY = new Array(7);
+        WEEKDAY[0]=  "SU";
+        WEEKDAY[1] = "MO";
+        WEEKDAY[2] = "TU";
+        WEEKDAY[3] = "WE";
+        WEEKDAY[4] = "TH";
+        WEEKDAY[5] = "FR";
+        WEEKDAY[6] = "SA";
+        var DAYS = {"월":2, "화":3, "수":4, "목":5, "금":6, "토":7, "일":8};
+        var NAVER_CATEGORIES = [
+          89229342,
+          89229343,
+          89229344,
+          89229345,
+          89229346,
+          89229347,
+          89229348,
+          89229349,
+          89229350,
+          89229351
+        ]
+        // end constant
+
+        for(var i = 0; i < lectures.length; i++) {
+          var lecture = lectures[i];
+          var classTimes = lecture.class_time.split("/");
+          var locations = lecture.location.split("/");
+          
+          var summary = lecture.course_title;
+          var description = "";
+          if(lecture.instructor != null && lecture.instructor != "") {
+            description = lecture.instructor
+          }
+
+          for(var j = 0; j < classTimes.length; j++) {
+            var classTime = classTimes[j]; // 시간 스트링
+            var location = locations[j]; // 장소
+            var day = DAYS[classTime[0]]; // 요일
+            var times = classTime.substring(2, classTime.length - 1);
+            var startHour = parseFloat(times.split("-")[0]) * 60;
+            var runningMinutes = parseFloat(times.split("-")[1]) * 60;
+
+            var zeroHour = new Date(2015, 3 - 1, day, 8, 00); // 0교시
+            var startedAt = new Date(zeroHour.getTime() + startHour * 60000);
+            var endedAt = new Date(startedAt.getTime() + runningMinutes * 60000);
+            var rrule = {FREQ: 'WEEKLY', UNTIL: semesterEndedAt, BYDAY: WEEKDAY[startedAt.getDay()]};
+
+            var event = ical.addComponent('VEVENT');
+
+            event.setSummary(summary);
+            event.setDescription(description);
+            event.setLocation(location);
+            event.setDate(startedAt, endedAt); // Duration in seconds
+            event.addProperty('RRULE', rrule);
+            event.addProperty('CLASS', "PRIVATE");
+            if(serviceType == "naver") {
+              event.addProperty('X-NAVER-STICKER', "001");
+              event.addProperty('X-NAVER-CATEGORY', NAVER_CATEGORIES[i % NAVER_CATEGORIES.length]);
+            }
+          }
+        }
+
+        //renderer.text(ical.toString());
+        var filename = config[target].USER_ICS_PATH + '/' + serviceType + "_" + String((new Date()).getTime()) + "_" + Math.floor(Math.random() * 10000) + ".ics";
+        fs.writeFile(filename, ical.toString(), function(err){
+          if (err) {
+            console.log(err);
+            return renderer.err();
+          }
+          fs.readFile (filename, function (err, data) {
+            if (err) {
+              console.log(err);
+              return renderer.err();
+            }
+            renderer.cal(data);
+          });
+        });
+      },
     };
   }
 };

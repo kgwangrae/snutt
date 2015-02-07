@@ -229,7 +229,7 @@ function generate_next_color(color)
   var i;
   for(i=0;i<colors.length;i++)
   {
-    if(color == colors[i])
+    if(color.plane == colors[i].plane)
 	return colors[(i+1)%colors.length];
   }
 }
@@ -1060,6 +1060,12 @@ $(function(){
     }
     else {
       export_timetable();
+    }
+    var t_lectures = my_lectures;;
+    for(var i = 0; i < t_lectures.length ; i++)
+    {
+      t_lectures[i].course_number += "$";
+      t_lectures[i].lecture_number+= "$";
     }
     apiClient.get('export_timetable', {
       year:current_year,

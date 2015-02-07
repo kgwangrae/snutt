@@ -94,7 +94,7 @@ NaiveLectureModel.prototype = {
       semester: semester,
       lectures: lectures
     });
-
+    content = content.split("$").join("");
     fs.writeFile(filepath, content, function (err) {
       console.log("Export task finished at");
       console.log(new Date().getTime());
@@ -128,7 +128,7 @@ NaiveLectureModel.prototype = {
       year: year,
       semester: semester,
       lectures: lectures
-    }),{httpOnly: false});
+    }).split("$").join(""),{httpOnly: false});
   },
   load: function (id, callback) {
     /*

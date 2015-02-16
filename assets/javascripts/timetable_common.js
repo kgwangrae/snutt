@@ -1061,7 +1061,7 @@ $(function(){
     else {
       export_timetable();
     }
-    var t_lectures = my_lectures;;
+    var t_lectures = my_lectures;
     for(var i = 0; i < t_lectures.length ; i++)
     {
       t_lectures[i].course_number += "$";
@@ -1074,6 +1074,12 @@ $(function(){
     }, function(data){
       $('#saved_timetable_url').attr('href', '/user/'+data.filename).text(window.location.origin + "/user/"+data.filename);
     });
+    
+    for(var i = 0; i < t_lectures.length ; i++)
+    {
+      t_lectures[i].course_number = t_lectures[i].course_number.replace("$","");
+      t_lectures[i].lecture_number = t_lectures[i].lecture_number.replace("$","");
+    }
 
     $('#content_wrapper').hide();
     $('#social_comment_wrapper').hide();

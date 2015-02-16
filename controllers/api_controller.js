@@ -20,6 +20,11 @@ function functor(config, target, lectureModel) {
       var lectures = params.my_lectures;
       var year = params.year;
       var semester = params.semester;
+      for(var i = 0; i < lectures.length ; i++)
+      {
+        lectures[i].course_number = lectures[i].course_number.replace("$","");
+        lectures[i].lecture_number = lectures[i].lecture_number.replace("$","");
+      }
       console.log("Trying to export timetable at");
       console.log(new Date().getTime());
       lectureModel.save(lectures, year, semester, function(err, id) {

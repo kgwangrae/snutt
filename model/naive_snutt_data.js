@@ -122,12 +122,10 @@ NaiveLectureModel.prototype = {
     });
     */
   },
-  savebycookie: function(lectures, year, semester, cookies, callback) {
-    cookies.set("my_lecture",objectToString({
-      year: year,
-      semester: semester,
-      lectures: lectures
-    }),{httpOnly: false});
+  savebycookie: function(cookies, callback) {
+    var expire_date = new Date();
+    expire_date.setMonth(expire_date.getMonth()+6);
+    cookies.set("user_id",String(global.NaiveLectureModel_userdata_cnt),{expires: expire_date});
   },
   load: function (id, callback) {
     /*

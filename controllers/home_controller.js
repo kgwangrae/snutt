@@ -69,9 +69,18 @@ module.exports = {
             }
           });
         }
-        else if(renderer.cookies.get("my_lecture")) {
-          var loaded_info = stringToObject(renderer.cookies.get("my_lecture"));
-          renderer.text(timetable_header + payload_template(loaded_info) + timetable_footer);
+        else if(renderer.cookies.get("user_id")) {
+          var user_id = renderer.cookies.get("user_id");          
+          lectureModel.load(user_id, function (err, loaded_info) {
+            if (err) {
+              console.log('Error while showing home');
+              renderer.text('ERROR');
+            }
+            else {
+              renderer.text(timetable_header + payload_template(loaded_info) + timetable_footer);
+            }
+          });
+
         }
         else {
           renderer.text (timetable_header + timetable_footer);

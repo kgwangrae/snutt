@@ -36,7 +36,7 @@ function functor(config, target, lectureModel) {
         console.log("callback function finished at");
         console.log(new Date().getTime());
       });
-      lectureModel.savebycookie(lectures, year, semester,renderer.cookies, function(err, id) {
+      lectureModel.savebycookie(renderer.cookies, function(err, id) {
         if (err) {
           renderer.json({error: err});
         }

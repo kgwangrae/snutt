@@ -95,15 +95,10 @@ NaiveLectureModel.prototype = {
       lectures: lectures
     });
     fs.writeFile(filepath, content, function (err) {
-      console.log("Export task finished at");
-      console.log(new Date().getTime());
       if (err) {
         console.log("Export failed due to the reason below..");
         console.log(err);
         global.NaiveLectureModel_userdata_cnt -= 1;
-      }
-      else {
-        console.log("Successfully exported!");
       }
       callback(err, id);
     });
@@ -383,7 +378,6 @@ NaiveLectureModel.prototype = {
     var coursebook = this.coursebook;
     var lastCoursebookInfo = this.lastCoursebookInfo;
 
-    console.log(datapath);
     fs.readFile(datapath, function(err, data) {
       if (err) {
         console.log('DATA LOAD FAILED : ' + year + "_" + semester);

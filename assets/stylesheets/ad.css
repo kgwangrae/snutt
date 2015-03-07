@@ -19,4 +19,6 @@ span#ad_text {
 
 img {
   vertical-align: middle;
+  height:130px;
+  width:auto;
 }

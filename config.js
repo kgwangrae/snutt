@@ -6,7 +6,7 @@ function make_config(TARGET) {
   config.TARGET = TARGET;
   config.ROOT_VIEW_PATH = ROOT_PATH + '/views/' + TARGET;
   config.ROOT_DATA_PATH = ROOT_PATH + '/data/' + TARGET;
-  config.IMAGE_PATH = ROOT_PATH + '/assets/images';
+  config.ROOT_ASSET_PATH = ROOT_PATH + '/assets';
   config.USER_IMAGE_PATH = ROOT_PATH + '/userdata/' + TARGET + '/images';
   config.USER_ICS_PATH = ROOT_PATH + '/userdata/' + TARGET + '/ics';
   config.USER_TIMETABLE_PATH = ROOT_PATH + '/userdata/' + TARGET + '/timetables';

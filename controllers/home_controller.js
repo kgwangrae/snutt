@@ -93,24 +93,40 @@ module.exports = {
         fs.readFile (view_path + "/members.ejs.htm", 'utf8', function (err, data) {
           if (err) {
             console.log(err);
-            return renderer.err();
+            renderer.err();
           }
           renderer.text (timetable_header + ejs.render(data));
         });
       },
 
-      //Supports only png (because jpg does not support transparency)
-      image: function (params, renderer, request) {
-        var image_path = config[target].IMAGE_PATH;
-        if (!params.path2) image_path += ('/' + params.path1);
-        else image_path += ('/' + params.path1 + '/' + params.path2);
+      asset: function (params, renderer, request) {
+        if ((!params.name) || (!params.format)) return renderer.err();
 
-        fs.readFile (image_path, function (err, data) {
+        var path2 = "", asset_path = config[target].ROOT_ASSET_PATH;
+        if (params.path2) path2 = params.path2 + "/";
+        var path = path2 + params.name + '.' + params.format;
+        var mime = "";
+
+        if (params.format === "js") {
+          path = asset_path + '/javascripts/' + path;
+          mime = "text/javascript";
+        }
+        else if (params.format === "css") {
+          path = asset_path + '/stylesheets/' + path;
+          mime = "text/css";
+        }
+        else if (params.format === "jpg" || params.format === "png" || params.format === "gif") {
+          path = asset_path + '/images/' + path;
+          mime = "image/" + params.format;
+        }
+        else return renderer.err();
+        
+        fs.readFile (path, function (err, data) {
           if (err) {
             console.log(err);
-            return renderer.err();
+            renderer.err();
           }
-          renderer.image(data, 'png');
+          renderer.generic(data, mime);
         });
       },
 

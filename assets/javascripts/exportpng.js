@@ -12,8 +12,8 @@ line_horizontal = [0, 74, 182, 290, 397, 505, 613, 721];
 $(function(){
 	//png export를 지원하는 웹브라우저만
 	if (supportsToDataURL()){
-		bg_image = new Image();
-		bg_image.src = '/assets/images/tt_background2.png';
+		bg_image = new Image(726,626);
+		bg_image.src = '/asset/tt_background2.png';
 
 		bg_image.onload = function(){
 			$('#export_image_wrapper').width(bg_image.width);

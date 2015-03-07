@@ -9,13 +9,4 @@ Time table web application for SNU
 
     ```sh
     npm install
-    # .. or
-    npm update
-    ```
-
-2.  Logging 예시
-
-    ```js
-    var winston = require('winston');
-    winston.log('tag','message');
-    ```
+    sudo npm install -g

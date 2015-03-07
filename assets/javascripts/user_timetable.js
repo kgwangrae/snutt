@@ -1,3 +1,4 @@
+//User-defined timetable (사용자지정 시간표)
 $(function(){
 	init();
 	$(window).resize(function(){

@@ -1,8 +1,6 @@
-// dependencies
 var url = require('url');
 var path = require('path');
 var fs = require('fs');
-var mime = require('mime');
 var deparam = require('node-jquery-deparam');
 var Router = require('routes');
 var mkdirp = require('mkdirp');
@@ -37,13 +35,16 @@ router.addRoute("/api/init_client", controllers.api_controller.initClient);
 router.addRoute("/api/search_query?", controllers.api_controller.searchQuery);
 router.addRoute("/api/export_timetable?", controllers.api_controller.exportTimetable);
 router.addRoute("/api/publish_to_facebook", controllers.api_controller.publishToFacebook)
-// views
+// view
 router.addRoute("/", controllers.home_controller.home);
 router.addRoute("/member", controllers.home_controller.member);
-router.addRoute("/image/:path1", controllers.home_controller.image);
-router.addRoute("/image/:path1/:path2", controllers.home_controller.image);
 router.addRoute("/user/:id", controllers.home_controller.show);
 router.addRoute("/calendar/export", controllers.home_controller.export_cal);
+// asset
+router.addRoute("/asset/:name.:format", controllers.home_controller.asset);
+router.addRoute("/asset/:path2/:name.:format", controllers.home_controller.asset);
+router.addRoute("/user/asset/:name.:format", controllers.home_controller.asset);
+router.addRoute("/user/asset/:path2/:name.:format", controllers.home_controller.asset);
 
 //http server handler
 function handler (req, res) {
@@ -55,25 +56,32 @@ function handler (req, res) {
       res.writeHead(200, {"Content-Type": "application/json"});
       res.end(JSON.stringify(hash));
     },
-    text: function(text) {
-      res.writeHead(200, {'Content-Type' : "text/html"});
-      res.end(text);
+    // TODO : deprecated, use generic instead
+    text: function(data, mime) {
+      if (mime) res.writeHead(200, {'Content-Type' : mime});
+      else res.writeHead(200, {'Content-Type' : "text/html"});
+      res.end(data);
     },
-    image: function (img, extension) {
+    generic: function(data, mime) {
+      if (mime) res.writeHead(200, {'Content-Type' : mime});
+      else res.writeHead(200, {'Content-Type' : "text/html"});
+      res.end(data);
+    },
+    image: function (img, extension) { 
       res.writeHead(200, {'Content-Type' : "image/"+extension});
       res.end(img);
     },
     cal: function (ics) {
-      res.writeHead(200, 
-      {'Content-Type' : "application/octet-stream",
+      res.writeHead(200, {
+        'Content-Type' : "application/octet-stream",
         "Content-Disposition": "attachment; filename=snutt-calendar.ics"
       });
       res.end(ics);
     },
     cookies: cookies,
     err: function () {
-      res.writeHead(404);
-      res.end("페이지를 찾을 수 없습니다! 주소를 확인해주세요.");
+      res.writeHead(404, {'Content-Type' : "text/html"});
+      res.end("<h1>SNUTT</h1><br/><h5>페이지를 찾을 수 없습니다! 주소를 확인해주세요.</h5>");
     }
   };
 
@@ -82,21 +90,6 @@ function handler (req, res) {
   if (route) {
     _.extend(params, route.params);
     route.fn.apply(null, [params, renderer, req]);
-  } else {
-    var filename = path.join(process.cwd(), uri);
-    fs.readFile(config.ROOT_PATH + uri, function(err, data) {
-      if (err){
-        res.writeHead(404);
-        return res.end("ERROR");
-      }
-      //write header
-      var filestat = fs.statSync(filename);
-      var filemime = mime.lookup(filename);
-      res.writeHead(200, {
-        'Content-Type' : filemime,
-        'Content-Length' : filestat.size
-      });
-      res.end(data);
-    });
-  }
+  } 
+  else renderer.err();
 }

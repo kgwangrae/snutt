@@ -80,7 +80,7 @@ button.btn.well {padding:6px 12px;margin:0px;border:1px solid #aaa;background:no
 .search-result-table tbody tr {cursor:pointer;}
 #lectures_content {min-height:50px;height:300px;overflow:scroll;overflow-x:hidden;border:1px solid #ccc;}
 #timetable_container {margin-top:10px;}
-
+.timetable-image {width:726px;height:626px;}
 
 #timetable th.visible-xs {font-size:13px;}
 #search_result_table tr.selected {background-color:#ccf}

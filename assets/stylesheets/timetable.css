@@ -96,7 +96,15 @@ button.btn.well {padding:6px 12px;margin:0px;border:1px solid #aaa;background:no
 #timetable .period {font-size:1.2em;}
 #timetable .time {font-size:0.8em;}
 .timecell-container {position:absolute;z-index:100;}
-.timecell {position:relative;border-style:none;border-radius:8px;text-align:center;cursor:pointer;}
+.timecell {position:relative;border-style:none;border-radius:8px;text-align:center;cursor:pointer;font-size:10px}
+th {font-size:10px;}
+@media (min-width:768px) {
+	.timecell {font-size:11.5px;}
+}
+@media (min-width:1024px) {
+	.timecell {font-size:13.5px;}
+}
+
 .timecellinfo-containter{position:relative;top:50%;-webkit-transform:translateY(-50%); -ms-transform: translateY(-50%); transform:translateY(-50%);}
 #customcell_container {position:absolute;z-index:101;pointer-events:none;}
 #customcell {font-size:11px;position:relative;border:2px dotted #f00;text-align:center;z-index:200;pointer-events:none;}

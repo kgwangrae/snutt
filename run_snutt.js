@@ -45,16 +45,28 @@ router.addRoute("/asset/:name.:format", controllers.home_controller.asset);
 router.addRoute("/asset/:path2/:name.:format", controllers.home_controller.asset);
 router.addRoute("/user/asset/:name.:format", controllers.home_controller.asset);
 router.addRoute("/user/asset/:path2/:name.:format", controllers.home_controller.asset);
+// data for the mobile app - this is just a temporal fix
+router.addRoute("/data/snutt/:name", controllers.home_controller.app_data);
+router.addRoute("/api/:name", controllers.home_controller.json);
 
 //http server handler
 function handler (req, res) {
+  req.url = req.url.replace("//","/"); // app is requesting /api//sugang.json... 
   var uri = url.parse(req.url).pathname;
   var params = deparam(url.parse(req.url).query);
   cookies = new Cookies(req,res);
   var renderer = {
-    json:  function(hash) {
+    json:  function(hash, nostringfy) {
       res.writeHead(200, {"Content-Type": "application/json"});
-      res.end(JSON.stringify(hash));
+      if (nostringfy) res.end(hash); 
+      else res.end(JSON.stringify(hash)); //app doesn't work when JSON is stringfied...
+    },
+    zip: function(data, size) {
+      res.writeHead(200, 
+          {'Content-Type' : "application/zip",
+           'Content-Length' : size }
+      );
+      res.end(data);
     },
     // TODO : deprecated, use generic instead
     text: function(data, mime) {

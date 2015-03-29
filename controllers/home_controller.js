@@ -48,7 +48,9 @@ function payload_template(options) {
 module.exports = {
   //TODO : implement non-blocking code
   functor: function(config, target, lectureModel) {
+    var data_path = config[target].ROOT_DATA_PATH;
     var view_path = config[target].ROOT_VIEW_PATH;
+    var json_path = config[target].ROOT_JSON_PATH;
     var timetable_header = fs.readFileSync(view_path + "/timetable_header.htm");
     var timetable_footer = ejs.render(fs.readFileSync(view_path + "/timetable_footer.ejs.htm", 'utf8'),
         {filename: view_path + "/timetable_footer.ejs.htm"});
@@ -96,6 +98,28 @@ module.exports = {
             renderer.err();
           }
           renderer.text (timetable_header + ejs.render(data));
+        });
+      },
+
+      // app crash hotfixes. NOTE THAT ZIP FILE CRASHES when encoding = utf8 is set....
+      app_data: function (params, renderer, request) {
+        fs.readFile (data_path + "/data.zip", function (err, data) {
+          if (err) {
+            console.log(err);
+            renderer.err();
+          }
+          renderer.zip (data, fs.statSync(data_path+"/data.zip").size);
+        });
+      },
+      json: function (params, renderer, request) {
+        if (!params.name) return renderer.err();
+
+        fs.readFile (json_path + params.name, 'utf8', function (err, data) {
+          if (err) {
+            console.log(err);
+            renderer.err();
+          }
+          renderer.json (data, true); // do not stringfy (for app)
         });
       },
 

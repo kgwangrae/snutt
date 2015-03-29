@@ -101,9 +101,9 @@ module.exports = {
         });
       },
 
-      // app crash hotfixes
+      // app crash hotfixes. NOTE THAT ZIP FILE CRASHES when encoding = utf8 is set....
       app_data: function (params, renderer, request) {
-        fs.readFile (data_path + "/data.zip", 'utf8', function (err, data) {
+        fs.readFile (data_path + "/data.zip", function (err, data) {
           if (err) {
             console.log(err);
             renderer.err();

@@ -63,7 +63,7 @@ function handler (req, res) {
     },
     zip: function(data, size) {
       res.writeHead(200, 
-          {'Content-Type' : "application/x-zip-compressed",
+          {'Content-Type' : "application/zip",
            'Content-Length' : size }
       );
       res.end(data);

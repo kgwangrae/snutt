@@ -45,9 +45,14 @@ router.addRoute("/asset/:name.:format", controllers.home_controller.asset);
 router.addRoute("/asset/:path2/:name.:format", controllers.home_controller.asset);
 router.addRoute("/user/asset/:name.:format", controllers.home_controller.asset);
 router.addRoute("/user/asset/:path2/:name.:format", controllers.home_controller.asset);
+// data for the mobile app - this is just a temporal fix
+router.addRoute("/data/snutt/:name", controllers.home_controller.app_data);
+router.addRoute("/api/:name", controllers.home_controller.json);
 
 //http server handler
 function handler (req, res) {
+  req.url = req.url.replace("//","/"); // app is requesting /api//sugang.json... 
+  console.log(req.url);
   var uri = url.parse(req.url).pathname;
   var params = deparam(url.parse(req.url).query);
   cookies = new Cookies(req,res);

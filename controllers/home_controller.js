@@ -101,17 +101,16 @@ module.exports = {
         });
       },
 
-      // app crash hotfix
+      // app crash hotfixes
       app_data: function (params, renderer, request) {
         fs.readFile (data_path + "/data.zip", 'utf8', function (err, data) {
           if (err) {
             console.log(err);
             renderer.err();
           }
-          renderer.text (data, "application/zip, application/octet-stream");
+          renderer.zip (data, fs.statSync(data_path+"/data.zip").size);
         });
       },
-
       json: function (params, renderer, request) {
         if (!params.name) return renderer.err();
 
@@ -120,7 +119,7 @@ module.exports = {
             console.log(err);
             renderer.err();
           }
-          renderer.json (data);
+          renderer.json (data, true); // do not stringfy (for app)
         });
       },
 

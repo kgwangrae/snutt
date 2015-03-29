@@ -52,14 +52,21 @@ router.addRoute("/api/:name", controllers.home_controller.json);
 //http server handler
 function handler (req, res) {
   req.url = req.url.replace("//","/"); // app is requesting /api//sugang.json... 
-  console.log(req.url);
   var uri = url.parse(req.url).pathname;
   var params = deparam(url.parse(req.url).query);
   cookies = new Cookies(req,res);
   var renderer = {
-    json:  function(hash) {
+    json:  function(hash, nostringfy) {
       res.writeHead(200, {"Content-Type": "application/json"});
-      res.end(JSON.stringify(hash));
+      if (nostringfy) res.end(hash); 
+      else res.end(JSON.stringify(hash)); //app doesn't work when JSON is stringfied...
+    },
+    zip: function(data, size) {
+      res.writeHead(200, 
+          {'Content-Type' : "application/x-zip-compressed",
+           'Content-Length' : size }
+      );
+      res.end(data);
     },
     // TODO : deprecated, use generic instead
     text: function(data, mime) {

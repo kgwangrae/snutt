@@ -153,25 +153,25 @@ open("#{txt_filename}.tmp", "w") do |file|
   file.puts "classification;department;academic_year;course_number;lecture_number;course_title;credit;class_time;location;instructor;quota;enrollment;remark;category;snuev_lec_id;snuev_eval_score"
   3.upto(m.row_size-1) do |i|
     classification = m[i,0]
-    department = m[i,1]
-    academic_year = m[i,2]
+    department = m[i,2]
+    academic_year = m[i,3]
     if academic_year == "학사"
-      academic_year = m[i,3]
+      academic_year = m[i,4]
     end
-    course_number = m[i,4]
-    lecture_number = m[i,5]
-    course_title = m[i,6]
-    if m[i,7].to_s.length > 1
-      course_title = course_title + "(#{m[i,7]})"
+    course_number = m[i,5]
+    lecture_number = m[i,6]
+    course_title = m[i,7]
+    if m[i,8].to_s.length > 1
+      course_title = course_title + "(#{m[i,8]})"
     end
     course_title = course_title.gsub(/;/, ':')
-    credit = m[i,8].to_i
-    class_time = m[i,11]
-    location = m[i,13]
-    instructor = m[i,14]
-    quota = m[i,15].to_i
-    enrollment = m[i,16].to_i
-    remark = m[i,17].gsub(/
+    credit = m[i,9].to_i
+    class_time = m[i,12]
+    location = m[i,14]
+    instructor = m[i,15]
+    quota = m[i,16].split(" ")[0].to_i
+    enrollment = m[i,17].to_i
+    remark = m[i,18].gsub(/
 \n/, " ")
     category = category_map["#{course_number};#{lecture_number}"]
 

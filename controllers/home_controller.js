@@ -75,8 +75,8 @@ module.exports = {
           var user_id = renderer.cookies.get("user_id");          
           lectureModel.load(user_id, function (err, loaded_info) {
             if (err) {
-              console.log('Error while showing home');
-              renderer.text('ERROR');
+              console.log('Unvalid user_id');
+              renderer.text(timetable_header + timetable_footer);
             }
             else {
               renderer.text(timetable_header + payload_template(loaded_info) + timetable_footer);
